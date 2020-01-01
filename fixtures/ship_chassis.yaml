@@ -1,0 +1,9 @@
+App\Entity\ShipChassis:
+    chassis_aurora:
+        __construct: ['<(\Ramsey\Uuid\Uuid::fromString("62994bb6-f94f-4226-b144-d0e21c85b04e"))>']
+        manufacturer: '@manufacturer_rsi'
+        name: 'Aurora'
+        slug: 'aurora'
+        rsiId: 1
+        createdAt: '<(new \DateTimeImmutable("2019-05-01 21:22:33"))>'
+        updatedAt: '<(new \DateTimeImmutable("2019-05-02 21:22:33"))>'

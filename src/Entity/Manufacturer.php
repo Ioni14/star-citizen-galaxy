@@ -1,0 +1,211 @@
+<?php
+
+namespace App\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\UuidInterface;
+
+/**
+ * @ORM\Entity(repositoryClass="App\Repository\ManufacturerRepository")
+ * @ORM\Table(indexes={
+ *     @ORM\Index(name="name_idx", columns={"name"}),
+ *     @ORM\Index(name="code_idx", columns={"code"})
+ * })
+ */
+class Manufacturer
+{
+    /**
+     * @ORM\Id()
+     * @ORM\Column(type="uuid_binary", unique=true)
+     */
+    private ?UuidInterface $id = null;
+
+    /**
+     * @ORM\Column(type="string", length=30)
+     */
+    private string $name = '';
+
+    /**
+     * @ORM\Column(type="string", length=50, unique=true)
+     */
+    private string $slug = '';
+
+    /**
+     * @ORM\Column(type="string", length=10)
+     */
+    private string $code = '';
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private ?int $rsiId = null;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private ?string $thumbnailUri = null;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private ?string $pictureUri = null;
+
+    /**
+     * @ORM\Column(type="datetimetz_immutable")
+     */
+    private \DateTimeInterface $createdAt;
+
+    /**
+     * @ORM\Column(type="datetimetz_immutable")
+     */
+    private \DateTimeInterface $updatedAt;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     */
+    private ?User $createdBy = null;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     */
+    private ?User $updatedBy = null;
+
+    public function __construct(?UuidInterface $id = null)
+    {
+        $this->id = $id;
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
+    }
+
+    public function getId(): ?UuidInterface
+    {
+        return $this->id;
+    }
+
+    public function setId(?UuidInterface $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getCode(): string
+    {
+        return $this->code;
+    }
+
+    public function setCode(string $code): self
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    public function getRsiId(): ?int
+    {
+        return $this->rsiId;
+    }
+
+    public function setRsiId(?int $rsiId): self
+    {
+        $this->rsiId = $rsiId;
+
+        return $this;
+    }
+
+    public function getThumbnailUri(): ?string
+    {
+        return $this->thumbnailUri;
+    }
+
+    public function setThumbnailUri(?string $thumbnailUri): self
+    {
+        $this->thumbnailUri = $thumbnailUri;
+
+        return $this;
+    }
+
+    public function getPictureUri(): ?string
+    {
+        return $this->pictureUri;
+    }
+
+    public function setPictureUri(?string $pictureUri): self
+    {
+        $this->pictureUri = $pictureUri;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): \DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): \DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getCreatedBy(): ?User
+    {
+        return $this->createdBy;
+    }
+
+    public function setCreatedBy(?User $createdBy): self
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    public function getUpdatedBy(): ?User
+    {
+        return $this->updatedBy;
+    }
+
+    public function setUpdatedBy(?User $updatedBy): self
+    {
+        $this->updatedBy = $updatedBy;
+
+        return $this;
+    }
+}

@@ -1,0 +1,17 @@
+App\Entity\Ship:
+    ship_aurora_mr:
+        __construct: ['<(\Ramsey\Uuid\Uuid::fromString("62994bb6-f94f-4226-b144-d0e21c85b04e"))>']
+        chassis: '@chassis_aurora'
+        name: 'Aurora ES'
+        slug: 'aurora-es'
+        rsiId: 1
+        height: 4.0
+        length: 18.0
+        minCrew: 1
+        maxCrew: 1
+        readyStatus: 'flight-ready'
+        size: 'small'
+        focus: 'starter / pathfinder'
+        pledgeUrl: 'https://robertsspaceindustries.com/pledge/ships/rsi-aurora/Aurora-ES'
+        createdAt: '<(new \DateTimeImmutable("2019-05-01 21:22:33"))>'
+        updatedAt: '<(new \DateTimeImmutable("2019-05-02 21:22:33"))>'
