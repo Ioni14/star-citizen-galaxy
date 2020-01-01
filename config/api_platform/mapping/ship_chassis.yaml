@@ -1,0 +1,10 @@
+App\Entity\ShipChassis:
+    attributes:
+        normalization_context:
+            groups: ['chassis:read', 'manufacturer:read']
+    collectionOperations:
+        get:
+            path: '/chassis'
+    itemOperations:
+        get:
+            path: '/chassis/{id}'

@@ -1,0 +1,8 @@
+App\Entity\Ship:
+    attributes:
+        normalization_context:
+            groups: ['ship:read', 'chassis:read', 'manufacturer:read']
+    collectionOperations:
+        get: ~
+    itemOperations:
+        get: ~

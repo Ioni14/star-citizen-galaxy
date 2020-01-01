@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ShipChassisRepository")
@@ -16,11 +17,13 @@ class ShipChassis
     /**
      * @ORM\Id()
      * @ORM\Column(type="uuid_binary", unique=true)
+     * @Groups({"chassis:read"})
      */
     private ?UuidInterface $id = null;
 
     /**
      * @ORM\Column(type="string", length=30)
+     * @Groups({"chassis:read"})
      */
     private string $name = '';
 
@@ -30,23 +33,29 @@ class ShipChassis
     private string $slug = '';
 
     /**
+     * @var Manufacturer
+     *
      * @ORM\ManyToOne(targetEntity="App\Entity\Manufacturer")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"chassis:read"})
      */
-    private Manufacturer $manufacturer;
+    private $manufacturer;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"chassis:read"})
      */
     private ?int $rsiId = null;
 
     /**
      * @ORM\Column(type="datetimetz_immutable")
+     * @Groups({"chassis:read"})
      */
     private \DateTimeInterface $createdAt;
 
     /**
      * @ORM\Column(type="datetimetz_immutable")
+     * @Groups({"chassis:read"})
      */
     private \DateTimeInterface $updatedAt;
 

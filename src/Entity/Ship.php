@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ShipRepository")
@@ -30,11 +31,13 @@ class Ship
     /**
      * @ORM\Id()
      * @ORM\Column(type="uuid_binary", unique=true)
+     * @Groups({"ship:read"})
      */
     private ?UuidInterface $id = null;
 
     /**
      * @ORM\Column(type="string", length=30)
+     * @Groups({"ship:read"})
      */
     private string $name = '';
 
@@ -44,85 +47,105 @@ class Ship
     private string $slug = '';
 
     /**
+     * @var ShipChassis
+     *
      * @ORM\ManyToOne(targetEntity="App\Entity\ShipChassis")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"ship:read"})
      */
-    private ShipChassis $chassis;
+    private $chassis;
 
     /**
      * A ship can contain some others ship. e.g., A Carrack includes a Pisces.
      *
      * @ORM\ManyToOne(targetEntity="Ship", inversedBy="holdedShips")
+     * @Groups({"ship:read"})
      */
     private ?Ship $holder = null;
 
     /**
-     * @ORM\OneToMany(targetEntity="Ship", mappedBy="holder")
+     * @var Ship[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity="Ship", mappedBy="holder", fetch="EAGER")
+     * @Groups({"ship:read"})
      */
-    private Collection $holdedShips;
+    private $holdedShips;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"ship:read"})
      */
     private ?int $rsiId = null;
 
     /**
      * @ORM\Column(type="decimal", scale=4, nullable=true)
+     * @Groups({"ship:read"})
      */
     private ?float $height = null;
 
     /**
      * @ORM\Column(type="decimal", scale=4, nullable=true)
+     * @Groups({"ship:read"})
      */
     private ?float $length = null;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"ship:read"})
      */
     private ?int $maxCrew = null;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"ship:read"})
      */
     private ?int $minCrew = null;
 
     /**
      * @ORM\Column(type="string", length=30, nullable=true)
+     * @Groups({"ship:read"})
      */
     private ?string $readyStatus = null;
 
     /**
      * @ORM\Column(type="string", length=30, nullable=true)
+     * @Groups({"ship:read"})
      */
     private ?string $size = null;
 
     /**
      * @ORM\Column(type="string", length=30, nullable=true)
+     * @Groups({"ship:read"})
      */
     private ?string $focus = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"ship:read"})
      */
     private ?string $pledgeUrl = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"ship:read"})
      */
     private ?string $thumbnailUri = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"ship:read"})
      */
     private ?string $pictureUri = null;
 
     /**
      * @ORM\Column(type="datetimetz_immutable")
+     * @Groups({"ship:read"})
      */
     private \DateTimeInterface $createdAt;
 
     /**
      * @ORM\Column(type="datetimetz_immutable")
+     * @Groups({"ship:read"})
      */
     private \DateTimeInterface $updatedAt;
 

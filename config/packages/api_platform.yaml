@@ -1,0 +1,12 @@
+api_platform:
+    title: 'Star Citizen Galaxy API'
+    description: 'An unofficial open API for Star Citizen in-game concepts for ships.'
+    version: '0.0.1'
+    show_webby: true
+    path_segment_name_generator: 'api_platform.path_segment_name_generator.dash'
+    mapping:
+        paths: ['%kernel.project_dir%/config/api_platform/mapping']
+    patch_formats:
+        json: ['application/merge-patch+json']
+    swagger:
+        versions: [3]

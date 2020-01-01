@@ -1,0 +1,8 @@
+App\Entity\Manufacturer:
+    attributes:
+        normalization_context:
+            groups: ['manufacturer:read']
+    collectionOperations:
+        get: ~
+    itemOperations:
+        get: ~

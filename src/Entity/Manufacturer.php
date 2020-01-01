@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ManufacturerRepository")
@@ -17,11 +18,13 @@ class Manufacturer
     /**
      * @ORM\Id()
      * @ORM\Column(type="uuid_binary", unique=true)
+     * @Groups({"manufacturer:read"})
      */
     private ?UuidInterface $id = null;
 
     /**
      * @ORM\Column(type="string", length=30)
+     * @Groups({"manufacturer:read"})
      */
     private string $name = '';
 
@@ -32,31 +35,37 @@ class Manufacturer
 
     /**
      * @ORM\Column(type="string", length=10)
+     * @Groups({"manufacturer:read"})
      */
     private string $code = '';
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"manufacturer:read"})
      */
     private ?int $rsiId = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"manufacturer:read"})
      */
     private ?string $thumbnailUri = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"manufacturer:read"})
      */
     private ?string $pictureUri = null;
 
     /**
      * @ORM\Column(type="datetimetz_immutable")
+     * @Groups({"manufacturer:read"})
      */
     private \DateTimeInterface $createdAt;
 
     /**
      * @ORM\Column(type="datetimetz_immutable")
+     * @Groups({"manufacturer:read"})
      */
     private \DateTimeInterface $updatedAt;
 
