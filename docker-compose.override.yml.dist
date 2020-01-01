@@ -1,0 +1,67 @@
+version: '3.4'
+volumes:
+    #    db: ~
+    redis_db: ~
+services:
+    php:
+        build:
+            target: build_php_dev
+            args:
+                ENV: 'dev'
+                DUMP_ENV: 1
+        volumes:
+            - .:/app
+        environment:
+            # Docker for mac : try remote_host=host.docker.internal instead of remote_connect_back
+#            XDEBUG_CONFIG: >-
+#                remote_enable=1
+#                remote_connect_back=1
+#                remote_port=9001
+#                idekey=PHPSTORM
+    apache:
+        volumes:
+            - .:/app
+        ports:
+            - 127.0.0.1:8000:80
+    apache-test:
+        build:
+            context: .
+            target: build_apache_test
+            dockerfile: ./docker/Dockerfile
+        hostname: apache_test
+        volumes:
+            - .:/app
+        environment:
+            PHP_HANDLER_HOST: php:9000
+    mysql:
+        tmpfs: /var/lib/mysql
+#        volumes:
+#            - db:/var/lib/mysql
+#            - ./docker/mysql/config-file.cnf:/etc/mysql/conf.d/config-file.cnf
+        ports:
+            - 127.0.0.1:3306:3306
+    smtp:
+        image: schickling/mailcatcher
+        ports:
+            - 127.0.0.1:1080:1080 # web-ui
+    redis-commander:
+        image: rediscommander/redis-commander:latest
+        hostname: redis-commander
+        environment:
+            REDIS_HOST: redis
+            REDIS_PORT: 6379
+            REDIS_PASSWORD: ${REDIS_PASSWORD}
+        ports:
+            - 127.0.0.1:8081:8081
+    selenium-hub:
+        image: selenium/hub
+        ports:
+            - 127.0.0.1:4444:4444
+    selenium-chrome:
+        image: selenium/node-chrome-debug
+        environment:
+            HUB_HOST: selenium-hub
+        volumes:
+            - /dev/shm:/dev/shm
+        ports:
+            - 127.0.0.1:5900:5900 # VNC

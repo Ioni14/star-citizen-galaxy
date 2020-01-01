@@ -1,0 +1,11 @@
+security:
+    providers:
+        in_memory: { memory: null }
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|build)/
+            security: false
+        main:
+            anonymous: lazy
+    access_control:
+         - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
