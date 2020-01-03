@@ -1,7 +1,8 @@
 App\Entity\Ship:
     attributes:
+        pagination_items_per_page: 50
         normalization_context:
-            groups: ['ship:read', 'chassis:read', 'manufacturer:read']
+            groups: ['ship:read']
     collectionOperations:
         get: ~
     itemOperations:

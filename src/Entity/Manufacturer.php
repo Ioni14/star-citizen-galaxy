@@ -18,13 +18,13 @@ class Manufacturer
     /**
      * @ORM\Id()
      * @ORM\Column(type="uuid_binary", unique=true)
-     * @Groups({"manufacturer:read"})
+     * @Groups({"manufacturer:read", "chassis:read", "ship:read"})
      */
     private ?UuidInterface $id = null;
 
     /**
      * @ORM\Column(type="string", length=30)
-     * @Groups({"manufacturer:read"})
+     * @Groups({"manufacturer:read", "chassis:read", "ship:read"})
      */
     private string $name = '';
 
@@ -35,7 +35,7 @@ class Manufacturer
 
     /**
      * @ORM\Column(type="string", length=10)
-     * @Groups({"manufacturer:read"})
+     * @Groups({"manufacturer:read", "chassis:read", "ship:read"})
      */
     private string $code = '';
 
@@ -79,9 +79,12 @@ class Manufacturer
      */
     private ?User $updatedBy = null;
 
-    public function __construct(?UuidInterface $id = null)
+    public function __construct(?UuidInterface $id = null, string $name = '', string $slug = '', string $code = '')
     {
         $this->id = $id;
+        $this->name = $name;
+        $this->slug = $slug;
+        $this->code = $code;
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
     }

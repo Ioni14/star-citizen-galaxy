@@ -1,5 +1,6 @@
 App\Entity\Manufacturer:
     attributes:
+        pagination_items_per_page: 50
         normalization_context:
             groups: ['manufacturer:read']
     collectionOperations:

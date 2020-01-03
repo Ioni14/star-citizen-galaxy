@@ -17,13 +17,13 @@ class ShipChassis
     /**
      * @ORM\Id()
      * @ORM\Column(type="uuid_binary", unique=true)
-     * @Groups({"chassis:read"})
+     * @Groups({"chassis:read", "ship:read"})
      */
     private ?UuidInterface $id = null;
 
     /**
      * @ORM\Column(type="string", length=30)
-     * @Groups({"chassis:read"})
+     * @Groups({"chassis:read", "ship:read"})
      */
     private string $name = '';
 
@@ -37,7 +37,7 @@ class ShipChassis
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Manufacturer")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"chassis:read"})
+     * @Groups({"chassis:read", "ship:read"})
      */
     private $manufacturer;
 

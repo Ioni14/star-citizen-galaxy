@@ -1,6 +1,6 @@
 {
     "name": "ioni14/star-citizen-galaxy",
-    "description": "An unofficial open API for Star Citizen in-game concepts for ships.",
+    "description": "An unofficial open API for Star Citizen in-game concepts. By the creators of Fleet Manager.",
     "type": "project",
     "license": "AGPL",
     "require": {
