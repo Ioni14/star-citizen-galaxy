@@ -1,0 +1,36 @@
+{% use "bootstrap_4_layout.html.twig" %}
+
+{%- block file_row -%}
+    {%- if compound is defined and compound -%}
+        {%- set element = 'fieldset' -%}
+    {%- endif -%}
+    {%- set widget_attr = {} -%}
+    {%- if help is not empty -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+    {%- endif -%}
+    <{{ element|default('div') }}{% with {attr: row_attr|merge({class: (row_attr.class|default('') ~ ' form-group')|trim})} %}{{ block('attributes') }}{% endwith %}>
+    {{- form_label(form) -}}
+    {{- form_widget(form, widget_attr) -}}
+    {{- form_help(form) -}}
+
+    {%- if image_uri is not null -%}
+        <img src="{{ asset(image_uri) }}" alt="preview" class="img-thumbnail mt-2" />
+    {%- endif -%}
+
+    </{{ element|default('div') }}>
+{%- endblock -%}
+
+{% block holded_ship_widget %}
+    <div class="row">
+        <div class="col col-7">
+            {{ form_row(form.ship, {'attr': {'class': 'js-select2'}}) }}
+        </div>
+        <div class="col col-4">
+            {{ form_row(form.quantity) }}
+        </div>
+        <div class="col col-1 text-right">
+            <label class="d-block">&nbsp;</label>
+            <button type="button" class="btn btn-danger d-inline-block js-holded-ships-delete-row" title="Delete a row"><i class="fa fa-minus"></i></button>
+        </div>
+    </div>
+{% endblock %}

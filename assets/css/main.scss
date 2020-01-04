@@ -1,8 +1,8 @@
-// If you want to override variables do it here
 @import "variables";
 
-// Import styles
 @import "~@coreui/coreui/scss/coreui";
 @import '~@fortawesome/fontawesome-free/scss/fontawesome';
 @import '~@fortawesome/fontawesome-free/scss/solid';
 @import '~datatables.net-bs4';
+@import '~select2';
+@import '~select2-theme-bootstrap4';

@@ -20,6 +20,10 @@ class Ship
 {
     public const READY_STATUS_FLIGHT_READY = 'flight-ready';
     public const READY_STATUS_CONCEPT = 'concept';
+    public const READY_STATUSES = [
+        self::READY_STATUS_FLIGHT_READY,
+        self::READY_STATUS_CONCEPT,
+    ];
 
     public const SIZE_VEHICLE = 'vehicle';
     public const SIZE_SNUB = 'snub';
@@ -66,26 +70,26 @@ class Ship
     /**
      * @var HoldedShip[]|Collection
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\HoldedShip", mappedBy="holder", fetch="EAGER")
+     * @ORM\OneToMany(targetEntity="App\Entity\HoldedShip", mappedBy="holded", fetch="EAGER", cascade={"all"}, orphanRemoval=true)
      */
     private $holders;
 
     /**
      * @var HoldedShip[]|Collection
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\HoldedShip", mappedBy="holded", fetch="EAGER")
+     * @ORM\OneToMany(targetEntity="App\Entity\HoldedShip", mappedBy="holder", fetch="EAGER", cascade={"all"}, orphanRemoval=true)
      * @Groups({"ship:read"})
      */
     private $holdedShips;
 
     /**
-     * @ORM\Column(type="decimal", scale=4, nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      * @Groups({"ship:read"})
      */
     private ?float $height = null;
 
     /**
-     * @ORM\Column(type="decimal", scale=4, nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      * @Groups({"ship:read"})
      */
     private ?float $length = null;
@@ -219,17 +223,22 @@ class Ship
         return $this;
     }
 
+    /**
+     * @return HoldedShip[]
+     */
     public function getHoldedShips(): Collection
     {
         return $this->holdedShips;
     }
 
+    public function clearHoldedShips(): void
+    {
+        $this->holdedShips->clear();
+    }
+
     public function addHoldedShip(HoldedShip $holdedShip): self
     {
         $this->holdedShips->add($holdedShip);
-        if ($holdedShip->getHolded() !== $this) {
-            $holdedShip->setHolded($this);
-        }
 
         return $this;
     }
@@ -237,9 +246,6 @@ class Ship
     public function removeHoldedShip(HoldedShip $holdedShip): self
     {
         $this->holdedShips->removeElement($holdedShip);
-        if ($holdedShip->getHolded() !== null) {
-            $holdedShip->setHolded(null);
-        }
 
         return $this;
     }
@@ -252,9 +258,6 @@ class Ship
     public function addHolder(HoldedShip $holdedShip): self
     {
         $this->holders->add($holdedShip);
-        if ($holdedShip->getHolder() !== $this) {
-            $holdedShip->setHolder($this);
-        }
 
         return $this;
     }
@@ -262,9 +265,6 @@ class Ship
     public function removeHolder(HoldedShip $holdedShip): self
     {
         $this->holders->removeElement($holdedShip);
-        if ($holdedShip->getHolder() !== null) {
-            $holdedShip->setHolder(null);
-        }
 
         return $this;
     }

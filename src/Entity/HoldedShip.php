@@ -15,15 +15,15 @@ class HoldedShip
      * A ship can contain some others ship. e.g., A Carrack includes a Pisces and a Rover.
      *
      * @ORM\Id()
-     * @ORM\ManyToOne(targetEntity="Ship", inversedBy="holders")
-     * @Groups({"ship:read"})
-     * @MaxDepth(1)
+     * @ORM\ManyToOne(targetEntity="Ship", inversedBy="holdedShips")
      */
     private ?Ship $holder = null;
 
     /**
      * @ORM\Id()
-     * @ORM\ManyToOne(targetEntity="Ship", inversedBy="holdedShips")
+     * @ORM\ManyToOne(targetEntity="Ship", inversedBy="holders")
+     * @Groups({"ship:read"})
+     * @MaxDepth(1)
      */
     private ?Ship $holded = null;
 
