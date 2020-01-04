@@ -1,0 +1,13 @@
+oneup_flysystem:
+    adapters:
+        ships_pictures_adapter:
+            local:
+                directory: '%kernel.project_dir%/public/uploads/ships/pictures'
+        ships_thumbnails_adapter:
+            local:
+                directory: '%kernel.project_dir%/public/uploads/ships/thumbnails'
+    filesystems:
+        ships_pictures_filesystem:
+            adapter: ships_pictures_adapter
+        ships_thumbnails_filesystem:
+            adapter: ships_thumbnails_adapter

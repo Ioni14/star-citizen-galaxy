@@ -14,7 +14,7 @@
     {{- form_help(form) -}}
 
     {%- if image_uri is not null -%}
-        <img src="{{ asset(image_uri) }}" alt="preview" class="img-thumbnail mt-2" />
+        <img src="{{ asset(image_uri, image_assets_package) }}" alt="preview" class="img-thumbnail mt-2" />
     {%- endif -%}
 
     </{{ element|default('div') }}>

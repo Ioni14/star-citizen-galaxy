@@ -25,6 +25,8 @@ class ShipDto
 
     /**
      * @var HoldedShipDto[]
+     *
+     * @Assert\Valid()
      */
     public array $holdedShips;
 
@@ -79,14 +81,14 @@ class ShipDto
      */
     public ?UploadedFile $picture = null;
 
-    public ?string $pictureUri;
+    public ?string $picturePath;
 
     /**
      * @Assert\File(maxSize="1M", mimeTypes={"image/jpeg", "image/png", "image/webp"}, mimeTypesMessage="ship.constraints.picture.bad_format")
      */
     public ?UploadedFile $thumbnail = null;
 
-    public ?string $thumbnailUri;
+    public ?string $thumbnailPath;
 
     public function __construct(
         ?string $name = null,
@@ -100,8 +102,8 @@ class ShipDto
         ?string $readyStatus = null,
         ?string $focus = null,
         ?string $pledgeUrl = null,
-        ?string $pictureUri = null,
-        ?string $thumbnailUri = null,
+        ?string $picturePath = null,
+        ?string $thumbnailPath = null,
         ?int $price = null
     ) {
         $this->name = $name;
@@ -115,8 +117,8 @@ class ShipDto
         $this->readyStatus = $readyStatus;
         $this->focus = $focus;
         $this->pledgeUrl = $pledgeUrl;
-        $this->pictureUri = $pictureUri;
-        $this->thumbnailUri = $thumbnailUri;
+        $this->picturePath = $picturePath;
+        $this->thumbnailPath = $thumbnailPath;
         $this->price = $price;
     }
 

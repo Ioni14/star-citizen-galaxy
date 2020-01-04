@@ -13,7 +13,6 @@ App\Entity\Ship:
         size: 'small'
         focus: 'starter / pathfinder'
         pledgeUrl: 'https://robertsspaceindustries.com/pledge/ships/rsi-aurora/Aurora-ES'
-        pictureUri: 'https://robertsspaceindustries.com/media/9u8061zhf29fir/source/Rsi_aurora_es_storefront_visual.jpg'
         createdAt: '<(new \DateTimeImmutable("2019-05-01 21:22:33"))>'
         updatedAt: '<(new \DateTimeImmutable("2019-05-02 21:22:33"))>'
     ship_aurora_ln:

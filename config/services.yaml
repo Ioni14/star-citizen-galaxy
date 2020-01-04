@@ -1,4 +1,6 @@
 parameters:
+    env(SHIP_PICTURES_PATH_PREFIX): ''
+    env(SHIP_THUMBNAILS_PATH_PREFIX): ''
 
 services:
     _defaults:

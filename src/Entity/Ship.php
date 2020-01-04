@@ -134,13 +134,13 @@ class Ship
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"ship:read"})
      */
-    private ?string $thumbnailUri = null;
+    private ?string $thumbnailPath = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"ship:read"})
      */
-    private ?string $pictureUri = null;
+    private ?string $picturePath = null;
 
     /**
      * In cents.
@@ -365,26 +365,26 @@ class Ship
         return $this;
     }
 
-    public function getThumbnailUri(): ?string
+    public function getThumbnailPath(): ?string
     {
-        return $this->thumbnailUri;
+        return $this->thumbnailPath;
     }
 
-    public function setThumbnailUri(?string $thumbnailUri): self
+    public function setThumbnailPath(?string $thumbnailPath): self
     {
-        $this->thumbnailUri = $thumbnailUri;
+        $this->thumbnailPath = $thumbnailPath;
 
         return $this;
     }
 
-    public function getPictureUri(): ?string
+    public function getPicturePath(): ?string
     {
-        return $this->pictureUri;
+        return $this->picturePath;
     }
 
-    public function setPictureUri(?string $pictureUri): self
+    public function setPicturePath(?string $picturePath): self
     {
-        $this->pictureUri = $pictureUri;
+        $this->picturePath = $picturePath;
 
         return $this;
     }

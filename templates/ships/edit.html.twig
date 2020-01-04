@@ -21,6 +21,8 @@
 
                         <div class="row">
                             <div class="col col-12 col-xl-6">
+                                {{ form_errors(form) }}
+
                                 {{ form_row(form.name) }}
                                 {{ form_row(form.chassis, {'attr': {'class': 'js-select2'}, 'help': 'The ship family. e.g., Aurora LN and ES are both an Aurora.'}) }}
 

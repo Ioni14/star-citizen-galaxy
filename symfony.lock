@@ -16,6 +16,9 @@
             "src/Entity/.gitignore"
         ]
     },
+    "aws/aws-sdk-php": {
+        "version": "3.130.3"
+    },
     "clue/stream-filter": {
         "version": "v1.4.1"
     },
@@ -122,6 +125,9 @@
     "fzaninotto/faker": {
         "version": "v1.9.1"
     },
+    "guzzlehttp/guzzle": {
+        "version": "6.5.2"
+    },
     "guzzlehttp/promises": {
         "version": "v1.3.1"
     },
@@ -145,14 +151,42 @@
     "http-interop/http-factory-guzzle": {
         "version": "1.0.0"
     },
+    "imagine/imagine": {
+        "version": "1.2.3"
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
     "jean85/pretty-package-versions": {
         "version": "1.2"
     },
+    "league/flysystem": {
+        "version": "1.0.63"
+    },
+    "league/flysystem-aws-s3-v3": {
+        "version": "1.0.23"
+    },
+    "league/flysystem-cached-adapter": {
+        "version": "1.0.9"
+    },
+    "liip/imagine-bundle": {
+        "version": "1.8",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.8",
+            "ref": "1d42bc3f713130582e6e0c475c49bc327ab0a2a2"
+        },
+        "files": [
+            "config/packages/liip_imagine.yaml",
+            "config/routes/liip_imagine.yaml"
+        ]
+    },
     "monolog/monolog": {
         "version": "1.25.3"
+    },
+    "mtdowling/jmespath.php": {
+        "version": "2.5.0"
     },
     "myclabs/deep-copy": {
         "version": "1.9.4"
@@ -187,6 +221,18 @@
     },
     "ocramius/proxy-manager": {
         "version": "2.5.1"
+    },
+    "oneup/flysystem-bundle": {
+        "version": "3.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "3.0",
+            "ref": "0eb87bba411c227da027fe5f7c1dc7954b02f242"
+        },
+        "files": [
+            "config/packages/oneup_flysystem.yaml"
+        ]
     },
     "php": {
         "version": "7.4"
@@ -563,6 +609,9 @@
         "version": "v2.0.1"
     },
     "symfony/stopwatch": {
+        "version": "v4.4.2"
+    },
+    "symfony/templating": {
         "version": "v4.4.2"
     },
     "symfony/test-pack": {

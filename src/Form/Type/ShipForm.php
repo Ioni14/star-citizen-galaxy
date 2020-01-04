@@ -87,11 +87,13 @@ class ShipForm extends AbstractType
             ])
             ->add('picture', FileType::class, [
                 'required' => false,
-                'image_uri_property' => 'pictureUri',
+                'image_path_property' => 'picturePath',
+                'image_assets_package' => 'ship_pictures',
             ])
             ->add('thumbnail', FileType::class, [
                 'required' => false,
-                'image_uri_property' => 'thumbnailUri',
+                'image_path_property' => 'thumbnailPath',
+                'image_assets_package' => 'ship_thumbnails',
             ]);
     }
 
