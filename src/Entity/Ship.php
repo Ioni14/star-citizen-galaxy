@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -55,8 +56,9 @@ class Ship
 
     /**
      * @ORM\Column(type="string", length=50, unique=true)
+     * @Gedmo\Slug(fields={"name"})
      */
-    private string $slug = '';
+    private ?string $slug = null;
 
     /**
      * @var ShipChassis
@@ -199,7 +201,7 @@ class Ship
         return $this;
     }
 
-    public function getSlug(): string
+    public function getSlug(): ?string
     {
         return $this->slug;
     }

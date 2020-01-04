@@ -2,25 +2,21 @@
 
 namespace App\Controller\Ships;
 
-use App\Entity\HoldedShip;
 use App\Entity\Ship;
-use App\Form\Dto\HoldedShipDto;
 use App\Form\Dto\ShipDto;
 use App\Form\Type\ShipForm;
-use App\Repository\ShipRepository;
 use App\Service\Ship\FileHelper;
 use App\Service\Ship\HoldedShipsHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Flysystem\FilesystemInterface;
+use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-class EditController extends AbstractController
+class CreateController extends AbstractController
 {
-    private ShipRepository $shipRepository;
     private EntityManagerInterface $entityManager;
     private FilesystemInterface $picturesFilesystem;
     private FilesystemInterface $thumbnailsFilesystem;
@@ -28,14 +24,12 @@ class EditController extends AbstractController
     private FileHelper $fileHelper;
 
     public function __construct(
-        ShipRepository $shipRepository,
         EntityManagerInterface $entityManager,
         FilesystemInterface $shipsPicturesFilesystem,
         FilesystemInterface $shipsThumbnailsFilesystem,
         HoldedShipsHelper $holdedShipsHelper,
         FileHelper $fileHelper
     ) {
-        $this->shipRepository = $shipRepository;
         $this->entityManager = $entityManager;
         $this->picturesFilesystem = $shipsPicturesFilesystem;
         $this->thumbnailsFilesystem = $shipsThumbnailsFilesystem;
@@ -44,38 +38,15 @@ class EditController extends AbstractController
     }
 
     /**
-     * @Route("/ships/edit/{slug}", name="ships_edit", methods={"GET","POST"})
+     * @Route("/ships/create", name="ships_create", methods={"GET","POST"})
      */
-    public function __invoke(Request $request, string $slug): Response
+    public function __invoke(Request $request): Response
     {
-        /** @var Ship $ship */
-        $ship = $this->shipRepository->findOneBy(['slug' => $slug]);
-        if ($ship === null) {
-            throw new NotFoundHttpException('Ship not found.');
-        }
-
-        $shipDto = new ShipDto(
-            $ship->getName(),
-            $ship->getChassis(),
-            array_map(static function (HoldedShip $holdedShip): HoldedShipDto {
-                return new HoldedShipDto($holdedShip->getHolded(), $holdedShip->getQuantity());
-            }, $ship->getHoldedShips()->toArray()),
-            $ship->getHeight(),
-            $ship->getLength(),
-            $ship->getMinCrew(),
-            $ship->getMaxCrew(),
-            $ship->getSize(),
-            $ship->getReadyStatus(),
-            $ship->getFocus(),
-            $ship->getPledgeUrl(),
-            $ship->getPicturePath(),
-            $ship->getThumbnailPath(),
-            $ship->getPrice(),
-        );
+        $shipDto = new ShipDto();
         $form = $this->createForm(ShipForm::class, $shipDto);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $ship
+            $ship = (new Ship(Uuid::uuid4()))
                 ->setName($shipDto->name)
                 ->setChassis($shipDto->chassis)
                 ->setHeight($shipDto->height)
@@ -90,24 +61,34 @@ class EditController extends AbstractController
 
             $this->holdedShipsHelper->computeHoldedShips($ship, $shipDto);
 
-            if ($shipDto->picture !== null) {
-                $path = $this->fileHelper->handleFile($shipDto->picture, $ship->getSlug(), $ship->getPicturePath(), 'pictures', $this->picturesFilesystem);
-                $ship->setPicturePath($path);
-            }
-            if ($shipDto->thumbnail !== null) {
-                $path = $this->fileHelper->handleFile($shipDto->thumbnail, $ship->getSlug(), $ship->getThumbnailPath(), 'thumbnails', $this->thumbnailsFilesystem);
-                $ship->setThumbnailPath($path);
+            try {
+                $this->entityManager->beginTransaction();
+                $this->entityManager->persist($ship);
+                $this->entityManager->flush();
+
+                if ($shipDto->picture !== null) {
+                    $path = $this->fileHelper->handleFile($shipDto->picture, $ship->getSlug(), $ship->getPicturePath(), 'pictures', $this->picturesFilesystem);
+                    $ship->setPicturePath($path);
+                }
+                if ($shipDto->thumbnail !== null) {
+                    $path = $this->fileHelper->handleFile($shipDto->thumbnail, $ship->getSlug(), $ship->getThumbnailPath(), 'thumbnails', $this->thumbnailsFilesystem);
+                    $ship->setThumbnailPath($path);
+                }
+
+                $this->entityManager->flush();
+
+                $this->entityManager->commit();
+            } catch (\Exception $e) {
+                $this->entityManager->rollback();
+                throw $e;
             }
 
-            $this->entityManager->flush();
-
-            $this->addFlash('success', 'The ship has been successfully modified.');
+            $this->addFlash('success', 'The ship has been successfully created.');
 
             return $this->redirectToRoute('ships_edit', ['slug' => $ship->getSlug()]);
         }
 
-        return $this->render('ships/edit.html.twig', [
-            'ship' => $ship,
+        return $this->render('ships/create.html.twig', [
             'form' => $form->createView(),
         ]);
     }
