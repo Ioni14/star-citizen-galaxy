@@ -27,10 +27,18 @@ class Ship
     public const SIZE_MEDIUM = 'medium';
     public const SIZE_LARGE = 'large';
     public const SIZE_CAPITAL = 'capital';
+    public const SIZES = [
+        self::SIZE_VEHICLE,
+        self::SIZE_SNUB,
+        self::SIZE_SMALL,
+        self::SIZE_MEDIUM,
+        self::SIZE_LARGE,
+        self::SIZE_CAPITAL,
+    ];
 
     /**
      * @ORM\Id()
-     * @ORM\Column(type="uuid_binary", unique=true)
+     * @ORM\Column(type="uuid", unique=true)
      * @Groups({"ship:read"})
      */
     private ?UuidInterface $id = null;
@@ -56,26 +64,19 @@ class Ship
     private $chassis;
 
     /**
-     * A ship can contain some others ship. e.g., A Carrack includes a Pisces.
+     * @var HoldedShip[]|Collection
      *
-     * @ORM\ManyToOne(targetEntity="Ship", inversedBy="holdedShips")
-     * @Groups({"ship:read"})
+     * @ORM\OneToMany(targetEntity="App\Entity\HoldedShip", mappedBy="holder", fetch="EAGER")
      */
-    private ?Ship $holder = null;
+    private $holders;
 
     /**
-     * @var Ship[]|Collection
+     * @var HoldedShip[]|Collection
      *
-     * @ORM\OneToMany(targetEntity="Ship", mappedBy="holder", fetch="EAGER")
+     * @ORM\OneToMany(targetEntity="App\Entity\HoldedShip", mappedBy="holded", fetch="EAGER")
      * @Groups({"ship:read"})
      */
     private $holdedShips;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"ship:read"})
-     */
-    private ?int $rsiId = null;
 
     /**
      * @ORM\Column(type="decimal", scale=4, nullable=true)
@@ -138,6 +139,14 @@ class Ship
     private ?string $pictureUri = null;
 
     /**
+     * In cents.
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"ship:read"})
+     */
+    private ?int $price = null;
+
+    /**
      * @ORM\Column(type="datetimetz_immutable")
      * @Groups({"ship:read"})
      */
@@ -162,6 +171,7 @@ class Ship
     public function __construct(?UuidInterface $id = null, ?ShipChassis $chassis = null)
     {
         $this->id = $id;
+        $this->holders = new ArrayCollection();
         $this->holdedShips = new ArrayCollection();
         $this->chassis = $chassis ?? new ShipChassis();
         $this->createdAt = new \DateTimeImmutable();
@@ -209,52 +219,52 @@ class Ship
         return $this;
     }
 
-    public function getHolder(): ?self
-    {
-        return $this->holder;
-    }
-
-    public function setHolder(?self $holder): self
-    {
-        $this->holder = $holder;
-        if ($holder !== null && !$holder->holdedShips->contains($this)) {
-            $holder->addHoldedShip($this);
-        }
-
-        return $this;
-    }
-
     public function getHoldedShips(): Collection
     {
         return $this->holdedShips;
     }
 
-    public function addHoldedShip(self $ship): self
+    public function addHoldedShip(HoldedShip $holdedShip): self
     {
-        $this->holdedShips->add($ship);
-        if ($ship->holder !== $this) {
-            $ship->setHolder($this);
+        $this->holdedShips->add($holdedShip);
+        if ($holdedShip->getHolded() !== $this) {
+            $holdedShip->setHolded($this);
         }
 
         return $this;
     }
 
-    public function removeHoldedShip(self $ship): self
+    public function removeHoldedShip(HoldedShip $holdedShip): self
     {
-        $this->holdedShips->removeElement($ship);
-        $ship->setHolder(null);
+        $this->holdedShips->removeElement($holdedShip);
+        if ($holdedShip->getHolded() !== null) {
+            $holdedShip->setHolded(null);
+        }
 
         return $this;
     }
 
-    public function getRsiId(): ?int
+    public function getHolders(): Collection
     {
-        return $this->rsiId;
+        return $this->holders;
     }
 
-    public function setRsiId(?int $rsiId): self
+    public function addHolder(HoldedShip $holdedShip): self
     {
-        $this->rsiId = $rsiId;
+        $this->holders->add($holdedShip);
+        if ($holdedShip->getHolder() !== $this) {
+            $holdedShip->setHolder($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHolder(HoldedShip $holdedShip): self
+    {
+        $this->holders->removeElement($holdedShip);
+        if ($holdedShip->getHolder() !== null) {
+            $holdedShip->setHolder(null);
+        }
 
         return $this;
     }
@@ -375,6 +385,18 @@ class Ship
     public function setPictureUri(?string $pictureUri): self
     {
         $this->pictureUri = $pictureUri;
+
+        return $this;
+    }
+
+    public function getPrice(): ?int
+    {
+        return $this->price;
+    }
+
+    public function setPrice(?int $price): self
+    {
+        $this->price = $price;
 
         return $this;
     }

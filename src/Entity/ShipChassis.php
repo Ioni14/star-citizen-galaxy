@@ -16,7 +16,7 @@ class ShipChassis
 {
     /**
      * @ORM\Id()
-     * @ORM\Column(type="uuid_binary", unique=true)
+     * @ORM\Column(type="uuid", unique=true)
      * @Groups({"chassis:read", "ship:read"})
      */
     private ?UuidInterface $id = null;
@@ -40,12 +40,6 @@ class ShipChassis
      * @Groups({"chassis:read", "ship:read"})
      */
     private $manufacturer;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"chassis:read"})
-     */
-    private ?int $rsiId = null;
 
     /**
      * @ORM\Column(type="datetimetz_immutable")
@@ -121,18 +115,6 @@ class ShipChassis
     public function setManufacturer(?Manufacturer $manufacturer): self
     {
         $this->manufacturer = $manufacturer;
-
-        return $this;
-    }
-
-    public function getRsiId(): ?int
-    {
-        return $this->rsiId;
-    }
-
-    public function setRsiId(?int $rsiId): self
-    {
-        $this->rsiId = $rsiId;
 
         return $this;
     }

@@ -12,4 +12,17 @@ class ShipRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Ship::class);
     }
+
+    public function findShipJoinedChassis(): array
+    {
+        $dql = <<<DQL
+            SELECT s, c, m, s2 FROM App\Entity\Ship s
+            JOIN s.chassis c
+            JOIN c.manufacturer m
+            LEFT JOIN s.holdedShips s2
+            DQL;
+        $query = $this->_em->createQuery($dql);
+
+        return $query->getResult();
+    }
 }

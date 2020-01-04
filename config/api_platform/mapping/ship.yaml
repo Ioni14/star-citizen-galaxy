@@ -3,6 +3,7 @@ App\Entity\Ship:
         pagination_items_per_page: 50
         normalization_context:
             groups: ['ship:read']
+            enable_max_depth: true
     collectionOperations:
         get: ~
     itemOperations:

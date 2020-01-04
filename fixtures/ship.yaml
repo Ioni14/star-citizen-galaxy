@@ -4,14 +4,30 @@ App\Entity\Ship:
         chassis: '@chassis_aurora'
         name: 'Aurora ES'
         slug: 'aurora-es'
-        rsiId: 1
         height: 4.0
         length: 18.0
         minCrew: 1
         maxCrew: 1
+        price: 5000
         readyStatus: 'flight-ready'
         size: 'small'
         focus: 'starter / pathfinder'
         pledgeUrl: 'https://robertsspaceindustries.com/pledge/ships/rsi-aurora/Aurora-ES'
         createdAt: '<(new \DateTimeImmutable("2019-05-01 21:22:33"))>'
         updatedAt: '<(new \DateTimeImmutable("2019-05-02 21:22:33"))>'
+    ship_aurora_ln:
+        __construct: ['<(\Ramsey\Uuid\Uuid::fromString("63646ba8-1354-4279-be6a-364aa21c87a1"))>']
+        chassis: '@chassis_aurora'
+        name: 'Aurora LN'
+        slug: 'aurora-ln'
+        height: 4.0
+        length: 18.0
+        minCrew: 1
+        maxCrew: 1
+        price: 7500
+        readyStatus: 'flight-ready'
+        size: 'small'
+        focus: 'starter / pathfinder'
+        pledgeUrl: 'https://robertsspaceindustries.com/pledge/ships/rsi-aurora/Aurora-LN'
+        createdAt: '<(new \DateTimeImmutable("2019-05-02 21:22:33"))>'
+        updatedAt: '<(new \DateTimeImmutable("2019-05-03 21:22:33"))>'

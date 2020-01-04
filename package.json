@@ -1,14 +1,21 @@
 {
     "devDependencies": {
+        "@coreui/coreui": "^2.1",
         "@fortawesome/fontawesome-free": "^5.12",
         "@symfony/webpack-encore": "^0.28",
+        "autoprefixer": "^9.7.3",
         "babel-loader": "^8.0",
         "babel-plugin-syntax-dynamic-import": "^6.18",
         "bootstrap": "^4.4",
         "core-js": "^3.6",
-        "node-sass": "^4.13.0",
+        "datatables.net": "^1.10.20",
+        "datatables.net-bs4": "^1.10.20",
+        "jquery": "^3.4.1",
+        "node-sass": "^4.13",
+        "perfect-scrollbar": "^1.4.0",
+        "postcss-loader": "^3.0.0",
         "regenerator-runtime": "^0.13",
-        "sass-loader": "^7.1.0",
+        "sass-loader": "^7.1",
         "webpack-notifier": "^1.6"
     },
     "private": true,

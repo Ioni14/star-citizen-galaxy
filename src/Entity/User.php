@@ -17,7 +17,7 @@ class User implements UserInterface
 {
     /**
      * @ORM\Id()
-     * @ORM\Column(type="uuid_binary", unique=true)
+     * @ORM\Column(type="uuid", unique=true)
      */
     private ?UuidInterface $id = null;
 

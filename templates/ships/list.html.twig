@@ -1,0 +1,46 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">Home</li>
+        <li class="breadcrumb-item">
+            <a href="{{ path('ships_list') }}">Ships</a>
+        </li>
+        <li class="breadcrumb-item active">List</li>
+    </ol>
+    <div class="container-fluid">
+        <div class="animated fadeIn">
+            <div class="card">
+                <div class="card-header">
+                    List of Ships
+                </div>
+                <div class="card-body">
+                    <table id="js-ships-datatable" class="table table-responsive-sm table-bordered table-striped table-sm">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Chassis</th>
+                                <th>Manufacturer</th>
+                                <th>Size</th>
+                                <th class="nosort">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for ship in ships %}
+                            <tr>
+                                <td><a href="{{ path('ships_details', {'slug': ship.slug}) }}">{{ ship.name }}</a></td>
+                                <td>{{ ship.chassis.name ?? '-' }}</td>
+                                <td>{{ ship.chassis.manufacturer.name ?? '-' }}</td>
+                                <td>{{ ship.size }}</td>
+                                <td>
+                                    <a class="btn btn-primary btn-sm" href="{{ path('ships_edit', {'slug': ship.slug}) }}"><i class="fa fa-edit"></i> Edit</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -17,7 +17,7 @@ class Manufacturer
 {
     /**
      * @ORM\Id()
-     * @ORM\Column(type="uuid_binary", unique=true)
+     * @ORM\Column(type="uuid", unique=true)
      * @Groups({"manufacturer:read", "chassis:read", "ship:read"})
      */
     private ?UuidInterface $id = null;
@@ -38,12 +38,6 @@ class Manufacturer
      * @Groups({"manufacturer:read", "chassis:read", "ship:read"})
      */
     private string $code = '';
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"manufacturer:read"})
-     */
-    private ?int $rsiId = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -133,18 +127,6 @@ class Manufacturer
     public function setCode(string $code): self
     {
         $this->code = $code;
-
-        return $this;
-    }
-
-    public function getRsiId(): ?int
-    {
-        return $this->rsiId;
-    }
-
-    public function setRsiId(?int $rsiId): self
-    {
-        $this->rsiId = $rsiId;
 
         return $this;
     }

@@ -4,7 +4,6 @@ App\Entity\Manufacturer:
         name: 'Robert Space Industries'
         slug: 'robert-space-industries'
         code: 'RSI'
-        rsiId: 1
         createdAt: '<(new \DateTimeImmutable("2019-05-01 21:22:33"))>'
         updatedAt: '<(new \DateTimeImmutable("2019-05-02 21:22:33"))>'
     manufacturer_:
@@ -12,6 +11,5 @@ App\Entity\Manufacturer:
         name: 'Origin Jumpworks GmbH'
         slug: 'origin-jumpworks-gmbh'
         code: 'ORIG'
-        rsiId: 6
         createdAt: '<(new \DateTimeImmutable("2019-05-02 21:22:33"))>'
         updatedAt: '<(new \DateTimeImmutable("2019-05-03 21:22:33"))>'

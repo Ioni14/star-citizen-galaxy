@@ -4,6 +4,5 @@ App\Entity\ShipChassis:
         manufacturer: '@manufacturer_rsi'
         name: 'Aurora'
         slug: 'aurora'
-        rsiId: 1
         createdAt: '<(new \DateTimeImmutable("2019-05-01 21:22:33"))>'
         updatedAt: '<(new \DateTimeImmutable("2019-05-02 21:22:33"))>'

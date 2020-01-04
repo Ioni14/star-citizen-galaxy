@@ -1,0 +1,42 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">Home</li>
+        <li class="breadcrumb-item">
+            <a href="{{ path('ships_list') }}">Ships</a>
+        </li>
+        <li class="breadcrumb-item active">Edit</li>
+    </ol>
+    <div class="container-fluid">
+        <div class="animated fadeIn">
+            <div class="card">
+                <div class="card-header">
+                    Edit of a Ship
+                </div>
+                <div class="card-body">
+                    <form action="{{ path('ships_edit', {'slug': ship.slug}) }}" method="post" enctype="multipart/form-data">
+                        <p>
+                            <a href="{{ path('ships_list') }}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back to list</a>
+                            <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
+                        </p>
+
+                        {{ form_row(form.name) }}
+                        {{ form_row(form.chassis) }}
+                        {# add Select2 #}
+                        {{ form_row(form.size) }}
+
+                        {% if form._token is defined %}
+                            {{ form_widget(form._token) }}
+                        {% endif %}
+
+                        <p class="mb-0">
+                            <a href="{{ path('ships_list') }}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back to list</a>
+                            <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

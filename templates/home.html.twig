@@ -1,0 +1,23 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">Home</li>
+    </ol>
+    <div class="container-fluid">
+        <div class="animated fadeIn">
+            <div class="card">
+                <div class="card-header">
+                    Data pages
+                </div>
+                <div class="card-body">
+                    <ul>
+                        <li><a href="{{ path('ships_list') }}">List of the Ships</a></li>
+                        <li><a href="{{ path('ships_chassis_list') }}">List of the Ships Chassis</a></li>
+                        <li><a href="{{ path('manufacturers_list') }}">List of the Manufacturers</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

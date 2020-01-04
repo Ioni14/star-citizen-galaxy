@@ -8,7 +8,7 @@ Encore
     .setOutputPath('public/build/')
     .setPublicPath('/build')
 
-    .addEntry('app', './assets/js/app.js')
+    .addEntry('main', './assets/js/main.js')
 
     .splitEntryChunks()
     .enableSingleRuntimeChunk()
@@ -24,7 +24,9 @@ Encore
     })
 
     .enableSassLoader()
+    .enablePostCssLoader()
     .enableIntegrityHashes(Encore.isProduction())
+    .autoProvidejQuery()
 ;
 
 module.exports = Encore.getWebpackConfig();
