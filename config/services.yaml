@@ -9,8 +9,22 @@ services:
 
     App\:
         resource: '../src/*'
-        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+        exclude: '../src/{DependencyInjection,Entity,Serializer,Migrations,Tests,Kernel.php}'
 
     App\Controller\:
+        autowire: true
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
+
+    app.serializer.normalizer.ship_files:
+        class: App\Serializer\ShipFilesNormalizer
+        decorates: 'api_platform.serializer.normalizer.item'
+        arguments: [ '@app.serializer.normalizer.ship_files.inner', '@assets.packages' ]
+    app.jsonld.normalizer.ship_files:
+        class: App\Serializer\ShipFilesNormalizer
+        decorates: 'api_platform.jsonld.normalizer.item'
+        arguments: [ '@app.jsonld.normalizer.ship_files.inner', '@assets.packages' ]
+    app.hal.normalizer.ship_files:
+        class: App\Serializer\ShipFilesNormalizer
+        decorates: 'api_platform.hal.normalizer.item'
+        arguments: [ '@app.hal.normalizer.ship_files.inner', '@assets.packages' ]

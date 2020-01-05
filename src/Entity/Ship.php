@@ -146,14 +146,12 @@ class Ship
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Gedmo\Versioned()
-     * @Groups({"ship:read"})
      */
     private ?string $thumbnailPath = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Gedmo\Versioned()
-     * @Groups({"ship:read"})
      */
     private ?string $picturePath = null;
 

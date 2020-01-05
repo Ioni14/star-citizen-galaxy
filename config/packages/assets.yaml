@@ -1,8 +1,11 @@
+parameters:
+    env(ASSET_BASE_URL): ''
+
 framework:
     assets:
         json_manifest_path: '%kernel.project_dir%/public/build/manifest.json'
         packages:
             ship_pictures:
-                base_path: 'uploads/ships/pictures'
+                base_urls: ['%env(ASSET_BASE_URL)%/uploads/ships/pictures']
             ship_thumbnails:
-                base_path: 'uploads/ships/thumbnails'
+                base_urls: ['%env(ASSET_BASE_URL)%/uploads/ships/thumbnails']
