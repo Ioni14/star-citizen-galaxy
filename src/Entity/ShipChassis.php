@@ -64,11 +64,13 @@ class ShipChassis
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @Gedmo\Blameable(on="create")
      */
     private ?User $createdBy = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @Gedmo\Blameable(on="update")
      */
     private ?User $updatedBy = null;
 
