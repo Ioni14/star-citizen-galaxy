@@ -100,10 +100,27 @@ final class Version20200101184525 extends AbstractMigration
         $this->addSql('ALTER TABLE ship_chassis ADD CONSTRAINT FK_3BE443B2896DBBDE FOREIGN KEY (updated_by_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE holded_ship ADD CONSTRAINT FK_645607B1DEEE62D0 FOREIGN KEY (holder_id) REFERENCES ship (id)');
         $this->addSql('ALTER TABLE holded_ship ADD CONSTRAINT FK_645607B1AB9C6A93 FOREIGN KEY (holded_id) REFERENCES ship (id)');
+
+        $this->addSql("CREATE TABLE ext_log_entries (
+            id INT AUTO_INCREMENT NOT NULL,
+            action VARCHAR(8) NOT NULL,
+            logged_at DATETIME NOT NULL,
+            object_id VARCHAR(64) DEFAULT NULL,
+            object_class VARCHAR(255) NOT NULL,
+            version INT NOT NULL,
+            data LONGTEXT DEFAULT NULL COMMENT '(DC2Type:array)',
+            username VARCHAR(255) DEFAULT NULL,
+            INDEX log_class_lookup_idx (object_class),
+            INDEX log_date_lookup_idx (logged_at),
+            INDEX log_user_lookup_idx (username),
+            INDEX log_version_lookup_idx (object_id, object_class, version),
+            PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC");
     }
 
     public function down(Schema $schema): void
     {
+        $this->addSql('DROP TABLE ext_log_entries');
+
         $this->addSql('ALTER TABLE manufacturer DROP FOREIGN KEY FK_3D0AE6DCB03A8386');
         $this->addSql('ALTER TABLE manufacturer DROP FOREIGN KEY FK_3D0AE6DC896DBBDE');
         $this->addSql('ALTER TABLE ship DROP FOREIGN KEY FK_FA30EB2463EE729');

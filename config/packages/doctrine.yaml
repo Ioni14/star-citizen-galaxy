@@ -11,8 +11,14 @@ doctrine:
         auto_mapping: true
         mappings:
             App:
-                is_bundle: false
                 type: annotation
-                dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'App\Entity'
+                dir: '%kernel.project_dir%/src/Entity'
                 alias: App
+                is_bundle: false
+            gedmo_loggable:
+                type: annotation
+                prefix: Gedmo\Loggable\Entity
+                dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Loggable/Entity"
+                alias: GedmoLoggable
+                is_bundle: false

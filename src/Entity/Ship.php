@@ -16,6 +16,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     @ORM\Index(name="name_idx", columns={"name"})
  * })
  * @UniqueEntity(fields={"slug"})
+ * @Gedmo\Loggable()
  */
 class Ship
 {
@@ -50,6 +51,7 @@ class Ship
 
     /**
      * @ORM\Column(type="string", length=30)
+     * @Gedmo\Versioned()
      * @Groups({"ship:read"})
      */
     private string $name = '';
@@ -65,6 +67,7 @@ class Ship
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\ShipChassis")
      * @ORM\JoinColumn(nullable=false)
+     * @Gedmo\Versioned()
      * @Groups({"ship:read"})
      */
     private $chassis;
@@ -86,60 +89,70 @@ class Ship
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Gedmo\Versioned()
      * @Groups({"ship:read"})
      */
     private ?float $height = null;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Gedmo\Versioned()
      * @Groups({"ship:read"})
      */
     private ?float $length = null;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Gedmo\Versioned()
      * @Groups({"ship:read"})
      */
     private ?int $maxCrew = null;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Gedmo\Versioned()
      * @Groups({"ship:read"})
      */
     private ?int $minCrew = null;
 
     /**
      * @ORM\Column(type="string", length=30, nullable=true)
+     * @Gedmo\Versioned()
      * @Groups({"ship:read"})
      */
     private ?string $readyStatus = null;
 
     /**
      * @ORM\Column(type="string", length=30, nullable=true)
+     * @Gedmo\Versioned()
      * @Groups({"ship:read"})
      */
     private ?string $size = null;
 
     /**
      * @ORM\Column(type="string", length=30, nullable=true)
+     * @Gedmo\Versioned()
      * @Groups({"ship:read"})
      */
     private ?string $focus = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Gedmo\Versioned()
      * @Groups({"ship:read"})
      */
     private ?string $pledgeUrl = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Gedmo\Versioned()
      * @Groups({"ship:read"})
      */
     private ?string $thumbnailPath = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Gedmo\Versioned()
      * @Groups({"ship:read"})
      */
     private ?string $picturePath = null;
@@ -148,6 +161,7 @@ class Ship
      * In cents.
      *
      * @ORM\Column(type="integer", nullable=true)
+     * @Gedmo\Versioned()
      * @Groups({"ship:read"})
      */
     private ?int $price = null;
