@@ -85,7 +85,7 @@ class CreateController extends AbstractController
 
             $this->addFlash('success', 'The ship has been successfully created.');
 
-            return $this->redirectToRoute('ships_edit', ['slug' => $ship->getSlug()]);
+            return $this->redirectToRoute('ships_details', ['slug' => $ship->getSlug()]);
         }
 
         return $this->render('ships/create.html.twig', [

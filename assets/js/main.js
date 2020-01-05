@@ -29,7 +29,6 @@ $(document).ready(function () {
                 orderable: false
             },
         ],
-        order: [[1, "asc"]]
     });
 
     const select2Options = {

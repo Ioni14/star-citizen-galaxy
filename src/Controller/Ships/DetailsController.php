@@ -22,10 +22,10 @@ class DetailsController extends AbstractController
      */
     public function __invoke(Request $request, string $slug): Response
     {
-//        $ships = $this->shipRepository->findShipJoinedChassis();
-//
-//        return $this->render('ships/list.html.twig', [
-//            'ships' => $ships,
-//        ]);
+        $ship = $this->shipRepository->findOneShipJoinedChassis($slug);
+
+        return $this->render('ships/details.html.twig', [
+            'ship' => $ship,
+        ]);
     }
 }

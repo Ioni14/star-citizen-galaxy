@@ -103,7 +103,7 @@ class EditController extends AbstractController
 
             $this->addFlash('success', 'The ship has been successfully modified.');
 
-            return $this->redirectToRoute('ships_edit', ['slug' => $ship->getSlug()]);
+            return $this->redirectToRoute('ships_details', ['slug' => $ship->getSlug()]);
         }
 
         return $this->render('ships/edit.html.twig', [

@@ -15,7 +15,8 @@
                 <div class="card-body">
                     <form action="{{ path('ships_edit', {'slug': ship.slug}) }}" method="post" enctype="multipart/form-data">
                         <p>
-                            <a href="{{ path('ships_list') }}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back to list</a>
+                            <a href="{{ path('ships_list') }}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back to Ships list</a>
+                            <a href="{{ path('ships_details', {'slug': ship.slug}) }}" class="btn btn-primary"><i class="fa fa-eye"></i> Details</a>
                             <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
                         </p>
 
@@ -56,7 +57,8 @@
                         {% endif %}
 
                         <p class="mb-0">
-                            <a href="{{ path('ships_list') }}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back to list</a>
+                            <a href="{{ path('ships_list') }}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back to Ships list</a>
+                            <a href="{{ path('ships_details', {'slug': ship.slug}) }}" class="btn btn-primary"><i class="fa fa-eye"></i> Details</a>
                             <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
                         </p>
                     </form>

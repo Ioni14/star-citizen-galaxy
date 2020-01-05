@@ -25,4 +25,19 @@ class ShipRepository extends ServiceEntityRepository
 
         return $query->getResult();
     }
+
+    public function findOneShipJoinedChassis(string $slug): ?Ship
+    {
+        $dql = <<<DQL
+            SELECT s, c, m, s2 FROM App\Entity\Ship s
+            JOIN s.chassis c
+            JOIN c.manufacturer m
+            LEFT JOIN s.holdedShips s2
+            WHERE s.slug = :slug
+            DQL;
+        $query = $this->_em->createQuery($dql);
+        $query->setParameter('slug', $slug);
+
+        return $query->getOneOrNullResult();
+    }
 }

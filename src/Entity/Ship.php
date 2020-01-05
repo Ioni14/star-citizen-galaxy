@@ -154,12 +154,14 @@ class Ship
 
     /**
      * @ORM\Column(type="datetimetz_immutable")
+     * @Gedmo\Timestampable(on="create")
      * @Groups({"ship:read"})
      */
     private \DateTimeInterface $createdAt;
 
     /**
      * @ORM\Column(type="datetimetz_immutable")
+     * @Gedmo\Timestampable(on="update")
      * @Groups({"ship:read"})
      */
     private \DateTimeInterface $updatedAt;
