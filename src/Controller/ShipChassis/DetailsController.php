@@ -4,23 +4,32 @@ namespace App\Controller\ShipChassis;
 
 use App\Repository\ShipChassisRepository;
 use App\Repository\ShipRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Gedmo\Loggable\Entity\LogEntry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 class DetailsController extends AbstractController
 {
     private ShipChassisRepository $shipChassisRepository;
     private ShipRepository $shipRepository;
+    private EntityManagerInterface $entityManager;
+    private Security $security;
 
     public function __construct(
         ShipChassisRepository $shipChassisRepository,
-        ShipRepository $shipRepository
+        ShipRepository $shipRepository,
+        EntityManagerInterface $entityManager,
+        Security $security
     ) {
         $this->shipChassisRepository = $shipChassisRepository;
         $this->shipRepository = $shipRepository;
+        $this->entityManager = $entityManager;
+        $this->security = $security;
     }
 
     /**
@@ -34,9 +43,17 @@ class DetailsController extends AbstractController
         }
         $ships = $this->shipRepository->findBy(['chassis' => $shipChassis]);
 
+        $logs = [];
+        if ($this->security->isGranted('ROLE_MODERATOR')) {
+            $logsQuery = $this->entityManager->getRepository(LogEntry::class)->getLogEntriesQuery($shipChassis);
+            $logsQuery->setMaxResults(5);
+            $logs = $logsQuery->getResult();
+        }
+
         return $this->render('ship_chassis/details.html.twig', [
             'chassis' => $shipChassis,
             'ships' => $ships,
+            'last_logs' => $logs,
         ]);
     }
 }

@@ -54,7 +54,7 @@ class EditController extends AbstractController
 
             $this->addFlash('success', 'The manufacturer has been successfully modified.');
 
-            return $this->redirectToRoute('manufacturers_edit', ['slug' => $manufacturer->getSlug()]);
+            return $this->redirectToRoute('manufacturers_details', ['slug' => $manufacturer->getSlug()]);
         }
 
         return $this->render('manufacturers/edit.html.twig', [

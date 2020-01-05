@@ -120,6 +120,10 @@
                                     {% endif %}
                                 </dd>
                             </dl>
+
+                            {% if is_granted('ROLE_MODERATOR') %}
+                                {% include('_entity_loggable.html.twig') with {'last_logs': last_logs} %}
+                            {% endif %}
                         </div>
                     </div>
 

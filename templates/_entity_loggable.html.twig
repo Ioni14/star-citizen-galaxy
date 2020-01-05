@@ -1,0 +1,14 @@
+<h4>History</h4>
+<p>
+    {% for log in last_logs %}
+        {% if log.action == constant('Gedmo\\Loggable\\LoggableListener::ACTION_CREATE') %}
+            <strong>{{ log.username ?? 'Unknown' }}</strong> created at {{ log.loggedAt|localizeddate('medium', 'short') }} UTC.
+        {% else %}
+            <strong>{{ log.username ?? 'Unknown' }}</strong> modified
+            {% for field,value in log.data %}
+                <em>{{ field }}</em>{%- if not loop.last -%}, {% endif -%}
+            {% endfor %}
+            at {{ log.loggedAt|localizeddate('medium', 'short') }} UTC.<br/>
+        {% endif %}
+    {% endfor %}
+</p>
