@@ -15,13 +15,17 @@
                     List of Manufacturers
                 </div>
                 <div class="card-body">
-                    <p><a class="btn btn-primary" href="{{ path('manufacturers_create') }}"><i class="fa fa-plus"></i> Create a new Manufacturer</a></p>
+                    {% if is_granted('ROLE_MODERATOR') %}
+                        <p><a class="btn btn-primary" href="{{ path('manufacturers_create') }}"><i class="fa fa-plus"></i> Create a new Manufacturer</a></p>
+                    {% endif %}
                     <table id="js-manufacturers-datatable" class="table table-responsive-sm table-bordered table-striped table-sm" data-order='[[0, "asc"]]'>
                         <thead>
                         <tr>
                             <th>Name</th>
                             <th>Code</th>
-                            <th class="nosort">Actions</th>
+                            {% if is_granted('ROLE_MODERATOR') %}
+                                <th class="nosort">Actions</th>
+                            {% endif %}
                         </tr>
                         </thead>
                         <tbody>
@@ -29,9 +33,11 @@
                             <tr>
                                 <td><a href="{{ path('manufacturers_details', {'slug': manufacturer.slug}) }}">{{ manufacturer.name }}</a></td>
                                 <td>{{ manufacturer.code }}</td>
-                                <td>
-                                    <a class="btn btn-primary btn-sm" href="{{ path('manufacturers_edit', {'slug': manufacturer.slug}) }}"><i class="fa fa-edit"></i> Edit</a>
-                                </td>
+                                {% if is_granted('ROLE_MODERATOR') %}
+                                    <td>
+                                        <a class="btn btn-primary btn-sm" href="{{ path('manufacturers_edit', {'slug': manufacturer.slug}) }}"><i class="fa fa-edit"></i> Edit</a>
+                                    </td>
+                                {% endif %}
                             </tr>
                         {% endfor %}
                         </tbody>

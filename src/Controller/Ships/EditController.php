@@ -12,6 +12,7 @@ use App\Service\Ship\FileHelper;
 use App\Service\Ship\HoldedShipsHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Flysystem\FilesystemInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,6 +46,7 @@ class EditController extends AbstractController
 
     /**
      * @Route("/ships/edit/{slug}", name="ships_edit", methods={"GET","POST"})
+     * @Security("is_granted('ROLE_MODERATOR')")
      */
     public function __invoke(Request $request, string $slug): Response
     {

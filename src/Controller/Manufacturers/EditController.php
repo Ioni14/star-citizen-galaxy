@@ -7,6 +7,7 @@ use App\Form\Dto\ManufacturerDto;
 use App\Form\Type\ManufacturerForm;
 use App\Repository\ManufacturerRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,6 +29,7 @@ class EditController extends AbstractController
 
     /**
      * @Route("/manufacturers/edit/{slug}", name="manufacturers_edit", methods={"GET","POST"})
+     * @Security("is_granted('ROLE_MODERATOR')")
      */
     public function __invoke(Request $request, string $slug): Response
     {

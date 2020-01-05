@@ -10,6 +10,7 @@ use App\Service\Ship\HoldedShipsHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Flysystem\FilesystemInterface;
 use Ramsey\Uuid\Uuid;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,6 +40,7 @@ class CreateController extends AbstractController
 
     /**
      * @Route("/ships/create", name="ships_create", methods={"GET","POST"})
+     * @Security("is_granted('ROLE_MODERATOR')")
      */
     public function __invoke(Request $request): Response
     {

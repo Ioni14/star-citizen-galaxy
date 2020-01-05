@@ -9,16 +9,13 @@ security:
             entity:
                 class: 'App\Entity\User'
                 property: 'username'
-        chain_user:
-            chain:
-                providers: ['user_entity_username', 'oauth_user_provider']
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|build|uploads|icons|favicon\.ico|robots\.txt)/
             security: false
         main:
             anonymous: lazy
-            provider: user_entity_username # default provider
+            provider: oauth_user_provider # default provider
             switch_user:
                 provider: user_entity_username
                 role: ROLE_ADMIN
@@ -26,15 +23,16 @@ security:
                 secret: '%kernel.secret%'
                 lifetime: 604800 # 1 week
                 path: /
-                user_providers: ['chain_user']
+                user_providers: oauth_user_provider
             oauth:
                 provider: oauth_user_provider
                 resource_owners:
                     discord: /login/check-discord
-                login_path: /login/
+                login_path: /
+                use_referer: true
                 use_forward: false
-                failure_path: /login/
-                always_use_default_target_path: true
+                failure_path: /
+                always_use_default_target_path: false
                 default_target_path: /
                 oauth_user_provider:
                     service: App\Security\OAuthUserProvider

@@ -3,13 +3,11 @@
 namespace App\Controller\Manufacturers;
 
 use App\Entity\Manufacturer;
-use App\Entity\Ship;
 use App\Form\Dto\ManufacturerDto;
-use App\Form\Dto\ShipDto;
 use App\Form\Type\ManufacturerForm;
-use App\Form\Type\ShipForm;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,6 +25,7 @@ class CreateController extends AbstractController
 
     /**
      * @Route("/manufacturers/create", name="manufacturers_create", methods={"GET","POST"})
+     * @Security("is_granted('ROLE_MODERATOR')")
      */
     public function __invoke(Request $request): Response
     {

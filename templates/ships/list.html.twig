@@ -15,7 +15,9 @@
                     List of Ships
                 </div>
                 <div class="card-body">
-                    <p><a class="btn btn-primary" href="{{ path('ships_create') }}"><i class="fa fa-plus"></i> Create a new Ship</a></p>
+                    {% if is_granted('ROLE_MODERATOR') %}
+                        <p><a class="btn btn-primary" href="{{ path('ships_create') }}"><i class="fa fa-plus"></i> Create a new Ship</a></p>
+                    {% endif %}
                     <table id="js-ships-datatable" class="table table-responsive-sm table-bordered table-striped table-sm" data-order='[[0, "asc"]]'>
                         <thead>
                             <tr>
@@ -23,7 +25,9 @@
                                 <th>Chassis</th>
                                 <th>Manufacturer</th>
                                 <th>Size</th>
-                                <th class="nosort">Actions</th>
+                                {% if is_granted('ROLE_MODERATOR') %}
+                                    <th class="nosort">Actions</th>
+                                {% endif %}
                             </tr>
                         </thead>
                         <tbody>
@@ -33,9 +37,11 @@
                                 <td>{{ ship.chassis.name ?? '-' }}</td>
                                 <td>{{ ship.chassis.manufacturer.name ?? '-' }}</td>
                                 <td>{{ ship.size }}</td>
-                                <td>
-                                    <a class="btn btn-primary btn-sm" href="{{ path('ships_edit', {'slug': ship.slug}) }}"><i class="fa fa-edit"></i> Edit</a>
-                                </td>
+                                {% if is_granted('ROLE_MODERATOR') %}
+                                    <td>
+                                        <a class="btn btn-primary btn-sm" href="{{ path('ships_edit', {'slug': ship.slug}) }}"><i class="fa fa-edit"></i> Edit</a>
+                                    </td>
+                                {% endif %}
                             </tr>
                         {% endfor %}
                         </tbody>

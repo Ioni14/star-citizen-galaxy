@@ -7,6 +7,7 @@ use App\Form\Dto\ShipChassisDto;
 use App\Form\Type\ShipChassisForm;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,6 +25,7 @@ class CreateController extends AbstractController
 
     /**
      * @Route("/ship-chassis/create", name="ship_chassis_create", methods={"GET","POST"})
+     * @Security("is_granted('ROLE_MODERATOR')")
      */
     public function __invoke(Request $request): Response
     {

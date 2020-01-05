@@ -43,7 +43,9 @@
                 <div class="card-body">
                     <p>
                         <a href="{{ path('ships_list') }}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back to Ships list</a>
-                        <a href="{{ path('ships_edit', {'slug': ship.slug}) }}" class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a>
+                        {% if is_granted('ROLE_MODERATOR') %}
+                            <a href="{{ path('ships_edit', {'slug': ship.slug}) }}" class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a>
+                        {% endif %}
                     </p>
 
                     <div class="row">
@@ -123,7 +125,9 @@
 
                     <p class="mb-0">
                         <a href="{{ path('ships_list') }}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back to Ships list</a>
-                        <a href="{{ path('ships_edit', {'slug': ship.slug}) }}" class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a>
+                        {% if is_granted('ROLE_MODERATOR') %}
+                            <a href="{{ path('ships_edit', {'slug': ship.slug}) }}" class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a>
+                        {% endif %}
                     </p>
                 </div>
             </div>
