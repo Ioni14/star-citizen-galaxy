@@ -3,7 +3,9 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -11,6 +13,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Table(indexes={
  *     @ORM\Index(name="name_idx", columns={"name"})
  * })
+ * @UniqueEntity(fields={"slug"})
+ * @Gedmo\Loggable()
  */
 class ShipChassis
 {
@@ -23,32 +27,37 @@ class ShipChassis
 
     /**
      * @ORM\Column(type="string", length=30)
+     * @Gedmo\Versioned()
      * @Groups({"chassis:read", "ship:read"})
      */
     private string $name = '';
 
     /**
      * @ORM\Column(type="string", length=50, unique=true)
+     * @Gedmo\Slug(fields={"name"})
      */
-    private string $slug = '';
+    private ?string $slug = null;
 
     /**
      * @var Manufacturer
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Manufacturer")
      * @ORM\JoinColumn(nullable=false)
+     * @Gedmo\Versioned()
      * @Groups({"chassis:read", "ship:read"})
      */
     private $manufacturer;
 
     /**
      * @ORM\Column(type="datetimetz_immutable")
+     * @Gedmo\Timestampable(on="create")
      * @Groups({"chassis:read"})
      */
     private \DateTimeInterface $createdAt;
 
     /**
      * @ORM\Column(type="datetimetz_immutable")
+     * @Gedmo\Timestampable(on="update")
      * @Groups({"chassis:read"})
      */
     private \DateTimeInterface $updatedAt;
@@ -63,9 +72,11 @@ class ShipChassis
      */
     private ?User $updatedBy = null;
 
-    public function __construct(?UuidInterface $id = null, ?Manufacturer $manufacturer = null)
+    public function __construct(?UuidInterface $id = null, string $name = '', ?string $slug = null, ?Manufacturer $manufacturer = null)
     {
         $this->id = $id;
+        $this->name = $name;
+        $this->slug = $slug;
         $this->manufacturer = $manufacturer ?? new Manufacturer();
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
@@ -95,7 +106,7 @@ class ShipChassis
         return $this;
     }
 
-    public function getSlug(): string
+    public function getSlug(): ?string
     {
         return $this->slug;
     }

@@ -15,8 +15,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class EditController extends AbstractController
 {
-    private EntityManagerInterface $entityManager;
     private ManufacturerRepository $manufacturerRepository;
+    private EntityManagerInterface $entityManager;
 
     public function __construct(
         ManufacturerRepository $manufacturerRepository,

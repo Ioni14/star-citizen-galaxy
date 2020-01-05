@@ -11,6 +11,7 @@ Encore
     .addEntry('main', './assets/js/main.js')
     .addEntry('manufacturers', './assets/js/manufacturers.js')
     .addEntry('ships', './assets/js/ships.js')
+    .addEntry('ship_chassis', './assets/js/ships_chassis.js')
 
     .splitEntryChunks()
     .enableSingleRuntimeChunk()

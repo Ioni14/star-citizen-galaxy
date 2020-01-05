@@ -12,4 +12,28 @@ class ShipChassisRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, ShipChassis::class);
     }
+
+    public function findChassisJoinedManufacturer(): array
+    {
+        $dql = <<<DQL
+            SELECT sc, m FROM App\Entity\ShipChassis sc
+            JOIN sc.manufacturer m
+            DQL;
+        $query = $this->_em->createQuery($dql);
+
+        return $query->getResult();
+    }
+
+    public function findOneChassisJoinedManufacturer(string $slug): ?ShipChassis
+    {
+        $dql = <<<DQL
+            SELECT sc, m FROM App\Entity\ShipChassis sc
+            JOIN sc.manufacturer m
+            WHERE sc.slug = :slug
+            DQL;
+        $query = $this->_em->createQuery($dql);
+        $query->setParameter('slug', $slug);
+
+        return $query->getOneOrNullResult();
+    }
 }

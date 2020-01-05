@@ -1,21 +1,21 @@
-{% extends 'manufacturers/layout.html.twig' %}
+{% extends 'ship_chassis/layout.html.twig' %}
 
 {% block content %}
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ path('homepage') }}">Home</a></li>
         <li class="breadcrumb-item">
-            <a href="{{ path('manufacturers_list') }}">Manufacturers</a>
+            <a href="{{ path('ship_chassis_list') }}">Ship chassis</a>
         </li>
         <li class="breadcrumb-item active">Details</li>
     </ol>
     <div class="container-fluid">
         <div class="animated fadeIn">
             <div class="card">
-                <div class="card-header">Details of a Manufacturer</div>
+                <div class="card-header">Details of a Ship chassis</div>
                 <div class="card-body">
                     <p>
-                        <a href="{{ path('manufacturers_list') }}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back to Manufacturers list</a>
-                        <a href="{{ path('manufacturers_edit', {'slug': manufacturer.slug}) }}" class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a>
+                        <a href="{{ path('ship_chassis_list') }}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back to Ship chassis list</a>
+                        <a href="{{ path('ship_chassis_edit', {'slug': chassis.slug}) }}" class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a>
                     </p>
 
                     <div class="row">
@@ -30,14 +30,14 @@
 
                             <dl class="row">
                                 <dt class="col-sm-3">Name</dt>
-                                <dd class="col-sm-9">{{ manufacturer.name }}</dd>
-                                <dt class="col-sm-3">Code</dt>
-                                <dd class="col-sm-9">{{ manufacturer.code }}</dd>
-                                <dt class="col-sm-3">Chassis</dt>
+                                <dd class="col-sm-9">{{ chassis.name }}</dd>
+                                <dt class="col-sm-3">Manufacturer</dt>
+                                <dd class="col-sm-9">{{ chassis.manufacturer.name }}</dd>
+                                <dt class="col-sm-3">Ships</dt>
                                 <dd class="col-sm-9">
                                     <ul>
-                                        {% for chassis in manufacturerChassis %}
-                                            <li><a href="{{ path('ship_chassis_details', {'slug': chassis.slug}) }}">{{ chassis.name }}</a></li>
+                                        {% for ship in ships %}
+                                            <li><a href="{{ path('ships_details', {'slug': ship.slug}) }}">{{ ship.name }}</a></li>
                                         {% endfor %}
                                     </ul>
                                 </dd>
@@ -46,8 +46,8 @@
                     </div>
 
                     <p class="mb-0">
-                        <a href="{{ path('manufacturers_list') }}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back to Manufacturers list</a>
-                        <a href="{{ path('manufacturers_edit', {'slug': manufacturer.slug}) }}" class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a>
+                        <a href="{{ path('ship_chassis_list') }}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back to Ship chassis list</a>
+                        <a href="{{ path('ship_chassis_edit', {'slug': chassis.slug}) }}" class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a>
                     </p>
                 </div>
             </div>

@@ -32,6 +32,7 @@ $(document).ready(function () {
     const select2Options = {
         theme: 'bootstrap',
     };
+    $('.js-select2').select2(select2Options);
 
     $('#js-holded-ships-collection').on('click', '.js-holded-ships-add-row', (ev) => {
         addNewRowCollection($('#js-holded-ships-collection'), $('#js-holded-ships-rows'), ($newRow) => {

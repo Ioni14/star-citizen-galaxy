@@ -60,9 +60,9 @@
                                 <dt class="col-sm-3">Name</dt>
                                 <dd class="col-sm-9">{{ ship.name }}</dd>
                                 <dt class="col-sm-3">Chassis</dt>
-                                <dd class="col-sm-9"><a href="{#{{ path('ships_chassis_details', {'slug': ship.chassis.slug}) }}#}">{{ ship.chassis.name }}</a></dd>
+                                <dd class="col-sm-9"><a href="{{ path('ship_chassis_details', {'slug': ship.chassis.slug}) }}">{{ ship.chassis.name }}</a></dd>
                                 <dt class="col-sm-3">Manufacturer</dt>
-                                <dd class="col-sm-9"><a href="{#{{ path('manufacturers_details', {'slug': ship.chassis.manufacturer.slug}) }}#}">{{ ship.chassis.manufacturer.name }}</a></dd>
+                                <dd class="col-sm-9"><a href="{{ path('manufacturers_details', {'slug': ship.chassis.manufacturer.slug}) }}">{{ ship.chassis.manufacturer.name }}</a></dd>
                                 <dt class="col-sm-3">Holded ships</dt>
                                 <dd class="col-sm-9">
                                     <ul>
