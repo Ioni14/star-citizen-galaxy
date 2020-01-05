@@ -9,6 +9,9 @@
     <span class="navbar-toggler-icon"></span>
 </button>
 <ul class="nav navbar-nav ml-auto">
+    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+        <span class="navbar-text">Welcome, {{ app.user.nickname }}</span>
+    {% endif %}
     <li class="nav-item dropdown px-3">
         {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
             <a class="nav-link" href="{{ path('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>

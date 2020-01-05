@@ -1,4 +1,7 @@
 parameters:
+    env(REDIS_HOST): 'localhost'
+    env(REDIS_PORT): '6379'
+    env(REDIS_PASSWORD): ''
     env(SHIP_PICTURES_PATH_PREFIX): ''
     env(SHIP_THUMBNAILS_PATH_PREFIX): ''
 
@@ -15,6 +18,12 @@ services:
         autowire: true
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
+
+    Redis:
+        class: Redis
+        calls:
+            - [connect, ['%env(REDIS_HOST)%', '%env(REDIS_PORT)%']]
+            - [auth, ['%env(REDIS_PASSWORD)%']]
 
     app.serializer.normalizer.ship_files:
         class: App\Serializer\ShipFilesNormalizer

@@ -7,6 +7,7 @@
         "php": "7.4.*",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "ext-redis": "*",
         "ext-zend-opcache": "*",
         "api-platform/core": "^2.5",
         "doctrine/annotations": "^1.0",
