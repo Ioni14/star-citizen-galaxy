@@ -6,18 +6,17 @@
         <li class="breadcrumb-item">
             <a href="{{ path('manufacturers_list') }}">Manufacturers</a>
         </li>
-        <li class="breadcrumb-item active">Edit</li>
+        <li class="breadcrumb-item active">Create</li>
     </ol>
     <div class="container-fluid">
         <div class="animated fadeIn">
             <div class="card">
-                <div class="card-header">Edit of a Manufacturer</div>
+                <div class="card-header">Creation of a Manufacturer</div>
                 <div class="card-body">
-                    <form action="{{ path('manufacturers_edit', {'slug': manufacturer.slug}) }}" method="post">
+                    <form action="{{ path('manufacturers_create') }}" method="post">
                         <p>
                             <a href="{{ path('manufacturers_list') }}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back to Manufacturers list</a>
-                            <a href="{#{{ path('manufacturers_details', {'slug': manufacturer.slug}) }}#}" class="btn btn-primary"><i class="fa fa-eye"></i> Details</a>
-                            <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
+                            <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Create</button>
                         </p>
 
                         <div class="row">
@@ -35,8 +34,7 @@
 
                         <p class="mb-0">
                             <a href="{{ path('manufacturers_list') }}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back to Manufacturers list</a>
-                            <a href="{#{{ path('manufacturers_details', {'slug': manufacturer.slug}) }}#}" class="btn btn-primary"><i class="fa fa-eye"></i> Details</a>
-                            <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
+                            <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Create</button>
                         </p>
                     </form>
                 </div>

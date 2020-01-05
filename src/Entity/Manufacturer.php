@@ -35,6 +35,7 @@ class Manufacturer
 
     /**
      * @ORM\Column(type="string", length=50, unique=true)
+     * @Gedmo\Slug(fields={"name"})
      */
     private ?string $slug = null;
 
