@@ -71,11 +71,11 @@ final class Version20200101184525 extends AbstractMigration
             PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB");
         $this->addSql("CREATE TABLE user (
             id CHAR(36) NOT NULL COMMENT '(DC2Type:uuid)',
-            username VARCHAR(255) NOT NULL,
+            username VARCHAR(50) NOT NULL,
             roles JSON NOT NULL COMMENT '(DC2Type:json_array)',
-            nickname VARCHAR(255) DEFAULT NULL,
-            discord_id VARCHAR(255) DEFAULT NULL,
-            discord_tag VARCHAR(15) DEFAULT NULL,
+            nickname VARCHAR(50) DEFAULT NULL,
+            discord_id VARCHAR(50) DEFAULT NULL,
+            discord_tag CHAR(4) DEFAULT NULL,
             created_at DATETIME NOT NULL COMMENT '(DC2Type:datetimetz_immutable)',
             updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetimetz_immutable)',
             INDEX discord_idx (discord_id),

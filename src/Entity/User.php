@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -22,7 +23,7 @@ class User implements UserInterface
     private ?UuidInterface $id = null;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=50)
      */
     private string $username = '';
 
@@ -32,27 +33,29 @@ class User implements UserInterface
     private array $roles = ['ROLE_USER'];
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=50, nullable=true)
      */
     private ?string $nickname = null;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=false, nullable=true)
+     * @ORM\Column(type="string", length=50, nullable=true)
      */
     private ?string $discordId = null;
 
     /**
-     * @ORM\Column(type="string", length=15, nullable=true)
+     * @ORM\Column(type="string", length=4, options={"fixed":true}, nullable=true)
      */
     private ?string $discordTag = null;
 
     /**
      * @ORM\Column(type="datetimetz_immutable")
+     * @Gedmo\Timestampable(on="create")
      */
     private \DateTimeInterface $createdAt;
 
     /**
      * @ORM\Column(type="datetimetz_immutable")
+     * @Gedmo\Timestampable(on="update")
      */
     private \DateTimeInterface $updatedAt;
 

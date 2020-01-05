@@ -19,8 +19,8 @@ App\Entity\User:
         roles: ['ROLE_USER', 'ROLE_ADMIN']
     user_moderator1:
         __construct: ['<(\Ramsey\Uuid\Uuid::fromString("18e3fc59-f9de-4853-9e44-26da3b1bafca"))>']
-        username: 'Ashuvidz'
-        nickname: 'Ashuvidz'
+        username: 'Moderator1'
+        nickname: 'Moderator1'
         discordId: '123456789003'
         discordTag: '0003'
         createdAt: '<(new \DateTimeImmutable("2019-04-04 11:22:33"))>'

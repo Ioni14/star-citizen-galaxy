@@ -1,17 +1,21 @@
 <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
     <span class="navbar-toggler-icon"></span>
 </button>
-<a class="navbar-brand" href="#">
-    <img class="navbar-brand-full" src="img/brand/logo.svg" width="89" height="25" alt="SC Galaxy">
-    <img class="navbar-brand-minimized" src="img/brand/sygnet.svg" width="30" height="30" alt="SCG">
+<a class="navbar-brand" href="{{ path('homepage') }}">
+    <img class="navbar-brand-full" src="{{ asset('build/static/images/logo_scg_blue.svg') }}" height="30" alt="SC Galaxy">
+    <img class="navbar-brand-minimized" src="{{ asset('build/static/images/icon_scg_blue.svg') }}" height="30" alt="SCG">
 </a>
 <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
     <span class="navbar-toggler-icon"></span>
 </button>
 <ul class="nav navbar-nav ml-auto">
-    {#<li class="nav-item dropdown px-3">
-        <a class="nav-link" data-toggle="dropdown" href="{{ path('login') }}" role="button" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-sign-in-alt"></i> Login
-        </a>
-    </li>#}
+    <li class="nav-item dropdown px-3">
+        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+            <a class="nav-link" href="{{ path('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        {% else %}
+            <a class="nav-link" data-toggle="dropdown" href="{{ path('hwi_oauth_service_redirect', {'service': 'discord'}) }}" role="button" aria-haspopup="true" aria-expanded="false">
+                <i class="fab fa-discord"></i> Login with Discord
+            </a>
+        {% endif %}
+    </li>
 </ul>

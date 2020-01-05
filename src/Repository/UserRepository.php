@@ -12,4 +12,16 @@ class UserRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, User::class);
     }
+
+    public function getByDiscordId(string $id): ?User
+    {
+        $dql = <<<DQL
+            SELECT u FROM App\Entity\User u
+            WHERE u.discordId = :id
+            DQL;
+        $query = $this->_em->createQuery($dql);
+        $query->setParameter('id', $id);
+
+        return $query->getOneOrNullResult();
+    }
 }

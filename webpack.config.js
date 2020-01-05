@@ -26,6 +26,11 @@ Encore
         config.corejs = 3;
     })
 
+    .copyFiles({
+        from: './assets/static/images',
+        to: 'static/images/[path][name].[ext]',
+    })
+
     .enableSassLoader()
     .enablePostCssLoader()
     .enableIntegrityHashes(Encore.isProduction())
