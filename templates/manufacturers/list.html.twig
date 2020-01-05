@@ -1,7 +1,6 @@
-{% extends 'layout.html.twig' %}
+{% extends 'manufacturers/layout.html.twig' %}
 
 {% block content %}
-    <!-- Breadcrumb-->
     <ol class="breadcrumb">
         <li class="breadcrumb-item">Home</li>
         <li class="breadcrumb-item">
@@ -11,9 +10,34 @@
     </ol>
     <div class="container-fluid">
         <div class="animated fadeIn">
-
-
-
+            <div class="card">
+                <div class="card-header">
+                    List of Manufacturers
+                </div>
+                <div class="card-body">
+                    <p><a class="btn btn-primary" href="{#{{ path('ships_create') }}#}"><i class="fa fa-plus"></i> Create a new Manufacturer</a></p>
+                    <table id="js-manufacturers-datatable" class="table table-responsive-sm table-bordered table-striped table-sm" data-order='[[0, "asc"]]'>
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Code</th>
+                            <th class="nosort">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for manufacturer in manufacturers %}
+                            <tr>
+                                <td><a href="{#{{ path('manufacturers_details', {'slug': manufacturer.slug}) }}#}">{{ manufacturer.name }}</a></td>
+                                <td>{{ manufacturer.code }}</td>
+                                <td>
+                                    <a class="btn btn-primary btn-sm" href="{{ path('manufacturers_edit', {'slug': manufacturer.slug}) }}"><i class="fa fa-edit"></i> Edit</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

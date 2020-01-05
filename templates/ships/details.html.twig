@@ -1,4 +1,4 @@
-{% extends 'layout.html.twig' %}
+{% extends 'ships/layout.html.twig' %}
 
 {% macro displayBadgeShipReadyStatus(ship) %}
     {% if ship.readyStatus == constant('READY_STATUS_FLIGHT_READY', ship) %}

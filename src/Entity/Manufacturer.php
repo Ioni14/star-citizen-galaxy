@@ -3,7 +3,9 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -12,6 +14,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     @ORM\Index(name="name_idx", columns={"name"}),
  *     @ORM\Index(name="code_idx", columns={"code"})
  * })
+ * @UniqueEntity(fields={"slug"})
+ * @Gedmo\Loggable()
  */
 class Manufacturer
 {
@@ -24,6 +28,7 @@ class Manufacturer
 
     /**
      * @ORM\Column(type="string", length=30)
+     * @Gedmo\Versioned()
      * @Groups({"manufacturer:read", "chassis:read", "ship:read"})
      */
     private string $name = '';
@@ -31,34 +36,25 @@ class Manufacturer
     /**
      * @ORM\Column(type="string", length=50, unique=true)
      */
-    private string $slug = '';
+    private ?string $slug = null;
 
     /**
      * @ORM\Column(type="string", length=10)
+     * @Gedmo\Versioned()
      * @Groups({"manufacturer:read", "chassis:read", "ship:read"})
      */
     private string $code = '';
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"manufacturer:read"})
-     */
-    private ?string $thumbnailUri = null;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"manufacturer:read"})
-     */
-    private ?string $pictureUri = null;
-
-    /**
      * @ORM\Column(type="datetimetz_immutable")
+     * @Gedmo\Timestampable(on="create")
      * @Groups({"manufacturer:read"})
      */
     private \DateTimeInterface $createdAt;
 
     /**
      * @ORM\Column(type="datetimetz_immutable")
+     * @Gedmo\Timestampable(on="update")
      * @Groups({"manufacturer:read"})
      */
     private \DateTimeInterface $updatedAt;
@@ -73,7 +69,7 @@ class Manufacturer
      */
     private ?User $updatedBy = null;
 
-    public function __construct(?UuidInterface $id = null, string $name = '', string $slug = '', string $code = '')
+    public function __construct(?UuidInterface $id = null, string $name = '', ?string $slug = null, string $code = '')
     {
         $this->id = $id;
         $this->name = $name;
@@ -107,7 +103,7 @@ class Manufacturer
         return $this;
     }
 
-    public function getSlug(): string
+    public function getSlug(): ?string
     {
         return $this->slug;
     }
@@ -127,30 +123,6 @@ class Manufacturer
     public function setCode(string $code): self
     {
         $this->code = $code;
-
-        return $this;
-    }
-
-    public function getThumbnailUri(): ?string
-    {
-        return $this->thumbnailUri;
-    }
-
-    public function setThumbnailUri(?string $thumbnailUri): self
-    {
-        $this->thumbnailUri = $thumbnailUri;
-
-        return $this;
-    }
-
-    public function getPictureUri(): ?string
-    {
-        return $this->pictureUri;
-    }
-
-    public function setPictureUri(?string $pictureUri): self
-    {
-        $this->pictureUri = $pictureUri;
 
         return $this;
     }
