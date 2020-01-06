@@ -13,7 +13,9 @@ RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS icu-dev libzip-dev lib
     && docker-php-ext-enable --ini-name 20-redis.ini redis \
     && rm -rf /tmp/*
 
+RUN mkdir /app && chown -R www-data:www-data /app
 WORKDIR /app
+USER www-data
 
 ########################################
 FROM req_php as composer_deps
@@ -23,12 +25,13 @@ COPY --from=composer:1.9.1 /usr/bin/composer /usr/local/bin/composer
 # prod|dev
 ARG ENV=prod
 
-COPY src src
-COPY .env* composer.json composer.lock symfony.lock ./
+COPY --chown=www-data:www-data src src
+COPY --chown=www-data:www-data .env* composer.json composer.lock symfony.lock ./
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_MEMORY_LIMIT -1
 ENV APP_ENV $ENV
+
 RUN composer global require "hirak/prestissimo:^0.3" --prefer-dist --no-progress --no-suggest --optimize-autoloader --classmap-authoritative --no-interaction; \
     if [ $ENV = 'prod' ]; then \
         composer install --no-scripts --no-suggest --ignore-platform-reqs --optimize-autoloader --classmap-authoritative --no-dev --prefer-dist --no-progress --no-interaction; \
@@ -58,6 +61,7 @@ FROM req_php as build_php
 ARG ENV=prod
 ARG DUMP_ENV=0
 
+USER root
 COPY --from=bugoman/mozjpeg /opt/mozjpeg /opt/mozjpeg
 RUN apk add --no-cache pngquant
 
@@ -67,18 +71,19 @@ COPY docker/php/www.prod.conf /usr/local/etc/php-fpm.d/www.conf
 COPY docker/php/entrypoint.sh /usr/local/bin/docker-app-entrypoint
 RUN chmod +x /usr/local/bin/docker-app-entrypoint
 
-COPY assets assets
-COPY bin/console bin/
-COPY config config
-COPY public/index.php public/
-COPY src src
-COPY templates templates
-COPY translations translations
-COPY .env* Makefile composer.json composer.lock ./
-COPY --from=node_deps /app/public/build/entrypoints.json public/build/entrypoints.json
-COPY --from=node_deps /app/public/build/manifest.json public/build/manifest.json
-COPY --from=composer_deps /app/vendor vendor
-COPY --from=composer_deps /app/.env.local.php .env.local.php
+USER www-data
+COPY --chown=www-data:www-data assets assets
+COPY --chown=www-data:www-data bin/console bin/
+COPY --chown=www-data:www-data config config
+COPY --chown=www-data:www-data public/index.php public/
+COPY --chown=www-data:www-data src src
+COPY --chown=www-data:www-data templates templates
+COPY --chown=www-data:www-data translations translations
+COPY --chown=www-data:www-data .env* Makefile composer.json composer.lock ./
+COPY --chown=www-data:www-data --from=node_deps /app/public/build/entrypoints.json public/build/entrypoints.json
+COPY --chown=www-data:www-data --from=node_deps /app/public/build/manifest.json public/build/manifest.json
+COPY --chown=www-data:www-data --from=composer_deps /app/vendor vendor
+COPY --chown=www-data:www-data --from=composer_deps /app/.env.local.php .env.local.php
 
 RUN if [ ${DUMP_ENV} == 0 ]; then echo "<?php return ['APP_ENV'=>'${ENV}','APP_SECRET'=>''];" > .env.local.php; fi; \
     chown www-data .env*; \
@@ -88,7 +93,7 @@ RUN mkdir -p public/bundles \
     && bin/console assets:install -v \
     && rm -rf var/cache/* \
     && bin/console cache:warmup -v \
-    && mkdir -p var/log && chown -R www-data var/log
+    && mkdir -p var/log public/uploads
 
 ENV BUILD_ENV prod
 ENTRYPOINT ["docker-app-entrypoint"]
@@ -117,6 +122,7 @@ FROM build_php as build_php_dev
 
 #COPY public/index_test.php public/
 
+USER root
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 ENV COMPOSER_MEMORY_LIMIT -1
 ENV COMPOSER_ALLOW_SUPERUSER 1
@@ -140,3 +146,5 @@ COPY docker/php/php-fpm.dev.conf /usr/local/etc/php-fpm.conf
 COPY docker/php/www.dev.conf /usr/local/etc/php-fpm.d/www.conf
 
 ENV BUILD_ENV dev
+
+USER www-data
