@@ -1,5 +1,5 @@
 parameters:
-    env(ASSET_BASE_URL): ''
+    env(ASSET_BASE_URL): 'http://localhost'
 
 framework:
     assets:
