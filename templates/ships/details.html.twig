@@ -1,0 +1,140 @@
+{% extends 'ships/layout.html.twig' %}
+
+{% macro displayBadgeShipReadyStatus(ship) %}
+    {% if ship.readyStatus == constant('READY_STATUS_FLIGHT_READY', ship) %}
+        <span class="badge badge-success">Flight ready</span>
+    {% elseif ship.readyStatus == constant('READY_STATUS_CONCEPT', ship) %}
+        <span class="badge badge-warning">In concept</span>
+    {% else %}
+        <span class="badge badge-secondary">{{ ship.readyStatus }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro displayBadgeShipSize(ship) %}
+    {% if ship.size == constant('SIZE_VEHICLE', ship) %}
+        <span class="badge badge-info">Vehicle</span>
+    {% elseif ship.size == constant('SIZE_SNUB', ship) %}
+        <span class="badge badge-info">Snub</span>
+    {% elseif ship.size == constant('SIZE_SMALL', ship) %}
+        <span class="badge badge-info">Small</span>
+    {% elseif ship.size == constant('SIZE_MEDIUM', ship) %}
+        <span class="badge badge-info">Medium</span>
+    {% elseif ship.size == constant('SIZE_LARGE', ship) %}
+        <span class="badge badge-info">Large</span>
+    {% elseif ship.size == constant('SIZE_CAPITAL', ship) %}
+        <span class="badge badge-info">Capital</span>
+    {% else %}
+        <span class="badge badge-secondary">{{ ship.size }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% block content %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('homepage') }}">Home</a></li>
+        <li class="breadcrumb-item">
+            <a href="{{ path('ships_list') }}">Ships</a>
+        </li>
+        <li class="breadcrumb-item active">Details</li>
+    </ol>
+    <div class="container-fluid">
+        <div class="animated fadeIn">
+            <div class="card">
+                <div class="card-header">Details of a Ship</div>
+                <div class="card-body">
+                    <p>
+                        <a href="{{ path('ships_list') }}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back to Ships list</a>
+                        {% if is_granted('ROLE_MODERATOR') %}
+                            <a href="{{ path('ships_edit', {'slug': ship.slug}) }}" class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a>
+                        {% endif %}
+                    </p>
+
+                    <div class="row">
+                        <div class="col col-12 col-xl-6">
+                            {% for label, messages in app.flashes %}
+                                {% for message in messages %}
+                                    <div class="alert alert-{{ label }}">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
+
+                            <dl class="row">
+                                <dt class="col-sm-3">Name</dt>
+                                <dd class="col-sm-9">{{ ship.name }}</dd>
+                                <dt class="col-sm-3">Chassis</dt>
+                                <dd class="col-sm-9"><a href="{{ path('ship_chassis_details', {'slug': ship.chassis.slug}) }}">{{ ship.chassis.name }}</a></dd>
+                                <dt class="col-sm-3">Manufacturer</dt>
+                                <dd class="col-sm-9"><a href="{{ path('manufacturers_details', {'slug': ship.chassis.manufacturer.slug}) }}">{{ ship.chassis.manufacturer.name }}</a></dd>
+                                <dt class="col-sm-3">Holded ships</dt>
+                                <dd class="col-sm-9">
+                                    <ul>
+                                        {% for holdedShip in ship.holdedShips %}
+                                            <li><a href="{{ path('ships_details', {'slug': holdedShip.holded.slug}) }}">{{ holdedShip.holded.name }}</a> <span class="badge badge-secondary">x{{ holdedShip.quantity }}</span></li>
+                                        {% endfor %}
+                                    </ul>
+                                </dd>
+                                <dt class="col-sm-3">Height</dt>
+                                <dd class="col-sm-9">
+                                    {% if ship.height is not null %}
+                                        {{ ship.height|number_format(2) }}
+                                    {% endif %}
+                                </dd>
+                                <dt class="col-sm-3">Length</dt>
+                                <dd class="col-sm-9">
+                                    {% if ship.length is not null %}
+                                        {{ ship.length|number_format(2) }}
+                                    {% endif %}
+                                </dd>
+                                <dt class="col-sm-3">Min crew</dt>
+                                <dd class="col-sm-9">{{ ship.minCrew }}</dd>
+                                <dt class="col-sm-3">Max crew</dt>
+                                <dd class="col-sm-9">{{ ship.maxCrew }}</dd>
+                                <dt class="col-sm-3">Size</dt>
+                                <dd class="col-sm-9">{{ _self.displayBadgeShipSize(ship) }}</dd>
+                                <dt class="col-sm-3">Price</dt>
+                                <dd class="col-sm-9">
+                                    {% if ship.price is not null %}
+                                        <i class="fas fa-dollar-sign" aria-hidden="true"></i> <span class="sr-only">$</span>{{ (ship.price / 100)|number_format(2) }}
+                                    {% endif %}
+                                </dd>
+                                <dt class="col-sm-3">Ready status</dt>
+                                <dd class="col-sm-9">{{ _self.displayBadgeShipReadyStatus(ship) }}</dd>
+                                <dt class="col-sm-3">Focus</dt>
+                                <dd class="col-sm-9">{{ ship.focus }}</dd>
+                                <dt class="col-sm-3">Pledge URL</dt>
+                                <dd class="col-sm-9">
+                                    {% if ship.pledgeUrl is not null %}
+                                        <a target="_blank" href="{{ ship.pledgeUrl }}">{{ ship.pledgeUrl }} <i class="fas fa-external-link-alt"></i></a>
+                                    {% endif %}
+                                </dd>
+                                <dt class="col-sm-3">Picture</dt>
+                                <dd class="col-sm-9">
+                                    {% if ship.picturePath is not null %}
+                                        <img src="{{ asset(ship.picturePath, 'ship_pictures') }}" alt="picture preview" class="img-thumbnail" />
+                                    {% endif %}
+                                </dd>
+                                <dt class="col-sm-3">Thumbnail</dt>
+                                <dd class="col-sm-9">
+                                    {% if ship.thumbnailPath is not null %}
+                                        <img src="{{ asset(ship.thumbnailPath, 'ship_thumbnails') }}" alt="thumbnail preview" class="img-thumbnail" />
+                                    {% endif %}
+                                </dd>
+                            </dl>
+
+                            {% if is_granted('ROLE_MODERATOR') %}
+                                {% include('_entity_loggable.html.twig') with {'last_logs': last_logs} %}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <p class="mb-0">
+                        <a href="{{ path('ships_list') }}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back to Ships list</a>
+                        {% if is_granted('ROLE_MODERATOR') %}
+                            <a href="{{ path('ships_edit', {'slug': ship.slug}) }}" class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

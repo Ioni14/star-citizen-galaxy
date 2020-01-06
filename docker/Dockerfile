@@ -3,9 +3,10 @@ FROM php:7.4.1-fpm-alpine as req_php
 # prod|dev
 ARG ENV=prod
 
-RUN apk add --no-cache --virtual .deps icu-libs zlib libintl libzip libxml2 libxslt
-RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS icu-dev libzip-dev libxml2-dev libxslt-dev libgcrypt-dev \
-    && docker-php-ext-install intl zip pdo_mysql xml xsl \
+RUN apk add --no-cache --virtual .deps icu-libs zlib libintl libzip libxml2 libxslt freetype libpng libwebp libjpeg-turbo
+RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS icu-dev libzip-dev libxml2-dev libxslt-dev libgcrypt-dev freetype-dev libpng-dev libwebp-dev libjpeg-turbo-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
+    && docker-php-ext-install -j$(nproc) gd intl zip pdo_mysql xml xsl \
     && pecl install redis \
     && apk del .build-deps \
     && docker-php-ext-enable --ini-name 05-opcache.ini opcache \
@@ -17,7 +18,7 @@ WORKDIR /app
 ########################################
 FROM req_php as composer_deps
 
-COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+COPY --from=composer:1.9.1 /usr/bin/composer /usr/local/bin/composer
 
 # prod|dev
 ARG ENV=prod
@@ -47,8 +48,8 @@ COPY package.json yarn.lock ./
 RUN yarn install
 
 COPY assets assets
-COPY webpack.config.js ./
-RUN mkdir public && yarn encore production && cp -r assets/js/vendors public/build/vendors
+COPY webpack.config.js postcss.config.js ./
+RUN mkdir public && yarn encore production
 
 ####################################
 FROM req_php as build_php
@@ -56,6 +57,9 @@ FROM req_php as build_php
 # prod|dev
 ARG ENV=prod
 ARG DUMP_ENV=0
+
+COPY --from=bugoman/mozjpeg /opt/mozjpeg /opt/mozjpeg
+RUN apk add --no-cache pngquant
 
 COPY docker/php/php.prod.ini /usr/local/etc/php/php.ini
 COPY docker/php/php-fpm.prod.conf /usr/local/etc/php-fpm.conf
@@ -76,7 +80,7 @@ COPY --from=node_deps /app/public/build/manifest.json public/build/manifest.json
 COPY --from=composer_deps /app/vendor vendor
 COPY --from=composer_deps /app/.env.local.php .env.local.php
 
-RUN if [ ${DUMP_ENV} == 0 ]; then echo "<?php return ['APP_ENV'=>'${ENV}'];" > .env.local.php; fi; \
+RUN if [ ${DUMP_ENV} == 0 ]; then echo "<?php return ['APP_ENV'=>'${ENV}','APP_SECRET'=>''];" > .env.local.php; fi; \
     chown www-data .env*; \
     sed -i "s/^APP_ENV=.*$/APP_ENV=${ENV}/" .env; \
     if [ -e .env.local ]; then sed -i "s/^APP_ENV=.*$/APP_ENV=${ENV}/" .env.local; fi

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="ship.constraints.picture.bad_format">
+                <source>ship.constraints.picture.bad_format</source>
+                <target>The picture must be in jpeg, png or webp.</target>
+            </trans-unit>
+            <trans-unit id="ship.constraints.max_crew.over_min_crew">
+                <source>ship.constraints.max_crew.over_min_crew</source>
+                <target>Max crew must be greater than or equal to Min crew.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

@@ -1,4 +1,9 @@
 parameters:
+    env(REDIS_HOST): 'localhost'
+    env(REDIS_PORT): '6379'
+    env(REDIS_PASSWORD): ''
+    env(SHIP_PICTURES_PATH_PREFIX): ''
+    env(SHIP_THUMBNAILS_PATH_PREFIX): ''
 
 services:
     _defaults:
@@ -7,8 +12,28 @@ services:
 
     App\:
         resource: '../src/*'
-        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+        exclude: '../src/{DependencyInjection,Entity,Serializer,Migrations,Tests,Kernel.php}'
 
     App\Controller\:
+        autowire: true
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
+
+    Redis:
+        class: Redis
+        calls:
+            - [connect, ['%env(REDIS_HOST)%', '%env(REDIS_PORT)%']]
+            - [auth, ['%env(REDIS_PASSWORD)%']]
+
+    app.serializer.normalizer.ship_files:
+        class: App\Serializer\ShipFilesNormalizer
+        decorates: 'api_platform.serializer.normalizer.item'
+        arguments: [ '@app.serializer.normalizer.ship_files.inner', '@assets.packages' ]
+    app.jsonld.normalizer.ship_files:
+        class: App\Serializer\ShipFilesNormalizer
+        decorates: 'api_platform.jsonld.normalizer.item'
+        arguments: [ '@app.jsonld.normalizer.ship_files.inner', '@assets.packages' ]
+    app.hal.normalizer.ship_files:
+        class: App\Serializer\ShipFilesNormalizer
+        decorates: 'api_platform.hal.normalizer.item'
+        arguments: [ '@app.hal.normalizer.ship_files.inner', '@assets.packages' ]

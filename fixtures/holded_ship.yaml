@@ -1,0 +1,5 @@
+App\Entity\HoldedShip:
+    aurora_es_hold_aurora_ln:
+        holder: '@ship_aurora_es'
+        holded: '@ship_aurora_ln'
+        quantity: 1

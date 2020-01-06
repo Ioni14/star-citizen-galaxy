@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="ship.sizes.vehicle">
+                <source>ship.sizes.vehicle</source>
+                <target>Vehicle</target>
+            </trans-unit>
+            <trans-unit id="ship.sizes.snub">
+                <source>ship.sizes.snub</source>
+                <target>Snub</target>
+            </trans-unit>
+            <trans-unit id="ship.sizes.small">
+                <source>ship.sizes.small</source>
+                <target>Small</target>
+            </trans-unit>
+            <trans-unit id="ship.sizes.medium">
+                <source>ship.sizes.medium</source>
+                <target>Medium</target>
+            </trans-unit>
+            <trans-unit id="ship.sizes.large">
+                <source>ship.sizes.large</source>
+                <target>Large</target>
+            </trans-unit>
+            <trans-unit id="ship.sizes.capital">
+                <source>ship.sizes.capital</source>
+                <target>Capital</target>
+            </trans-unit>
+            <trans-unit id="ship.ready_statuses.flight_ready">
+                <source>ship.ready_statuses.flight_ready</source>
+                <target>Flight ready</target>
+            </trans-unit>
+            <trans-unit id="ship.ready_statuses.concept">
+                <source>ship.ready_statuses.concept</source>
+                <target>Concept</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

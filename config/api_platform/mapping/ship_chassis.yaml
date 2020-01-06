@@ -1,0 +1,10 @@
+App\Entity\ShipChassis:
+    shortName: 'Chassis'
+    attributes:
+        pagination_items_per_page: 50
+        normalization_context:
+            groups: ['chassis:read']
+    collectionOperations:
+        get: ~
+    itemOperations:
+        get: ~

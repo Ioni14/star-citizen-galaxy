@@ -1,0 +1,15 @@
+App\Entity\Manufacturer:
+    manufacturer_rsi:
+        __construct: ['<(\Ramsey\Uuid\Uuid::fromString("dbf9cab3-c65a-4475-8594-183a587e2953"))>']
+        name: 'Robert Space Industries'
+        slug: 'robert-space-industries'
+        code: 'RSI'
+        createdAt: '<(new \DateTimeImmutable("2019-05-01 21:22:33"))>'
+        updatedAt: '<(new \DateTimeImmutable("2019-05-02 21:22:33"))>'
+    manufacturer_:
+        __construct: ['<(\Ramsey\Uuid\Uuid::fromString("834ce675-730c-4af1-9711-5c02b9055fea"))>']
+        name: 'Origin Jumpworks GmbH'
+        slug: 'origin-jumpworks-gmbh'
+        code: 'ORIG'
+        createdAt: '<(new \DateTimeImmutable("2019-05-02 21:22:33"))>'
+        updatedAt: '<(new \DateTimeImmutable("2019-05-03 21:22:33"))>'
