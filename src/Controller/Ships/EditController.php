@@ -4,13 +4,16 @@ namespace App\Controller\Ships;
 
 use App\Entity\HoldedShip;
 use App\Entity\Ship;
+use App\Entity\User;
 use App\Form\Dto\HoldedShipDto;
 use App\Form\Dto\ShipDto;
 use App\Form\Type\ShipForm;
 use App\Repository\ShipRepository;
+use App\Service\LockHelper;
 use App\Service\Ship\FileHelper;
 use App\Service\Ship\HoldedShipsHelper;
 use Doctrine\ORM\EntityManagerInterface;
+use Gedmo\Loggable\Entity\LogEntry;
 use League\Flysystem\FilesystemInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,6 +30,7 @@ class EditController extends AbstractController
     private FilesystemInterface $thumbnailsFilesystem;
     private HoldedShipsHelper $holdedShipsHelper;
     private FileHelper $fileHelper;
+    private LockHelper $lockHelper;
 
     public function __construct(
         ShipRepository $shipRepository,
@@ -34,7 +38,8 @@ class EditController extends AbstractController
         FilesystemInterface $shipsPicturesFilesystem,
         FilesystemInterface $shipsThumbnailsFilesystem,
         HoldedShipsHelper $holdedShipsHelper,
-        FileHelper $fileHelper
+        FileHelper $fileHelper,
+        LockHelper $lockHelper
     ) {
         $this->shipRepository = $shipRepository;
         $this->entityManager = $entityManager;
@@ -42,6 +47,7 @@ class EditController extends AbstractController
         $this->thumbnailsFilesystem = $shipsThumbnailsFilesystem;
         $this->holdedShipsHelper = $holdedShipsHelper;
         $this->fileHelper = $fileHelper;
+        $this->lockHelper = $lockHelper;
     }
 
     /**
@@ -54,6 +60,16 @@ class EditController extends AbstractController
         $ship = $this->shipRepository->findOneBy(['slug' => $slug]);
         if ($ship === null) {
             throw new NotFoundHttpException('Ship not found.');
+        }
+
+        /** @var LogEntry $lastLog */
+        $lastLog = $this->entityManager->getRepository(LogEntry::class)->getLogEntriesQuery($ship)->setMaxResults(1)->getOneOrNullResult();
+        $lastVersion = $lastLog !== null ? $lastLog->getVersion() : 0;
+
+        $lockedBy = $this->lockHelper->acquireLock($ship);
+        $lockedByMe = $lockedBy !== null && $lockedBy->getId()->equals($this->getUser()->getId());
+        if ($lockedByMe) {
+            $this->entityManager->refresh($ship);
         }
 
         $shipDto = new ShipDto(
@@ -73,10 +89,14 @@ class EditController extends AbstractController
             $ship->getPicturePath(),
             $ship->getThumbnailPath(),
             $ship->getPrice(),
+            $lastVersion,
+            $lastVersion,
         );
-        $form = $this->createForm(ShipForm::class, $shipDto);
+        $form = $this->createForm(ShipForm::class, $shipDto, [
+            'disabled' => !$lockedByMe,
+        ]);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($lockedByMe && $form->isSubmitted() && $form->isValid()) {
             $ship
                 ->setName($shipDto->name)
                 ->setChassis($shipDto->chassis)
@@ -103,12 +123,15 @@ class EditController extends AbstractController
 
             $this->entityManager->flush();
 
+            $this->lockHelper->releaseLock($ship);
             $this->addFlash('success', 'The ship has been successfully modified.');
 
             return $this->redirectToRoute('ships_details', ['slug' => $ship->getSlug()]);
         }
 
         return $this->render('ships/edit.html.twig', [
+            'locked_by' => $lockedBy,
+            'locked_by_me' => $lockedByMe,
             'ship' => $ship,
             'form' => $form->createView(),
         ]);

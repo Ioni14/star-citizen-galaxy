@@ -17,11 +17,17 @@
                         <p>
                             <a href="{{ path('ships_list') }}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back to Ships list</a>
                             <a href="{{ path('ships_details', {'slug': ship.slug}) }}" class="btn btn-primary"><i class="fa fa-eye"></i> Details</a>
-                            <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
+                            <button type="submit" class="btn btn-success" {{ not locked_by_me ? 'disabled' }}><i class="fa fa-check"></i> Save</button>
                         </p>
 
                         <div class="row">
                             <div class="col col-12 col-xl-6">
+                                {% if not locked_by_me %}
+                                    <div class="alert alert-warning">
+                                        <i class="fas fa-exclamation-triangle"></i> <strong>{{ locked_by.nickname }}</strong> is currently editing this ship. Please wait a bit until he/she finishes.
+                                    </div>
+                                {% endif %}
+
                                 {{ form_errors(form) }}
 
                                 {{ form_row(form.name) }}
@@ -29,13 +35,13 @@
 
                                 {{ form_label(form.holdedShips) }}
                                 {{ form_help(form.holdedShips, {'help': 'The ships that are contained in. e.g., a Carrack holds a Pisces.'}) }}
-                                <div class="pl-5" id="js-holded-ships-collection" data-index="{{ form.holdedShips|length }}" data-prototype="{{ form_widget(form.holdedShips.vars.prototype)|e('html_attr') }}">
+                                <div id="js-holded-ships-collection" data-index="{{ form.holdedShips|length }}" data-prototype="{{ form_widget(form.holdedShips.vars.prototype)|e('html_attr') }}">
                                     <div id="js-holded-ships-rows">
                                         {% for holdedShip in form.holdedShips %}
                                             {{ form_widget(holdedShip) }}
                                         {% endfor %}
                                     </div>
-                                    <p class="text-right"><button type="button" class="btn btn-primary d-inline-block js-holded-ships-add-row" title="Add a row"><i class="fa fa-plus"></i> Add a row</button></p>
+                                    <p><button {{ form.holdedShips.vars.disabled ? 'disabled' }} type="button" class="btn btn-primary d-inline-block js-holded-ships-add-row" title="Add a row"><i class="fa fa-plus"></i> Add a row</button></p>
                                 </div>
 
                                 {{ form_row(form.height, {'help': 'The physical height of the ship. e.g., an Aurora LN is 4.0 meters tall.'}) }}
@@ -52,6 +58,7 @@
                             </div>
                         </div>
 
+                        {{ form_widget(form.version) }}
                         {% if form._token is defined %}
                             {{ form_widget(form._token) }}
                         {% endif %}
@@ -59,7 +66,7 @@
                         <p class="mb-0">
                             <a href="{{ path('ships_list') }}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back to Ships list</a>
                             <a href="{{ path('ships_details', {'slug': ship.slug}) }}" class="btn btn-primary"><i class="fa fa-eye"></i> Details</a>
-                            <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
+                            <button type="submit" class="btn btn-success" {{ not locked_by_me ? 'disabled' }}><i class="fa fa-check"></i> Save</button>
                         </p>
                     </form>
                 </div>

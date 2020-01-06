@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @UniqueEntity(fields={"slug"})
  * @Gedmo\Loggable()
  */
-class Manufacturer
+class Manufacturer implements LockableEntityInterface
 {
     /**
      * @ORM\Id()
@@ -35,7 +35,7 @@ class Manufacturer
 
     /**
      * @ORM\Column(type="string", length=50, unique=true)
-     * @Gedmo\Slug(fields={"name"})
+     * @Gedmo\Slug(fields={"name"}, updatable=false)
      */
     private ?string $slug = null;
 

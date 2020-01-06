@@ -90,6 +90,13 @@ class ShipDto
 
     public ?string $thumbnailPath;
 
+    public int $lastVersion;
+
+    /**
+     * @Assert\Expression("value === this.lastVersion", message="Someone has modified this Ship in the meantime. Please refresh the page without submitting the form then apply your changes.")
+     */
+    public ?int $version = null;
+
     public function __construct(
         ?string $name = null,
         ?ShipChassis $chassis = null,
@@ -104,7 +111,9 @@ class ShipDto
         ?string $pledgeUrl = null,
         ?string $picturePath = null,
         ?string $thumbnailPath = null,
-        ?int $price = null
+        ?int $price = null,
+        int $lastVersion = 0,
+        int $version = 0
     ) {
         $this->name = $name;
         $this->chassis = $chassis;
@@ -120,6 +129,8 @@ class ShipDto
         $this->picturePath = $picturePath;
         $this->thumbnailPath = $thumbnailPath;
         $this->price = $price;
+        $this->lastVersion = $lastVersion;
+        $this->version = $version;
     }
 
     public function addHoldedShip(HoldedShipDto $holdedShip): void

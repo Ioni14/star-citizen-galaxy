@@ -6,7 +6,9 @@ use App\Entity\Manufacturer;
 use App\Form\Dto\ManufacturerDto;
 use App\Form\Type\ManufacturerForm;
 use App\Repository\ManufacturerRepository;
+use App\Service\LockHelper;
 use Doctrine\ORM\EntityManagerInterface;
+use Gedmo\Loggable\Entity\LogEntry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,13 +20,16 @@ class EditController extends AbstractController
 {
     private ManufacturerRepository $manufacturerRepository;
     private EntityManagerInterface $entityManager;
+    private LockHelper $lockHelper;
 
     public function __construct(
         ManufacturerRepository $manufacturerRepository,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        LockHelper $lockHelper
     ) {
         $this->manufacturerRepository = $manufacturerRepository;
         $this->entityManager = $entityManager;
+        $this->lockHelper = $lockHelper;
     }
 
     /**
@@ -39,25 +44,42 @@ class EditController extends AbstractController
             throw new NotFoundHttpException('Manufacturer not found.');
         }
 
+        /** @var LogEntry $lastLog */
+        $lastLog = $this->entityManager->getRepository(LogEntry::class)->getLogEntriesQuery($manufacturer)->setMaxResults(1)->getOneOrNullResult();
+        $lastVersion = $lastLog !== null ? $lastLog->getVersion() : 0;
+
+        $lockedBy = $this->lockHelper->acquireLock($manufacturer);
+        $lockedByMe = $lockedBy !== null && $lockedBy->getId()->equals($this->getUser()->getId());
+        if ($lockedByMe) {
+            $this->entityManager->refresh($manufacturer);
+        }
+
         $manufacturerDto = new ManufacturerDto(
             $manufacturer->getName(),
             $manufacturer->getCode(),
+            $lastVersion,
+            $lastVersion,
         );
-        $form = $this->createForm(ManufacturerForm::class, $manufacturerDto);
+        $form = $this->createForm(ManufacturerForm::class, $manufacturerDto, [
+            'disabled' => !$lockedByMe,
+        ]);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($lockedByMe && $form->isSubmitted() && $form->isValid()) {
             $manufacturer
                 ->setName($manufacturerDto->name)
                 ->setCode($manufacturerDto->code);
 
             $this->entityManager->flush();
 
+            $this->lockHelper->releaseLock($manufacturer);
             $this->addFlash('success', 'The manufacturer has been successfully modified.');
 
             return $this->redirectToRoute('manufacturers_details', ['slug' => $manufacturer->getSlug()]);
         }
 
         return $this->render('manufacturers/edit.html.twig', [
+            'locked_by' => $lockedBy,
+            'locked_by_me' => $lockedByMe,
             'manufacturer' => $manufacturer,
             'form' => $form->createView(),
         ]);

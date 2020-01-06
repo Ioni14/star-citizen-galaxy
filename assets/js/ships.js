@@ -4,6 +4,8 @@ import 'datatables.net-bs4';
 import 'select2';
 import $ from "jquery";
 
+$.fn.select2.defaults.set( "width", "100%" );
+
 function addNewRowCollection($collection, $rowsContainer, initRow = null) {
     const collectionPrototype = $collection.data('prototype');
     const collectionIndex = $collection.data('index');

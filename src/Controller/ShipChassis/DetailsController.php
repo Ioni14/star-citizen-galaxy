@@ -46,7 +46,7 @@ class DetailsController extends AbstractController
         $logs = [];
         if ($this->security->isGranted('ROLE_MODERATOR')) {
             $logsQuery = $this->entityManager->getRepository(LogEntry::class)->getLogEntriesQuery($shipChassis);
-            $logsQuery->setMaxResults(5);
+            $logsQuery->setMaxResults(10);
             $logs = $logsQuery->getResult();
         }
 

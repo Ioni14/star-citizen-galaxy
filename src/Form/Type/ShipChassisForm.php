@@ -6,6 +6,7 @@ use App\Entity\Manufacturer;
 use App\Form\Dto\ShipChassisDto;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -23,7 +24,8 @@ class ShipChassisForm extends AbstractType
                 'class' => Manufacturer::class,
                 'choice_value' => 'id',
                 'choice_label' => 'name',
-            ]);
+            ])
+            ->add('version', HiddenType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

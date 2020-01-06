@@ -18,9 +18,18 @@ class ManufacturerDto
      */
     public ?string $code;
 
-    public function __construct(?string $name = null, ?string $code = null)
+    public int $lastVersion;
+
+    /**
+     * @Assert\Expression("value === this.lastVersion", message="Someone has modified this manufacturer in the meantime. Please refresh the page without submitting the form then apply your changes.")
+     */
+    public ?int $version = null;
+
+    public function __construct(?string $name = null, ?string $code = null, int $lastVersion = 0, int $version = 0)
     {
         $this->name = $name;
         $this->code = $code;
+        $this->lastVersion = $lastVersion;
+        $this->version = $version;
     }
 }

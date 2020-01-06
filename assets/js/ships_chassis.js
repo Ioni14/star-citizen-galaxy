@@ -4,6 +4,8 @@ import 'datatables.net-bs4';
 import 'select2';
 import $ from "jquery";
 
+$.fn.select2.defaults.set( "width", "100%" );
+
 $(document).ready(function () {
     $('#js-ship-chassis-datatable').DataTable({
         paging: false,
