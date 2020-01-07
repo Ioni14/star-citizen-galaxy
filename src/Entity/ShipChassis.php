@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\UuidInterface;
@@ -15,12 +17,30 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * })
  * @UniqueEntity(fields={"slug"})
  * @Gedmo\Loggable()
+ *
+ * @ApiResource(
+ *   shortName="Chassis",
+ *   attributes={
+ *     "pagination_items_per_page"=50,
+ *     "normalization_context"={
+ *       "groups"={"chassis:read"}
+ *     },
+ *     "force_eager"=false
+ *   },
+ *   collectionOperations={
+ *     "get"
+ *   },
+ *   itemOperations={
+ *     "get"
+ *   }
+ * )
  */
 class ShipChassis implements LockableEntityInterface
 {
     /**
      * @ORM\Id()
      * @ORM\Column(type="uuid", unique=true)
+     * @ApiProperty(identifier=true)
      * @Groups({"chassis:read", "ship:read"})
      */
     private ?UuidInterface $id = null;
@@ -28,6 +48,10 @@ class ShipChassis implements LockableEntityInterface
     /**
      * @ORM\Column(type="string", length=30)
      * @Gedmo\Versioned()
+     * @ApiProperty(
+     *     iri="https://schema.org/name",
+     *     required=true
+     * )
      * @Groups({"chassis:read", "ship:read"})
      */
     private string $name = '';
@@ -44,6 +68,9 @@ class ShipChassis implements LockableEntityInterface
      * @ORM\ManyToOne(targetEntity="App\Entity\Manufacturer")
      * @ORM\JoinColumn(nullable=false)
      * @Gedmo\Versioned()
+     * @ApiProperty(
+     *     required=true
+     * )
      * @Groups({"chassis:read", "ship:read"})
      */
     private $manufacturer;
@@ -51,6 +78,7 @@ class ShipChassis implements LockableEntityInterface
     /**
      * @ORM\Column(type="datetimetz_immutable")
      * @Gedmo\Timestampable(on="create")
+     * @ApiProperty(iri="https://schema.org/DateTime")
      * @Groups({"chassis:read"})
      */
     private \DateTimeInterface $createdAt;
@@ -58,6 +86,7 @@ class ShipChassis implements LockableEntityInterface
     /**
      * @ORM\Column(type="datetimetz_immutable")
      * @Gedmo\Timestampable(on="update")
+     * @ApiProperty(iri="https://schema.org/DateTime")
      * @Groups({"chassis:read"})
      */
     private \DateTimeInterface $updatedAt;

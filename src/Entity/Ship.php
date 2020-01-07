@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,6 +19,23 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * })
  * @UniqueEntity(fields={"slug"})
  * @Gedmo\Loggable()
+ *
+ * @ApiResource(
+ *   attributes={
+ *     "pagination_items_per_page"=50,
+ *     "normalization_context"={
+ *       "groups"={"ship:read"},
+ *       "enable_max_depth"=true
+ *     },
+ *     "force_eager"=false
+ *   },
+ *   collectionOperations={
+ *     "get"
+ *   },
+ *   itemOperations={
+ *     "get"
+ *   }
+ * )
  */
 class Ship implements LockableEntityInterface
 {
@@ -45,6 +64,7 @@ class Ship implements LockableEntityInterface
     /**
      * @ORM\Id()
      * @ORM\Column(type="uuid", unique=true)
+     * @ApiProperty(identifier=true)
      * @Groups({"ship:read"})
      */
     private ?UuidInterface $id = null;
@@ -52,6 +72,7 @@ class Ship implements LockableEntityInterface
     /**
      * @ORM\Column(type="string", length=30)
      * @Gedmo\Versioned()
+     * @ApiProperty(iri="https://schema.org/name", required=true)
      * @Groups({"ship:read"})
      */
     private string $name = '';
@@ -68,6 +89,7 @@ class Ship implements LockableEntityInterface
      * @ORM\ManyToOne(targetEntity="App\Entity\ShipChassis")
      * @ORM\JoinColumn(nullable=false)
      * @Gedmo\Versioned()
+     * @ApiProperty(required=true)
      * @Groups({"ship:read"})
      */
     private $chassis;
@@ -83,6 +105,7 @@ class Ship implements LockableEntityInterface
      * @var HoldedShip[]|Collection
      *
      * @ORM\OneToMany(targetEntity="App\Entity\HoldedShip", mappedBy="holder", fetch="EAGER", cascade={"all"}, orphanRemoval=true)
+     * @ApiProperty()
      * @Groups({"ship:read"})
      */
     private $holdedShips;
@@ -90,6 +113,7 @@ class Ship implements LockableEntityInterface
     /**
      * @ORM\Column(type="float", nullable=true)
      * @Gedmo\Versioned()
+     * @ApiProperty()
      * @Groups({"ship:read"})
      */
     private ?float $height = null;
@@ -97,6 +121,7 @@ class Ship implements LockableEntityInterface
     /**
      * @ORM\Column(type="float", nullable=true)
      * @Gedmo\Versioned()
+     * @ApiProperty()
      * @Groups({"ship:read"})
      */
     private ?float $length = null;
@@ -104,6 +129,7 @@ class Ship implements LockableEntityInterface
     /**
      * @ORM\Column(type="integer", nullable=true)
      * @Gedmo\Versioned()
+     * @ApiProperty()
      * @Groups({"ship:read"})
      */
     private ?int $maxCrew = null;
@@ -111,6 +137,7 @@ class Ship implements LockableEntityInterface
     /**
      * @ORM\Column(type="integer", nullable=true)
      * @Gedmo\Versioned()
+     * @ApiProperty()
      * @Groups({"ship:read"})
      */
     private ?int $minCrew = null;
@@ -118,6 +145,12 @@ class Ship implements LockableEntityInterface
     /**
      * @ORM\Column(type="string", length=30, nullable=true)
      * @Gedmo\Versioned()
+     * @ApiProperty(
+     *     attributes={
+     *         "swagger_context"={"type"="string", "enum"=Ship::READY_STATUSES},
+     *         "openapi_context"={"type"="string", "enum"=Ship::READY_STATUSES}
+     *     }
+     * )
      * @Groups({"ship:read"})
      */
     private ?string $readyStatus = null;
@@ -125,20 +158,29 @@ class Ship implements LockableEntityInterface
     /**
      * @ORM\Column(type="string", length=30, nullable=true)
      * @Gedmo\Versioned()
+     * @ApiProperty(
+     *     attributes={
+     *         "swagger_context"={"type"="string", "enum"=Ship::SIZES},
+     *         "openapi_context"={"type"="string", "enum"=Ship::SIZES}
+     *     }
+     * )
      * @Groups({"ship:read"})
      */
     private ?string $size = null;
 
     /**
-     * @ORM\Column(type="string", length=30, nullable=true)
-     * @Gedmo\Versioned()
+     * @var Ship[]|Collection
+     *
+     * @ORM\ManyToMany(targetEntity="App\Entity\ShipFocus")
+     * @ApiProperty()
      * @Groups({"ship:read"})
      */
-    private ?string $focus = null;
+    private $focuses;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Gedmo\Versioned()
+     * @ApiProperty(iri="https://schema.org/url")
      * @Groups({"ship:read"})
      */
     private ?string $pledgeUrl = null;
@@ -156,10 +198,23 @@ class Ship implements LockableEntityInterface
     private ?string $picturePath = null;
 
     /**
+     * @ApiProperty(iri="https://schema.org/image")
+     * @Groups({"ship:read"})
+     */
+    private ?string $pictureUri = null;
+
+    /**
+     * @ApiProperty(iri="https://schema.org/image")
+     * @Groups({"ship:read"})
+     */
+    private ?string $thumbnailUri = null;
+
+    /**
      * In cents.
      *
      * @ORM\Column(type="integer", nullable=true)
      * @Gedmo\Versioned()
+     * @ApiProperty(iri="https://schema.org/price")
      * @Groups({"ship:read"})
      */
     private ?int $price = null;
@@ -167,6 +222,7 @@ class Ship implements LockableEntityInterface
     /**
      * @ORM\Column(type="datetimetz_immutable")
      * @Gedmo\Timestampable(on="create")
+     * @ApiProperty(iri="https://schema.org/DateTime")
      * @Groups({"ship:read"})
      */
     private \DateTimeInterface $createdAt;
@@ -174,6 +230,7 @@ class Ship implements LockableEntityInterface
     /**
      * @ORM\Column(type="datetimetz_immutable")
      * @Gedmo\Timestampable(on="update")
+     * @ApiProperty(iri="https://schema.org/DateTime")
      * @Groups({"ship:read"})
      */
     private \DateTimeInterface $updatedAt;
@@ -195,6 +252,7 @@ class Ship implements LockableEntityInterface
         $this->id = $id;
         $this->holders = new ArrayCollection();
         $this->holdedShips = new ArrayCollection();
+        $this->focuses = new ArrayCollection();
         $this->chassis = $chassis ?? new ShipChassis();
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
@@ -359,14 +417,24 @@ class Ship implements LockableEntityInterface
         return $this;
     }
 
-    public function getFocus(): ?string
+    /**
+     * @return ShipFocus[]
+     */
+    public function getFocuses(): Collection
     {
-        return $this->focus;
+        return $this->focuses;
     }
 
-    public function setFocus(?string $focus): self
+    public function addFocus(ShipFocus $shipFocus): self
     {
-        $this->focus = $focus;
+        $this->focuses->add($shipFocus);
+
+        return $this;
+    }
+
+    public function removeFocus(ShipFocus $shipFocus): self
+    {
+        $this->focuses->removeElement($shipFocus);
 
         return $this;
     }
@@ -405,6 +473,16 @@ class Ship implements LockableEntityInterface
         $this->picturePath = $picturePath;
 
         return $this;
+    }
+
+    public function getPictureUri(): ?string
+    {
+        return $this->pictureUri;
+    }
+
+    public function getThumbnailUri(): ?string
+    {
+        return $this->thumbnailUri;
     }
 
     public function getPrice(): ?int

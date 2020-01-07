@@ -30,6 +30,10 @@ final class ShipFilesNormalizer implements NormalizerInterface, SerializerAwareI
             return $data;
         }
 
+
+        // TODO : add to Ship schema the two fields :
+
+
         if ($object instanceof Ship) {
             $data['pictureUri'] = $object->getPicturePath() !== null ? $this->assetPackages->getUrl($object->getPicturePath(), 'ship_pictures') : null;
             $data['thumbnailUri'] = $object->getThumbnailPath() !== null ? $this->assetPackages->getUrl($object->getThumbnailPath(), 'ship_thumbnails') : null;

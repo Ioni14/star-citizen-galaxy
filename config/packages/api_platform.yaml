@@ -4,8 +4,11 @@ api_platform:
     version: '0.0.1'
     show_webby: true
     path_segment_name_generator: 'api_platform.path_segment_name_generator.dash'
-    mapping:
-        paths: ['%kernel.project_dir%/config/api_platform/mapping']
+#    mapping:
+#        paths: ['%kernel.project_dir%/config/api_platform/mapping']
+#    resource_class_directories: ['%kernel.project_dir%/config/api_platform/mapping']
+    resource_class_directories:
+        - '%kernel.project_dir%/src/Entity'
     swagger:
         versions: [3]
     formats:
@@ -15,9 +18,6 @@ api_platform:
         json:
             mime_types:
                 - application/json
-        jsonhal:
-            mime_types:
-                - application/hal+json
         xml:
             mime_types:
                 - text/xml

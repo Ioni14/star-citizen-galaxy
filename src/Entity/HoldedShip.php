@@ -2,12 +2,26 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 /**
  * @ORM\Entity()
+ * @ApiResource(
+ *   attributes={
+ *     "normalization_context"={
+ *       "groups"={"ship:read"}
+ *     },
+ *     "force_eager"=false
+ *   },
+ *   collectionOperations={},
+ *   itemOperations={
+ *     "get"
+ *   }
+ * )
  */
 class HoldedShip
 {
@@ -22,6 +36,7 @@ class HoldedShip
     /**
      * @ORM\Id()
      * @ORM\ManyToOne(targetEntity="Ship", inversedBy="holders")
+     * @ApiProperty(required=true)
      * @Groups({"ship:read"})
      * @MaxDepth(1)
      */
@@ -29,6 +44,7 @@ class HoldedShip
 
     /**
      * @ORM\Column(type="integer", options={"default":1})
+     * @ApiProperty(required=true)
      * @Groups({"ship:read"})
      */
     private int $quantity;

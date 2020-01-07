@@ -12,7 +12,7 @@ services:
 
     App\:
         resource: '../src/*'
-        exclude: '../src/{DependencyInjection,Entity,Serializer,Migrations,Tests,Kernel.php}'
+        exclude: '../src/{Api,Entity,Serializer,Migrations,Tests,Kernel.php}'
 
     App\Controller\:
         autowire: true
@@ -33,7 +33,7 @@ services:
         class: App\Serializer\ShipFilesNormalizer
         decorates: 'api_platform.jsonld.normalizer.item'
         arguments: [ '@app.jsonld.normalizer.ship_files.inner', '@assets.packages' ]
-    app.hal.normalizer.ship_files:
-        class: App\Serializer\ShipFilesNormalizer
-        decorates: 'api_platform.hal.normalizer.item'
-        arguments: [ '@app.hal.normalizer.ship_files.inner', '@assets.packages' ]
+
+    ApiPlatform\Core\Metadata\Property\Factory\AnnotationPropertyNameCollectionFactory:
+        arguments: ['@annotation_reader', null]
+    api_platform.metadata.property.name_collection_factory: '@ApiPlatform\Core\Metadata\Property\Factory\AnnotationPropertyNameCollectionFactory'
