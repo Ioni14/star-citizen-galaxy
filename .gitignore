@@ -32,3 +32,4 @@ yarn-error.log
 ###< liip/imagine-bundle ###
 
 /public/uploads/
+/dumps/
