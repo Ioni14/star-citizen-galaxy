@@ -4,7 +4,6 @@ namespace App\Controller\Ships;
 
 use App\Entity\HoldedShip;
 use App\Entity\Ship;
-use App\Entity\User;
 use App\Form\Dto\HoldedShipDto;
 use App\Form\Dto\ShipDto;
 use App\Form\Type\ShipForm;
@@ -83,8 +82,10 @@ class EditController extends AbstractController
             $ship->getMinCrew(),
             $ship->getMaxCrew(),
             $ship->getSize(),
+            $ship->getCargoCapacity(),
+            $ship->getCareer(),
+            $ship->getRoles()->toArray(),
             $ship->getReadyStatus(),
-            $ship->getFocus(),
             $ship->getPledgeUrl(),
             $ship->getPicturePath(),
             $ship->getThumbnailPath(),
@@ -94,6 +95,7 @@ class EditController extends AbstractController
         );
         $form = $this->createForm(ShipForm::class, $shipDto, [
             'disabled' => !$lockedByMe,
+            'mode' => ShipForm::MODE_EDIT,
         ]);
         $form->handleRequest($request);
         if ($lockedByMe && $form->isSubmitted() && $form->isValid()) {
@@ -105,10 +107,16 @@ class EditController extends AbstractController
                 ->setMinCrew($shipDto->minCrew)
                 ->setMaxCrew($shipDto->maxCrew)
                 ->setSize($shipDto->size)
+                ->setCargoCapacity($shipDto->cargoCapacity)
                 ->setReadyStatus($shipDto->readyStatus)
-                ->setFocus($shipDto->focus)
+                ->setCareer($shipDto->career)
                 ->setPledgeUrl($shipDto->pledgeUrl)
                 ->setPrice($shipDto->price);
+
+            $ship->clearRoles();
+            foreach ($shipDto->roles as $role) {
+                $ship->addRole($role);
+            }
 
             $this->holdedShipsHelper->computeHoldedShips($ship, $shipDto);
 

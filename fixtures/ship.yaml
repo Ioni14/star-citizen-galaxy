@@ -11,7 +11,9 @@ App\Entity\Ship:
         price: 5000
         readyStatus: 'flight-ready'
         size: 'small'
-        focuses: ['@focus_starter', '@focus_pathfinding']
+        cargoCapacity: 2
+        career: '@career_combat'
+        roles: ['@role_pathfinding', '@role_medical']
         pledgeUrl: 'https://robertsspaceindustries.com/pledge/ships/rsi-aurora/Aurora-ES'
         createdAt: '<(new \DateTimeImmutable("2019-05-01 21:22:33"))>'
         updatedAt: '<(new \DateTimeImmutable("2019-05-02 21:22:33"))>'
@@ -27,7 +29,8 @@ App\Entity\Ship:
         price: 7500
         readyStatus: 'flight-ready'
         size: 'small'
-        focuses: ['@focus_starter', '@focus_pathfinding']
+        career: '@career_transport'
+        roles: ['@role_medical']
         pledgeUrl: 'https://robertsspaceindustries.com/pledge/ships/rsi-aurora/Aurora-LN'
         createdAt: '<(new \DateTimeImmutable("2019-05-02 21:22:33"))>'
         updatedAt: '<(new \DateTimeImmutable("2019-05-03 21:22:33"))>'

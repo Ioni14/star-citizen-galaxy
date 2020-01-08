@@ -1,8 +1,5 @@
 FROM php:7.4.1-fpm-alpine as req_php
 
-# prod|dev
-ARG ENV=prod
-
 RUN apk add --no-cache --virtual .deps icu-libs zlib libintl libzip libxml2 libxslt freetype libpng libwebp libjpeg-turbo
 RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS icu-dev libzip-dev libxml2-dev libxslt-dev libgcrypt-dev freetype-dev libpng-dev libwebp-dev libjpeg-turbo-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
@@ -11,6 +8,7 @@ RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS icu-dev libzip-dev lib
     && apk del .build-deps \
     && docker-php-ext-enable --ini-name 05-opcache.ini opcache \
     && docker-php-ext-enable --ini-name 20-redis.ini redis \
+    && docker-php-source delete \
     && rm -rf /tmp/*
 
 RUN mkdir /app && chown -R www-data:www-data /app
@@ -85,7 +83,7 @@ COPY --chown=www-data:www-data --from=node_deps /app/public/build/manifest.json 
 COPY --chown=www-data:www-data --from=composer_deps /app/vendor vendor
 COPY --chown=www-data:www-data --from=composer_deps /app/.env.local.php .env.local.php
 
-RUN if [ ${DUMP_ENV} == 0 ]; then echo "<?php return ['APP_ENV'=>'${ENV}','APP_SECRET'=>''];" > .env.local.php; fi; \
+RUN if [ ${DUMP_ENV} -eq 0 ]; then echo "<?php return ['APP_ENV'=>'${ENV}','APP_SECRET'=>''];" > .env.local.php; fi; \
     chown www-data .env*; \
     sed -i "s/^APP_ENV=.*$/APP_ENV=${ENV}/" .env; \
     if [ -e .env.local ]; then sed -i "s/^APP_ENV=.*$/APP_ENV=${ENV}/" .env.local; fi
@@ -123,7 +121,7 @@ FROM build_php as build_php_dev
 #COPY public/index_test.php public/
 
 USER root
-COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+COPY --from=composer:1.9.1 /usr/bin/composer /usr/local/bin/composer
 ENV COMPOSER_MEMORY_LIMIT -1
 ENV COMPOSER_ALLOW_SUPERUSER 1
 

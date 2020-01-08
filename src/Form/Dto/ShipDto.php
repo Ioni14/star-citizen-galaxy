@@ -3,7 +3,9 @@
 namespace App\Form\Dto;
 
 use App\Entity\Ship;
+use App\Entity\ShipCareer;
 use App\Entity\ShipChassis;
+use App\Entity\ShipRole;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -59,6 +61,11 @@ class ShipDto
     /**
      * @Assert\Range(min="0", max="2147483647")
      */
+    public ?int $cargoCapacity;
+
+    /**
+     * @Assert\Range(min="0", max="2147483647")
+     */
     public ?int $price;
 
     /**
@@ -66,10 +73,12 @@ class ShipDto
      */
     public ?string $readyStatus = Ship::READY_STATUS_FLIGHT_READY;
 
+    public ?ShipCareer $career;
+
     /**
-     * @Assert\Length(min="3", max="30")
+     * @var ShipRole[]
      */
-    public ?string $focus;
+    public array $roles;
 
     /**
      * @Assert\Url()
@@ -106,8 +115,10 @@ class ShipDto
         ?int $minCrew = 1,
         ?int $maxCrew = 1,
         ?string $size = null,
+        ?int $cargoCapacity = null,
+        ?ShipCareer $career = null,
+        array $roles = [],
         ?string $readyStatus = null,
-        ?string $focus = null,
         ?string $pledgeUrl = null,
         ?string $picturePath = null,
         ?string $thumbnailPath = null,
@@ -123,8 +134,10 @@ class ShipDto
         $this->minCrew = $minCrew;
         $this->maxCrew = $maxCrew;
         $this->size = $size;
+        $this->cargoCapacity = $cargoCapacity;
+        $this->career = $career;
+        $this->roles = $roles;
         $this->readyStatus = $readyStatus;
-        $this->focus = $focus;
         $this->pledgeUrl = $pledgeUrl;
         $this->picturePath = $picturePath;
         $this->thumbnailPath = $thumbnailPath;
@@ -136,5 +149,10 @@ class ShipDto
     public function addHoldedShip(HoldedShipDto $holdedShip): void
     {
         $this->holdedShips[] = $holdedShip;
+    }
+
+    public function addShipRole(ShipRole $role): void
+    {
+        $this->roles[] = $role;
     }
 }

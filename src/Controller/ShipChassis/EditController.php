@@ -62,6 +62,7 @@ class EditController extends AbstractController
         );
         $form = $this->createForm(ShipChassisForm::class, $shipChassisDto, [
             'disabled' => !$lockedByMe,
+            'mode' => ShipChassisForm::MODE_EDIT,
         ]);
         $form->handleRequest($request);
         if ($lockedByMe && $form->isSubmitted() && $form->isValid()) {

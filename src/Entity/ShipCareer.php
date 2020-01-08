@@ -15,7 +15,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * })
  *
  * @ApiResource(
- *   shortName="ShipFocuses",
+ *   shortName="ShipCareers",
  *   attributes={
  *     "pagination_items_per_page"=50,
  *     "normalization_context"={
@@ -31,7 +31,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *   }
  * )
  */
-class ShipFocus implements LockableEntityInterface
+class ShipCareer implements LockableEntityInterface
 {
     /**
      * @ORM\Id()

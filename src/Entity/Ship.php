@@ -169,13 +169,31 @@ class Ship implements LockableEntityInterface
     private ?string $size = null;
 
     /**
-     * @var Ship[]|Collection
-     *
-     * @ORM\ManyToMany(targetEntity="App\Entity\ShipFocus")
+     * @ORM\Column(type="integer", nullable=true)
+     * @Gedmo\Versioned()
      * @ApiProperty()
      * @Groups({"ship:read"})
      */
-    private $focuses;
+    private ?int $cargoCapacity = null;
+
+    /**
+     * @var ShipCareer
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\ShipCareer", fetch="EAGER")
+     * @Gedmo\Versioned()
+     * @ApiProperty()
+     * @Groups({"ship:read"})
+     */
+    private ?ShipCareer $career = null;
+
+    /**
+     * @var ShipRole[]|Collection
+     *
+     * @ORM\ManyToMany(targetEntity="App\Entity\ShipRole", fetch="EAGER")
+     * @ApiProperty()
+     * @Groups({"ship:read"})
+     */
+    private $roles;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -252,7 +270,7 @@ class Ship implements LockableEntityInterface
         $this->id = $id;
         $this->holders = new ArrayCollection();
         $this->holdedShips = new ArrayCollection();
-        $this->focuses = new ArrayCollection();
+        $this->roles = new ArrayCollection();
         $this->chassis = $chassis ?? new ShipChassis();
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
@@ -305,11 +323,6 @@ class Ship implements LockableEntityInterface
     public function getHoldedShips(): Collection
     {
         return $this->holdedShips;
-    }
-
-    public function clearHoldedShips(): void
-    {
-        $this->holdedShips->clear();
     }
 
     public function addHoldedShip(HoldedShip $holdedShip): self
@@ -417,24 +430,53 @@ class Ship implements LockableEntityInterface
         return $this;
     }
 
-    /**
-     * @return ShipFocus[]
-     */
-    public function getFocuses(): Collection
+    public function getCargoCapacity(): ?int
     {
-        return $this->focuses;
+        return $this->cargoCapacity;
     }
 
-    public function addFocus(ShipFocus $shipFocus): self
+    public function setCargoCapacity(?int $cargoCapacity): self
     {
-        $this->focuses->add($shipFocus);
+        $this->cargoCapacity = $cargoCapacity;
 
         return $this;
     }
 
-    public function removeFocus(ShipFocus $shipFocus): self
+    public function getCareer(): ?ShipCareer
     {
-        $this->focuses->removeElement($shipFocus);
+        return $this->career;
+    }
+
+    public function setCareer(?ShipCareer $career): self
+    {
+        $this->career = $career;
+
+        return $this;
+    }
+
+    /**
+     * @return ShipRole[]
+     */
+    public function getRoles(): Collection
+    {
+        return $this->roles;
+    }
+
+    public function clearRoles(): void
+    {
+        $this->roles->clear();
+    }
+
+    public function addRole(ShipRole $role): self
+    {
+        $this->roles->add($role);
+
+        return $this;
+    }
+
+    public function removeRole(ShipRole $role): self
+    {
+        $this->roles->removeElement($role);
 
         return $this;
     }

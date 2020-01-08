@@ -28,13 +28,13 @@
 
                                 {{ form_label(form.holdedShips) }}
                                 {{ form_help(form.holdedShips, {'help': 'The ships that are contained in. e.g., a Carrack holds a Pisces.'}) }}
-                                <div class="pl-5" id="js-holded-ships-collection" data-index="{{ form.holdedShips|length }}" data-prototype="{{ form_widget(form.holdedShips.vars.prototype)|e('html_attr') }}">
+                                <div id="js-holded-ships-collection" data-index="{{ form.holdedShips|length }}" data-prototype="{{ form_widget(form.holdedShips.vars.prototype)|e('html_attr') }}">
                                     <div id="js-holded-ships-rows">
                                         {% for holdedShip in form.holdedShips %}
                                             {{ form_widget(holdedShip) }}
                                         {% endfor %}
                                     </div>
-                                    <p class="text-right"><button type="button" class="btn btn-primary d-inline-block js-holded-ships-add-row" title="Add a row"><i class="fa fa-plus"></i> Add a row</button></p>
+                                    <p><button type="button" class="btn btn-primary d-inline-block js-holded-ships-add-row" title="Add a row"><i class="fa fa-plus"></i> Add a row</button></p>
                                 </div>
 
                                 {{ form_row(form.height, {'help': 'The physical height of the ship. e.g., an Aurora LN is 4.0 meters tall.'}) }}
@@ -42,9 +42,11 @@
                                 {{ form_row(form.minCrew, {'help': 'How many citizens are needed to drive the ship?'}) }}
                                 {{ form_row(form.maxCrew, {'help': 'How many citizens are sufficient to drive the ship?'}) }}
                                 {{ form_row(form.size, {'attr': {'class': 'js-select2'}}) }}
+                                {{ form_row(form.cargoCapacity, {'help': 'How many cargo the ship can carry?'}) }}
                                 {{ form_row(form.price, {'help': 'The standalone price of the ship.'}) }}
                                 {{ form_row(form.readyStatus, {'attr': {'class': 'js-select2'}}) }}
-                                {{ form_row(form.focus, {'help': 'Free description about the main purpose of the ship. e.g., a Prospector is about Mining.'}) }}
+                                {{ form_row(form.career, {'attr': {'class': 'js-select2'}}) }}
+                                {{ form_row(form.roles, {'attr': {'class': 'js-select2'}}) }}
                                 {{ form_row(form.pledgeUrl, {'attr': {'placeholder': 'e.g., https://robertsspaceindustries.com/pledge/ships/rsi-aurora/Aurora-LN'}, 'help': 'The URL of the official page of the ship.'}) }}
                                 {{ form_row(form.picture, {'attr': {'placeholder': 'Choose an image...'}, 'help': 'The best quality picture of the ship in jpeg, png or webp.'}) }}
                                 {{ form_row(form.thumbnail, {'attr': {'placeholder': 'Choose an image...'}, 'help': 'The thumbnail of the ship in jpeg, png or webp.'}) }}

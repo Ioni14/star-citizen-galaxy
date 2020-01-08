@@ -91,6 +91,8 @@
                                 <dd class="col-sm-9">{{ ship.maxCrew }}</dd>
                                 <dt class="col-sm-3">Size</dt>
                                 <dd class="col-sm-9">{{ _self.displayBadgeShipSize(ship) }}</dd>
+                                <dt class="col-sm-3">Cargo capacity (SCU)</dt>
+                                <dd class="col-sm-9">{{ ship.cargoCapacity }}</dd>
                                 <dt class="col-sm-3">Price</dt>
                                 <dd class="col-sm-9">
                                     {% if ship.price is not null %}
@@ -99,8 +101,14 @@
                                 </dd>
                                 <dt class="col-sm-3">Ready status</dt>
                                 <dd class="col-sm-9">{{ _self.displayBadgeShipReadyStatus(ship) }}</dd>
-                                <dt class="col-sm-3">Focus</dt>
-                                <dd class="col-sm-9">{{ ship.focus }}</dd>
+                                <dt class="col-sm-3">Career</dt>
+                                <dd class="col-sm-9">{{ ship.career is not null ? ship.career.label : '' }}</dd>
+                                <dt class="col-sm-3">Roles</dt>
+                                <dd class="col-sm-9">
+                                    {% for role in ship.roles %}
+                                        <span class="badge badge-secondary">{{ role.label }}</span>
+                                    {% endfor %}
+                                </dd>
                                 <dt class="col-sm-3">Pledge URL</dt>
                                 <dd class="col-sm-9">
                                     {% if ship.pledgeUrl is not null %}

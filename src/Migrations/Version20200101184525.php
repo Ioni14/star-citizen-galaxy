@@ -18,8 +18,10 @@ final class Version20200101184525 extends AbstractMigration
             length DOUBLE PRECISION DEFAULT NULL,
             max_crew INT DEFAULT NULL,
             min_crew INT DEFAULT NULL,
+            career_id CHAR(36) DEFAULT NULL COMMENT '(DC2Type:uuid)',
             ready_status VARCHAR(30) DEFAULT NULL,
             size VARCHAR(30) DEFAULT NULL,
+            cargo_capacity INT DEFAULT NULL,
             pledge_url VARCHAR(255) DEFAULT NULL,
             thumbnail_path VARCHAR(255) DEFAULT NULL,
             picture_path VARCHAR(255) DEFAULT NULL,
@@ -30,6 +32,7 @@ final class Version20200101184525 extends AbstractMigration
             updated_by_id CHAR(36) DEFAULT NULL COMMENT '(DC2Type:uuid)',
             UNIQUE INDEX UNIQ_FA30EB24989D9B62 (slug),
             INDEX IDX_FA30EB2463EE729 (chassis_id),
+            INDEX IDX_FA30EB24B58CDA09 (career_id),
             INDEX IDX_FA30EB24B03A8386 (created_by_id),
             INDEX IDX_FA30EB24896DBBDE (updated_by_id),
             INDEX name_idx (name),
@@ -82,18 +85,24 @@ final class Version20200101184525 extends AbstractMigration
             INDEX IDX_645607B1DEEE62D0 (holder_id),
             INDEX IDX_645607B1AB9C6A93 (holded_id),
             PRIMARY KEY(holder_id, holded_id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB");
-        $this->addSql("CREATE TABLE ship_focus (
+        $this->addSql("CREATE TABLE ship_career (
             id CHAR(36) NOT NULL COMMENT '(DC2Type:uuid)',
             label VARCHAR(30) NOT NULL,
             INDEX label_idx (label),
             PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB");
-        $this->addSql("CREATE TABLE ship_ship_focus (
+        $this->addSql("CREATE TABLE ship_role (
+            id CHAR(36) NOT NULL COMMENT '(DC2Type:uuid)',
+            label VARCHAR(30) NOT NULL,
+            INDEX label_idx (label),
+            PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB");
+        $this->addSql("CREATE TABLE ship_ship_role (
             ship_id CHAR(36) NOT NULL COMMENT '(DC2Type:uuid)',
-            ship_focus_id CHAR(36) NOT NULL COMMENT '(DC2Type:uuid)',
-            INDEX IDX_B92F2BC7C256317D (ship_id),
-            INDEX IDX_B92F2BC7628D7B97 (ship_focus_id),
-            PRIMARY KEY(ship_id, ship_focus_id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB");
+            ship_role_id CHAR(36) NOT NULL COMMENT '(DC2Type:uuid)',
+            INDEX IDX_3C17240C256317D (ship_id),
+            INDEX IDX_3C17240D82E12C1 (ship_role_id),
+            PRIMARY KEY(ship_id, ship_role_id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB");
         $this->addSql('ALTER TABLE ship ADD CONSTRAINT FK_FA30EB2463EE729 FOREIGN KEY (chassis_id) REFERENCES ship_chassis (id)');
+        $this->addSql('ALTER TABLE ship ADD CONSTRAINT FK_FA30EB24B58CDA09 FOREIGN KEY (career_id) REFERENCES ship_career (id)');
         $this->addSql('ALTER TABLE ship ADD CONSTRAINT FK_FA30EB24B03A8386 FOREIGN KEY (created_by_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE ship ADD CONSTRAINT FK_FA30EB24896DBBDE FOREIGN KEY (updated_by_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE manufacturer ADD CONSTRAINT FK_3D0AE6DCB03A8386 FOREIGN KEY (created_by_id) REFERENCES user (id)');
@@ -103,8 +112,8 @@ final class Version20200101184525 extends AbstractMigration
         $this->addSql('ALTER TABLE ship_chassis ADD CONSTRAINT FK_3BE443B2896DBBDE FOREIGN KEY (updated_by_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE holded_ship ADD CONSTRAINT FK_645607B1DEEE62D0 FOREIGN KEY (holder_id) REFERENCES ship (id)');
         $this->addSql('ALTER TABLE holded_ship ADD CONSTRAINT FK_645607B1AB9C6A93 FOREIGN KEY (holded_id) REFERENCES ship (id)');
-        $this->addSql('ALTER TABLE ship_ship_focus ADD CONSTRAINT FK_B92F2BC7C256317D FOREIGN KEY (ship_id) REFERENCES ship (id) ON DELETE CASCADE');
-        $this->addSql('ALTER TABLE ship_ship_focus ADD CONSTRAINT FK_B92F2BC7628D7B97 FOREIGN KEY (ship_focus_id) REFERENCES ship_focus (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE ship_ship_role ADD CONSTRAINT FK_3C17240C256317D FOREIGN KEY (ship_id) REFERENCES ship (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE ship_ship_role ADD CONSTRAINT FK_3C17240D82E12C1 FOREIGN KEY (ship_role_id) REFERENCES ship_role (id) ON DELETE CASCADE');
 
         $this->addSql("CREATE TABLE ext_log_entries (
             id INT AUTO_INCREMENT NOT NULL,
@@ -121,50 +130,51 @@ final class Version20200101184525 extends AbstractMigration
             INDEX log_version_lookup_idx (object_id, object_class, version),
             PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC");
 
-        $this->addSql("INSERT INTO ship_focus(id, label) VALUES('7236e77f-ad90-47ec-9fc3-ca05c45c263f', 'Starter')");
-        $this->addSql("INSERT INTO ship_focus(id, label) VALUES('4feb3099-4b86-424f-bbd0-9d6fb73083af', 'Combat')");
-        $this->addSql("INSERT INTO ship_focus(id, label) VALUES('9f8cf8da-6f0f-46e5-a267-ca3a8628f2c0', 'E-Warfare')");
-        $this->addSql("INSERT INTO ship_focus(id, label) VALUES('6b755d89-23b6-4162-bc30-3006518c0fac', 'Freight')");
-        $this->addSql("INSERT INTO ship_focus(id, label) VALUES('f7d33250-e2b0-43c2-88ea-2bdc34d8e7a2', 'Touring')");
-        $this->addSql("INSERT INTO ship_focus(id, label) VALUES('893d0be5-fd57-4699-9c04-2ed7a5ded66e', 'Racing')");
-        $this->addSql("INSERT INTO ship_focus(id, label) VALUES('05eaba1c-8273-4a76-8333-bd2cd776ae11', 'Mining')");
-        $this->addSql("INSERT INTO ship_focus(id, label) VALUES('b52fccd7-5eab-4cc3-a873-107b23008594', 'Pathfinder')");
-        $this->addSql("INSERT INTO ship_focus(id, label) VALUES('bfe94053-948e-4a2e-a43c-36230e8ca196', 'Expedition')");
-        $this->addSql("INSERT INTO ship_focus(id, label) VALUES('b6bfd8e7-ec7c-4e60-bbb6-17f0701847a2', 'Medical')");
-        $this->addSql("INSERT INTO ship_focus(id, label) VALUES('7f1d9794-f2d5-4954-a1f9-202664e6f374', 'Bomber')");
-        $this->addSql("INSERT INTO ship_focus(id, label) VALUES('becfe7b2-3932-4268-baad-e8f60b1cc417', 'Refuelling')");
-        $this->addSql("INSERT INTO ship_focus(id, label) VALUES('538839ce-cd1e-42c7-8b02-35aeb070092c', 'Transport')");
-        $this->addSql("INSERT INTO ship_focus(id, label) VALUES('0c979ad9-9372-486f-a5ef-fffd6841fc48', 'Frigate')");
-        $this->addSql("INSERT INTO ship_focus(id, label) VALUES('607b8a84-bf13-44a2-9d1f-ecfee5fd7d58', 'Cargo')");
-        $this->addSql("INSERT INTO ship_focus(id, label) VALUES('d65d7992-5f4c-4b68-b461-26cee4ed524d', 'Destroyer')");
-        $this->addSql("INSERT INTO ship_focus(id, label) VALUES('bb0a910b-7c1d-4a0b-bc5a-29e76b57fedc', 'Science')");
-        $this->addSql("INSERT INTO ship_focus(id, label) VALUES('133be469-d901-4003-96be-ca028c56b8b8', 'Repair')");
-        $this->addSql("INSERT INTO ship_focus(id, label) VALUES('8c5b14be-c41e-4d70-8c34-c1663643c1ce', 'Passenger')");
-        $this->addSql("INSERT INTO ship_focus(id, label) VALUES('6129d90b-73be-418f-8dfb-7cee72e68f7e', 'Luxury')");
-        $this->addSql("INSERT INTO ship_focus(id, label) VALUES('4ff0589f-0c90-4974-9ee1-ec990ca2e688', 'Construction')");
-        $this->addSql("INSERT INTO ship_focus(id, label) VALUES('2574bc17-159a-4c75-b3d9-120cd226cf34', 'Carrier')");
-        $this->addSql("INSERT INTO ship_focus(id, label) VALUES('a7e7fcfd-6744-452b-9cb3-d48ea9b51644', 'Salvage')");
-        $this->addSql("INSERT INTO ship_focus(id, label) VALUES('912fa9f7-808e-451a-a35e-d8174abda502', 'Military')");
-        $this->addSql("INSERT INTO ship_focus(id, label) VALUES('e59ee7c1-bcf1-4817-83cb-99e2e7aad1d6', 'Minelayer')");
-        $this->addSql("INSERT INTO ship_focus(id, label) VALUES('378e6163-c2bf-40e9-a521-4cff3123a487', 'Interceptor')");
-        $this->addSql("INSERT INTO ship_focus(id, label) VALUES('8f3ec376-1c8b-4981-95e0-88c8507fd2cf', 'News')");
+        $this->addSql("INSERT INTO ship_career(id, label) VALUES('2caf6940-9405-4eff-8a97-1f75412e51ce', 'Combat')");
+        $this->addSql("INSERT INTO ship_career(id, label) VALUES('e28fefdd-846c-4911-b1ba-250eed27bfad', 'Transport')");
+        $this->addSql("INSERT INTO ship_career(id, label) VALUES('9ed86581-5d55-40bc-bfbc-df08e37750a6', 'Exploration')");
+        $this->addSql("INSERT INTO ship_career(id, label) VALUES('6cfdb78f-1839-4e72-9eb0-ba475b4db0c3', 'Industrial')");
+        $this->addSql("INSERT INTO ship_career(id, label) VALUES('696a0f4d-6fe1-4b1f-8b37-2c2355824657', 'Support')");
+        $this->addSql("INSERT INTO ship_career(id, label) VALUES('b0e7049a-5692-45e4-b9d0-ae0a6a9bedd2', 'Competition')");
+
+        $this->addSql("INSERT INTO ship_role(id, label) VALUES('8e30b822-25a6-4716-8429-216b300115bd', 'Fighters')");
+        $this->addSql("INSERT INTO ship_role(id, label) VALUES('a01cda17-37e5-434d-b2be-998f2632e9aa', 'Interdiction')");
+        $this->addSql("INSERT INTO ship_role(id, label) VALUES('a4399327-d77b-449c-ab0f-f4e923638f20', 'Drop Ship')");
+        $this->addSql("INSERT INTO ship_role(id, label) VALUES('08d43f2e-6cd4-4b9e-82fe-90b17f3eb4e4', 'Bomber')");
+        $this->addSql("INSERT INTO ship_role(id, label) VALUES('d89c0ac7-7b1b-46ab-b733-2001e80ccefb', 'Freight')");
+        $this->addSql("INSERT INTO ship_role(id, label) VALUES('0a5368ec-7853-4083-9dfa-38896ec94d5f', 'Passenger')");
+        $this->addSql("INSERT INTO ship_role(id, label) VALUES('f320b0a9-2cc0-486b-b42c-40712434b26b', 'Data')");
+        $this->addSql("INSERT INTO ship_role(id, label) VALUES('922f426f-dd12-4d2a-9fdb-19c5a9cb2417', 'Pathfinder')");
+        $this->addSql("INSERT INTO ship_role(id, label) VALUES('cef8fc55-33b5-40e3-b093-f63c4ad8428d', 'Expedition')");
+        $this->addSql("INSERT INTO ship_role(id, label) VALUES('884e1f12-fd98-415f-a36f-00af8454d141', 'Touring')");
+        $this->addSql("INSERT INTO ship_role(id, label) VALUES('f935e2a7-a759-4a1f-accf-a6d145acd710', 'Mining')");
+        $this->addSql("INSERT INTO ship_role(id, label) VALUES('a7187e41-2759-4fa7-b99a-a55ce4899443', 'Salvage')");
+        $this->addSql("INSERT INTO ship_role(id, label) VALUES('29b58278-21a5-42bb-900c-feaf884d890b', 'Science')");
+        $this->addSql("INSERT INTO ship_role(id, label) VALUES('4fc5903a-cab5-424d-bdfb-86b2b5c91cca', 'Agriculture')");
+        $this->addSql("INSERT INTO ship_role(id, label) VALUES('1573a876-1bab-4316-99cf-ee35e2fb10ce', 'Medical')");
+        $this->addSql("INSERT INTO ship_role(id, label) VALUES('d73e175a-5601-4536-9526-935765edcd6a', 'Refueling')");
+        $this->addSql("INSERT INTO ship_role(id, label) VALUES('6e59ed0c-250a-4b2b-8f95-f3c1238de24b', 'Repair')");
+        $this->addSql("INSERT INTO ship_role(id, label) VALUES('f8f03bd9-4095-43f3-b7ee-6bcd21a87f78', 'Reporting')");
+        $this->addSql("INSERT INTO ship_role(id, label) VALUES('cc2bc9f5-0277-4a55-bfb9-ef128bf698fa', 'Racing')");
     }
 
     public function down(Schema $schema): void
     {
         $this->addSql('DROP TABLE ext_log_entries');
 
-        $this->addSql('ALTER TABLE ship_ship_focus DROP FOREIGN KEY FK_B92F2BC7628D7B97');
+        $this->addSql('ALTER TABLE ship_ship_role DROP FOREIGN KEY FK_3C17240D82E12C1');
         $this->addSql('ALTER TABLE manufacturer DROP FOREIGN KEY FK_3D0AE6DCB03A8386');
         $this->addSql('ALTER TABLE manufacturer DROP FOREIGN KEY FK_3D0AE6DC896DBBDE');
+        $this->addSql('ALTER TABLE ship DROP FOREIGN KEY FK_FA30EB24B58CDA09');
         $this->addSql('ALTER TABLE ship DROP FOREIGN KEY FK_FA30EB2463EE729');
         $this->addSql('ALTER TABLE ship DROP FOREIGN KEY FK_FA30EB24B03A8386');
         $this->addSql('ALTER TABLE ship DROP FOREIGN KEY FK_FA30EB24896DBBDE');
         $this->addSql('ALTER TABLE ship_chassis DROP FOREIGN KEY FK_3BE443B2A23B42D');
         $this->addSql('ALTER TABLE ship_chassis DROP FOREIGN KEY FK_3BE443B2B03A8386');
         $this->addSql('ALTER TABLE ship_chassis DROP FOREIGN KEY FK_3BE443B2896DBBDE');
-        $this->addSql('DROP TABLE ship_ship_focus');
-        $this->addSql('DROP TABLE ship_focus');
+        $this->addSql('DROP TABLE ship_ship_role');
+        $this->addSql('DROP TABLE ship_role');
+        $this->addSql('DROP TABLE ship_career');
         $this->addSql('DROP TABLE holded_ship');
         $this->addSql('DROP TABLE ship');
         $this->addSql('DROP TABLE manufacturer');

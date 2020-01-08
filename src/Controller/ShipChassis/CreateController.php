@@ -30,7 +30,9 @@ class CreateController extends AbstractController
     public function __invoke(Request $request): Response
     {
         $shipChassisDto = new ShipChassisDto();
-        $form = $this->createForm(ShipChassisForm::class, $shipChassisDto);
+        $form = $this->createForm(ShipChassisForm::class, $shipChassisDto, [
+            'mode' => ShipChassisForm::MODE_CREATE,
+        ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $shipChassis = (new ShipChassis(Uuid::uuid4()))

@@ -25,6 +25,7 @@
                                 <th>Chassis</th>
                                 <th>Manufacturer</th>
                                 <th>Size</th>
+                                <th>Career</th>
                                 {% if is_granted('ROLE_MODERATOR') %}
                                     <th class="nosort">Actions</th>
                                 {% endif %}
@@ -37,6 +38,7 @@
                                 <td>{{ ship.chassis.name ?? '-' }}</td>
                                 <td>{{ ship.chassis.manufacturer.name ?? '-' }}</td>
                                 <td>{{ ship.size }}</td>
+                                <td>{{ ship.career ? ship.career.label : '' }}</td>
                                 {% if is_granted('ROLE_MODERATOR') %}
                                     <td>
                                         <a class="btn btn-primary btn-sm" href="{{ path('ships_edit', {'slug': ship.slug}) }}"><i class="fa fa-edit"></i> Edit</a>

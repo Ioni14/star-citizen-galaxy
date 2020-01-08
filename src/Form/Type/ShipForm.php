@@ -3,7 +3,9 @@
 namespace App\Form\Type;
 
 use App\Entity\Ship;
+use App\Entity\ShipCareer;
 use App\Entity\ShipChassis;
+use App\Entity\ShipRole;
 use App\Form\Dto\HoldedShipDto;
 use App\Form\Dto\ShipDto;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -22,6 +24,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ShipForm extends AbstractType
 {
+    public const MODE_EDIT = 'edit';
+    public const MODE_CREATE = 'create';
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -67,6 +72,9 @@ class ShipForm extends AbstractType
                     'ship.sizes.capital' => Ship::SIZE_CAPITAL,
                 ],
             ])
+            ->add('cargoCapacity', IntegerType::class, [
+                'required' => false,
+            ])
             ->add('price', MoneyType::class, [
                 'required' => false,
                 'divisor' => 100,
@@ -80,8 +88,19 @@ class ShipForm extends AbstractType
                     'ship.ready_statuses.concept' => Ship::READY_STATUS_CONCEPT,
                 ],
             ])
-            ->add('focus', TextType::class, [
+            ->add('career', EntityType::class, [
                 'required' => false,
+                'class' => ShipCareer::class,
+                'placeholder' => 'N/A',
+                'choice_value' => 'id',
+                'choice_label' => 'label',
+            ])
+            ->add('roles', EntityType::class, [
+                'required' => false,
+                'class' => ShipRole::class,
+                'multiple' => true,
+                'choice_value' => 'id',
+                'choice_label' => 'label',
             ])
             ->add('pledgeUrl', UrlType::class, [
                 'required' => false,
@@ -95,8 +114,11 @@ class ShipForm extends AbstractType
                 'required' => false,
                 'image_path_property' => 'thumbnailPath',
                 'image_assets_package' => 'ship_thumbnails',
-            ])
-            ->add('version', HiddenType::class);
+            ]);
+
+        if ($options['mode'] === self::MODE_EDIT) {
+            $builder->add('version', HiddenType::class);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -104,6 +126,7 @@ class ShipForm extends AbstractType
         $resolver->setDefaults([
             'data_class' => ShipDto::class,
             'allow_extra_fields' => true,
+            'mode' => self::MODE_CREATE,
         ]);
     }
 }

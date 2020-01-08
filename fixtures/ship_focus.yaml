@@ -1,7 +1,0 @@
-App\Entity\ShipFocus:
-    focus_starter:
-        __construct: ['<(\Ramsey\Uuid\Uuid::fromString("99512129-f6bc-4622-a893-d37f1715d6be"))>']
-        label: 'Starter'
-    focus_pathfinding:
-        __construct: ['<(\Ramsey\Uuid\Uuid::fromString("d70a9024-b835-4707-b6f0-5e7bf58d999d"))>']
-        label: 'Pathfinding'

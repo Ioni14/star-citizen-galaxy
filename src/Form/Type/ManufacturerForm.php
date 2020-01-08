@@ -11,6 +11,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ManufacturerForm extends AbstractType
 {
+    public const MODE_CREATE = 'create';
+    public const MODE_EDIT = 'edit';
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -19,8 +22,10 @@ class ManufacturerForm extends AbstractType
             ])
             ->add('code', TextType::class, [
                 'required' => true,
-            ])
-            ->add('version', HiddenType::class);
+            ]);
+        if ($options['mode'] === self::MODE_EDIT) {
+            $builder->add('version', HiddenType::class);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -28,6 +33,7 @@ class ManufacturerForm extends AbstractType
         $resolver->setDefaults([
             'data_class' => ManufacturerDto::class,
             'allow_extra_fields' => true,
+            'mode' => self::MODE_CREATE,
         ]);
     }
 }

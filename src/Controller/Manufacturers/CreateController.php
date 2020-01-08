@@ -30,7 +30,9 @@ class CreateController extends AbstractController
     public function __invoke(Request $request): Response
     {
         $manufacturerDto = new ManufacturerDto();
-        $form = $this->createForm(ManufacturerForm::class, $manufacturerDto);
+        $form = $this->createForm(ManufacturerForm::class, $manufacturerDto, [
+            'mode' => ManufacturerForm::MODE_CREATE,
+        ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $manufacturer = (new Manufacturer(Uuid::uuid4()))
@@ -42,7 +44,7 @@ class CreateController extends AbstractController
 
             $this->addFlash('success', 'The manufacturer has been successfully created.');
 
-            return $this->redirectToRoute('manufacturers_edit', ['slug' => $manufacturer->getSlug()]);
+            return $this->redirectToRoute('manufacturers_details', ['slug' => $manufacturer->getSlug()]);
         }
 
         return $this->render('manufacturers/create.html.twig', [

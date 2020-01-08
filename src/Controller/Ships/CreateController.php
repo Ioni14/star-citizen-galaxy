@@ -8,6 +8,7 @@ use App\Form\Type\ShipForm;
 use App\Service\Ship\FileHelper;
 use App\Service\Ship\HoldedShipsHelper;
 use Doctrine\ORM\EntityManagerInterface;
+use Gedmo\Loggable\LoggableListener;
 use League\Flysystem\FilesystemInterface;
 use Ramsey\Uuid\Uuid;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -45,7 +46,9 @@ class CreateController extends AbstractController
     public function __invoke(Request $request): Response
     {
         $shipDto = new ShipDto();
-        $form = $this->createForm(ShipForm::class, $shipDto);
+        $form = $this->createForm(ShipForm::class, $shipDto, [
+            'mode' => ShipForm::MODE_CREATE,
+        ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $ship = (new Ship(Uuid::uuid4()))
@@ -56,17 +59,22 @@ class CreateController extends AbstractController
                 ->setMinCrew($shipDto->minCrew)
                 ->setMaxCrew($shipDto->maxCrew)
                 ->setSize($shipDto->size)
+                ->setCargoCapacity($shipDto->cargoCapacity)
                 ->setReadyStatus($shipDto->readyStatus)
-                ->setFocus($shipDto->focus)
+                ->setCareer($shipDto->career)
                 ->setPledgeUrl($shipDto->pledgeUrl)
                 ->setPrice($shipDto->price);
+
+            foreach ($shipDto->roles as $role) {
+                $ship->addRole($role);
+            }
 
             $this->holdedShipsHelper->computeHoldedShips($ship, $shipDto);
 
             try {
                 $this->entityManager->beginTransaction();
                 $this->entityManager->persist($ship);
-                $this->entityManager->flush();
+                $this->entityManager->flush(); // we need the generated Slug of the ship
 
                 if ($shipDto->picture !== null) {
                     $path = $this->fileHelper->handleFile($shipDto->picture, $ship->getSlug(), $ship->getPicturePath(), 'pictures', $this->picturesFilesystem);
@@ -76,8 +84,12 @@ class CreateController extends AbstractController
                     $path = $this->fileHelper->handleFile($shipDto->thumbnail, $ship->getSlug(), $ship->getThumbnailPath(), 'thumbnails', $this->thumbnailsFilesystem);
                     $ship->setThumbnailPath($path);
                 }
-
                 $this->entityManager->flush();
+                $dql = 'DELETE FROM Gedmo\Loggable\Entity\LogEntry e WHERE e.objectId = :oid AND e.action = :action';
+                $this->entityManager->createQuery($dql)->setParameters([
+                    'oid' => $ship->getId()->toString(),
+                    'action' => LoggableListener::ACTION_UPDATE,
+                ])->execute();
 
                 $this->entityManager->commit();
             } catch (\Exception $e) {

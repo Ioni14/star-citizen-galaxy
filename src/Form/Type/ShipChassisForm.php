@@ -13,6 +13,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ShipChassisForm extends AbstractType
 {
+    public const MODE_CREATE = 'create';
+    public const MODE_EDIT = 'edit';
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -24,8 +27,10 @@ class ShipChassisForm extends AbstractType
                 'class' => Manufacturer::class,
                 'choice_value' => 'id',
                 'choice_label' => 'name',
-            ])
-            ->add('version', HiddenType::class);
+            ]);
+        if ($options['mode'] === self::MODE_EDIT) {
+            $builder->add('version', HiddenType::class);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -33,6 +38,7 @@ class ShipChassisForm extends AbstractType
         $resolver->setDefaults([
             'data_class' => ShipChassisDto::class,
             'allow_extra_fields' => true,
+            'mode' => self::MODE_CREATE,
         ]);
     }
 }

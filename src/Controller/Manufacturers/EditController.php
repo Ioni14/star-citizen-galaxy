@@ -62,6 +62,7 @@ class EditController extends AbstractController
         );
         $form = $this->createForm(ManufacturerForm::class, $manufacturerDto, [
             'disabled' => !$lockedByMe,
+            'mode' => ManufacturerForm::MODE_EDIT,
         ]);
         $form->handleRequest($request);
         if ($lockedByMe && $form->isSubmitted() && $form->isValid()) {
