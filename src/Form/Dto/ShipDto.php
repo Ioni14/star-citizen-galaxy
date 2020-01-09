@@ -33,22 +33,22 @@ class ShipDto
     public array $holdedShips;
 
     /**
-     * @Assert\Range(min="0", max="2147483647")
+     * @Assert\Range(min="1", max="2147483647")
      */
     public ?float $height;
 
     /**
-     * @Assert\Range(min="0", max="2147483647")
+     * @Assert\Range(min="1", max="2147483647")
      */
     public ?float $length;
 
     /**
-     * @Assert\Range(min="1", max="2147483647")
+     * @Assert\Range(min="0", max="2147483647")
      */
     public ?int $minCrew;
 
     /**
-     * @Assert\Range(min="1", max="2147483647")
+     * @Assert\Range(min="0", max="2147483647")
      * @Assert\Expression("value === null or this.minCrew === null or value >= this.minCrew", message="ship.constraints.max_crew.over_min_crew", groups={"second_pass"})
      */
     public ?int $maxCrew;
@@ -82,6 +82,7 @@ class ShipDto
 
     /**
      * @Assert\Url()
+     * @Assert\Regex("~^https://robertsspaceindustries\.com/pledge~", message="ship.constraints.pledge_url.start_with", groups={"second_pass"})
      */
     public ?string $pledgeUrl;
 

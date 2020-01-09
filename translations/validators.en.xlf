@@ -10,6 +10,10 @@
                 <source>ship.constraints.max_crew.over_min_crew</source>
                 <target>Max crew must be greater than or equal to Min crew.</target>
             </trans-unit>
+            <trans-unit id="ship.constraints.pledge_url.start_with">
+                <source>ship.constraints.pledge_url.start_with</source>
+                <target>The URL must start with https://robertsspaceindustries.com/pledge.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
