@@ -58,13 +58,19 @@
                                 {% endfor %}
                             {% endfor %}
 
-                            <dl class="row">
+                            <dl class="row mb-2 border-bottom">
                                 <dt class="col-sm-3">Name</dt>
                                 <dd class="col-sm-9">{{ ship.name }}</dd>
+                            </dl>
+                            <dl class="row mb-2 border-bottom">
                                 <dt class="col-sm-3">Chassis</dt>
                                 <dd class="col-sm-9"><a href="{{ path('ship_chassis_details', {'slug': ship.chassis.slug}) }}">{{ ship.chassis.name }}</a></dd>
+                            </dl>
+                            <dl class="row mb-2 border-bottom">
                                 <dt class="col-sm-3">Manufacturer</dt>
                                 <dd class="col-sm-9"><a href="{{ path('manufacturers_details', {'slug': ship.chassis.manufacturer.slug}) }}">{{ ship.chassis.manufacturer.name }}</a></dd>
+                            </dl>
+                            <dl class="row mb-2 border-bottom">
                                 <dt class="col-sm-3">Holded ships</dt>
                                 <dd class="col-sm-9">
                                     <ul>
@@ -73,60 +79,88 @@
                                         {% endfor %}
                                     </ul>
                                 </dd>
+                            </dl>
+                            <dl class="row mb-2 border-bottom">
                                 <dt class="col-sm-3">Height</dt>
                                 <dd class="col-sm-9">
                                     {% if ship.height is not null %}
                                         {{ ship.height|number_format(2) }}
                                     {% endif %}
                                 </dd>
+                            </dl>
+                            <dl class="row mb-2 border-bottom">
                                 <dt class="col-sm-3">Length</dt>
                                 <dd class="col-sm-9">
                                     {% if ship.length is not null %}
                                         {{ ship.length|number_format(2) }}
                                     {% endif %}
                                 </dd>
+                            </dl>
+                            <dl class="row mb-2 border-bottom">
                                 <dt class="col-sm-3">Min crew</dt>
                                 <dd class="col-sm-9">{{ ship.minCrew }}</dd>
+                            </dl>
+                            <dl class="row mb-2 border-bottom">
                                 <dt class="col-sm-3">Max crew</dt>
                                 <dd class="col-sm-9">{{ ship.maxCrew }}</dd>
+                            </dl>
+                            <dl class="row mb-2 border-bottom">
                                 <dt class="col-sm-3">Size</dt>
                                 <dd class="col-sm-9">{{ _self.displayBadgeShipSize(ship) }}</dd>
+                            </dl>
+                            <dl class="row mb-2 border-bottom">
                                 <dt class="col-sm-3">Cargo capacity (SCU)</dt>
                                 <dd class="col-sm-9">{{ ship.cargoCapacity }}</dd>
+                            </dl>
+                            <dl class="row mb-2 border-bottom">
                                 <dt class="col-sm-3">Standalone price</dt>
                                 <dd class="col-sm-9">
                                     {% if ship.standalonePrice is not null %}
                                         <i class="fas fa-dollar-sign" aria-hidden="true"></i> <span class="sr-only">$</span>{{ (ship.standalonePrice / 100)|number_format(2) }}
                                     {% endif %}
                                 </dd>
+                            </dl>
+                            <dl class="row mb-2 border-bottom">
                                 <dt class="col-sm-3">Warbond price</dt>
                                 <dd class="col-sm-9">
                                     {% if ship.warbondPrice is not null %}
                                         <i class="fas fa-dollar-sign" aria-hidden="true"></i> <span class="sr-only">$</span>{{ (ship.warbondPrice / 100)|number_format(2) }}
                                     {% endif %}
                                 </dd>
+                            </dl>
+                            <dl class="row mb-2 border-bottom">
                                 <dt class="col-sm-3">Ready status</dt>
                                 <dd class="col-sm-9">{{ _self.displayBadgeShipReadyStatus(ship) }}</dd>
+                            </dl>
+                            <dl class="row mb-2 border-bottom">
                                 <dt class="col-sm-3">Career</dt>
                                 <dd class="col-sm-9">{{ ship.career is not null ? ship.career.label : '' }}</dd>
+                            </dl>
+                            <dl class="row mb-2 border-bottom">
                                 <dt class="col-sm-3">Roles</dt>
                                 <dd class="col-sm-9">
                                     {% for role in ship.roles %}
                                         <span class="badge badge-secondary">{{ role.label }}</span>
                                     {% endfor %}
                                 </dd>
+                            </dl>
+                            <dl class="row mb-2 border-bottom">
                                 <dt class="col-sm-3">Pledge URL</dt>
                                 <dd class="col-sm-9">
                                     {% if ship.pledgeUrl is not null %}
                                         <a target="_blank" href="{{ ship.pledgeUrl }}">{{ ship.pledgeUrl }} <i class="fas fa-external-link-alt"></i></a>
                                     {% endif %}
                                 </dd>
+                            </dl>
+                            <dl class="row mb-2 border-bottom">
                                 <dt class="col-sm-3">Picture</dt>
                                 <dd class="col-sm-9">
                                     {% if ship.picturePath is not null %}
                                         <img src="{{ asset(ship.picturePath, 'ship_pictures') }}" alt="picture preview" class="img-thumbnail" />
                                     {% endif %}
                                 </dd>
+                            </dl>
+                            <dl class="row mb-2 border-bottom">
                                 <dt class="col-sm-3">Thumbnail</dt>
                                 <dd class="col-sm-9">
                                     {% if ship.thumbnailPath is not null %}
