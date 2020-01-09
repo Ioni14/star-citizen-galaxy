@@ -1,17 +1,26 @@
-FROM php:7.4.1-fpm-alpine as req_php
+FROM php:7.4.1-fpm-buster as req_php
 
-RUN apk add --no-cache --virtual .deps icu-libs zlib libintl libzip libxml2 libxslt freetype libpng libwebp libjpeg-turbo
-RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS icu-dev libzip-dev libxml2-dev libxslt-dev libgcrypt-dev freetype-dev libpng-dev libwebp-dev libjpeg-turbo-dev \
+RUN apt-get update && apt-get install -y \
+    unzip \
+    libzip-dev \
+    libxml2-dev \
+    libxslt-dev \
+    libgcrypt-dev \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev \
+    libwebp-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install -j$(nproc) gd intl zip pdo_mysql xml xsl \
     && pecl install redis \
-    && apk del .build-deps \
+    && apt-get remove -y libzip-dev libxml2-dev libxslt-dev libgcrypt-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev libwebp-dev \
+    && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-enable --ini-name 05-opcache.ini opcache \
     && docker-php-ext-enable --ini-name 20-redis.ini redis \
     && docker-php-source delete \
     && rm -rf /tmp/*
 
-RUN mkdir /app && chown -R www-data:www-data /app
+RUN mkdir -p /app /.composer && chown -R www-data:www-data /app /.composer
 WORKDIR /app
 USER www-data
 
@@ -28,14 +37,13 @@ COPY --chown=www-data:www-data .env* composer.json composer.lock symfony.lock ./
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_MEMORY_LIMIT -1
+ENV COMPOSER_HOME /.composer
 ENV APP_ENV $ENV
 
 RUN composer global require "hirak/prestissimo:^0.3" --prefer-dist --no-progress --no-suggest --optimize-autoloader --classmap-authoritative --no-interaction; \
     if [ $ENV = 'prod' ]; then \
         composer install --no-scripts --no-suggest --ignore-platform-reqs --optimize-autoloader --classmap-authoritative --no-dev --prefer-dist --no-progress --no-interaction; \
         rm -rf vendor/*/*/docs; \
-        find vendor -name *.md -exec rm -rf {} \; ; \
-        find vendor -name LICENSE -exec rm -rf {} \; ; \
     else \
         composer install --no-scripts --no-suggest --optimize-autoloader --classmap-authoritative --prefer-dist --no-progress --no-interaction; \
     fi; \
@@ -60,8 +68,8 @@ ARG ENV=prod
 ARG DUMP_ENV=0
 
 USER root
-COPY --from=bugoman/mozjpeg /opt/mozjpeg /opt/mozjpeg
-RUN apk add --no-cache pngquant
+COPY --from=faithlife/mozjpeg /opt/mozjpeg /opt/mozjpeg
+RUN apt-get update && apt-get install -y pngquant && rm -rf /var/lib/apt/lists/*
 
 COPY docker/php/php.prod.ini /usr/local/etc/php/php.ini
 COPY docker/php/php-fpm.prod.conf /usr/local/etc/php-fpm.conf
@@ -84,7 +92,6 @@ COPY --chown=www-data:www-data --from=composer_deps /app/vendor vendor
 COPY --chown=www-data:www-data --from=composer_deps /app/.env.local.php .env.local.php
 
 RUN if [ ${DUMP_ENV} -eq 0 ]; then echo "<?php return ['APP_ENV'=>'${ENV}','APP_SECRET'=>''];" > .env.local.php; fi; \
-    chown www-data .env*; \
     sed -i "s/^APP_ENV=.*$/APP_ENV=${ENV}/" .env; \
     if [ -e .env.local ]; then sed -i "s/^APP_ENV=.*$/APP_ENV=${ENV}/" .env.local; fi
 RUN mkdir -p public/bundles \
@@ -98,22 +105,32 @@ ENTRYPOINT ["docker-app-entrypoint"]
 CMD ["php-fpm"]
 
 ##############################
-FROM httpd:2.4-alpine as build_apache
+FROM httpd:2.4 as build_apache
 
-WORKDIR /app
-COPY public/favicon.ico public/robots.txt public/
-COPY public/icons public/icons
-COPY --from=node_deps /app/public/build public/build
-COPY --from=build_php /app/public/bundles public/bundles
-RUN touch public/index.php
+ENV APACHE_RUN_USER www-data
+ENV APACHE_RUN_GROUP www-data
 
 COPY docker/apache/httpd.conf /usr/local/apache2/conf/httpd.conf
+
+USER www-data
+WORKDIR /app
+COPY --chown=www-data:www-data public/favicon.ico public/robots.txt public/
+COPY --chown=www-data:www-data public/icons public/icons
+COPY --chown=www-data:www-data --from=node_deps /app/public/build public/build
+COPY --chown=www-data:www-data --from=build_php /app/public/bundles public/bundles
+RUN touch public/index.php && mkdir -p public/uploads
+
+USER root
 
 ##############################
 FROM build_apache as build_apache_test
 
 COPY docker/apache/httpd_test.conf /usr/local/apache2/conf/httpd.conf
-#RUN touch public/index_test.php
+
+USER www-data
+RUN touch public/index_test.php
+
+USER root
 
 ###############################
 FROM build_php as build_php_dev
@@ -124,19 +141,16 @@ USER root
 COPY --from=composer:1.9.1 /usr/bin/composer /usr/local/bin/composer
 ENV COMPOSER_MEMORY_LIMIT -1
 ENV COMPOSER_ALLOW_SUPERUSER 1
+ENV COMPOSER_HOME /.composer
 
 # Xdebug install
 ARG XDEBUG_VERSION=2.9.0
 RUN set -eux; \
-	apk add --no-cache --virtual .build-deps $PHPIZE_DEPS; \
-	pecl install xdebug-$XDEBUG_VERSION; \
-	apk del .build-deps; \
-	rm -fr /tmp/*
+    apt-get update && apt-get install -y $PHPIZE_DEPS chromium \
+	&& pecl install xdebug-$XDEBUG_VERSION \
+    && apt-get remove -y $PHPIZE_DEPS \
+    && rm -rf /var/lib/apt/lists/* /tmp/*
 
-RUN apk add --no-cache \
-        chromium \
-        chromium-chromedriver
-ENV PANTHER_CHROME_DRIVER_BINARY /usr/lib/chromium/chromedriver
 ENV PANTHER_NO_SANDBOX 1
 
 COPY docker/php/php.dev.ini /usr/local/etc/php/php.ini
