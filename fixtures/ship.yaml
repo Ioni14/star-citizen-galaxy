@@ -8,7 +8,7 @@ App\Entity\Ship:
         length: 18.0
         minCrew: 1
         maxCrew: 1
-        price: 5000
+        standalonePrice: 5000
         readyStatus: 'flight-ready'
         size: 'small'
         cargoCapacity: 2
@@ -26,7 +26,7 @@ App\Entity\Ship:
         length: 18.0
         minCrew: 1
         maxCrew: 1
-        price: 7500
+        standalonePrice: 7500
         readyStatus: 'flight-ready'
         size: 'small'
         career: '@career_transport'

@@ -93,10 +93,16 @@
                                 <dd class="col-sm-9">{{ _self.displayBadgeShipSize(ship) }}</dd>
                                 <dt class="col-sm-3">Cargo capacity (SCU)</dt>
                                 <dd class="col-sm-9">{{ ship.cargoCapacity }}</dd>
-                                <dt class="col-sm-3">Price</dt>
+                                <dt class="col-sm-3">Standalone price</dt>
                                 <dd class="col-sm-9">
-                                    {% if ship.price is not null %}
-                                        <i class="fas fa-dollar-sign" aria-hidden="true"></i> <span class="sr-only">$</span>{{ (ship.price / 100)|number_format(2) }}
+                                    {% if ship.standalonePrice is not null %}
+                                        <i class="fas fa-dollar-sign" aria-hidden="true"></i> <span class="sr-only">$</span>{{ (ship.standalonePrice / 100)|number_format(2) }}
+                                    {% endif %}
+                                </dd>
+                                <dt class="col-sm-3">Warbond price</dt>
+                                <dd class="col-sm-9">
+                                    {% if ship.warbondPrice is not null %}
+                                        <i class="fas fa-dollar-sign" aria-hidden="true"></i> <span class="sr-only">$</span>{{ (ship.warbondPrice / 100)|number_format(2) }}
                                     {% endif %}
                                 </dd>
                                 <dt class="col-sm-3">Ready status</dt>
