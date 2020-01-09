@@ -43,6 +43,7 @@ final class Version20200101184525 extends AbstractMigration
             name VARCHAR(30) NOT NULL,
             slug VARCHAR(50) NOT NULL,
             code VARCHAR(10) NOT NULL,
+            logo_path VARCHAR(255) DEFAULT NULL,
             created_at DATETIME NOT NULL COMMENT '(DC2Type:datetimetz_immutable)',
             updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetimetz_immutable)',
             created_by_id CHAR(36) DEFAULT NULL COMMENT '(DC2Type:uuid)',

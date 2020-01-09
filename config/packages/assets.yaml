@@ -9,3 +9,5 @@ framework:
                 base_urls: ['%env(ASSET_BASE_URL)%/uploads/ships/pictures']
             ship_thumbnails:
                 base_urls: ['%env(ASSET_BASE_URL)%/uploads/ships/thumbnails']
+            manufacturer_logos:
+                base_urls: ['%env(ASSET_BASE_URL)%/uploads/manufacturers/logos']

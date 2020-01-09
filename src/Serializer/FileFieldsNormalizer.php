@@ -2,13 +2,14 @@
 
 namespace App\Serializer;
 
+use App\Entity\Manufacturer;
 use App\Entity\Ship;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerAwareInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-final class ShipFilesNormalizer implements NormalizerInterface, SerializerAwareInterface
+final class FileFieldsNormalizer implements NormalizerInterface, SerializerAwareInterface
 {
     private NormalizerInterface $decorated;
     private Packages $assetPackages;
@@ -30,13 +31,12 @@ final class ShipFilesNormalizer implements NormalizerInterface, SerializerAwareI
             return $data;
         }
 
-
-        // TODO : add to Ship schema the two fields :
-
-
         if ($object instanceof Ship) {
             $data['pictureUri'] = $object->getPicturePath() !== null ? $this->assetPackages->getUrl($object->getPicturePath(), 'ship_pictures') : null;
             $data['thumbnailUri'] = $object->getThumbnailPath() !== null ? $this->assetPackages->getUrl($object->getThumbnailPath(), 'ship_thumbnails') : null;
+        }
+        if ($object instanceof Manufacturer) {
+            $data['logoUri'] = $object->getLogoPath() !== null ? $this->assetPackages->getUrl($object->getLogoPath(), 'manufacturer_logos') : null;
         }
 
         return $data;

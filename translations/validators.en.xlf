@@ -14,6 +14,10 @@
                 <source>ship.constraints.pledge_url.start_with</source>
                 <target>The URL must start with https://robertsspaceindustries.com/pledge.</target>
             </trans-unit>
+            <trans-unit id="manufacturer.constraints.logo.bad_format">
+                <source>manufacturer.constraints.logo.bad_format</source>
+                <target>The logo must be in svg, jpeg, png or webp.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

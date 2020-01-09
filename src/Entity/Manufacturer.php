@@ -68,6 +68,18 @@ class Manufacturer implements LockableEntityInterface
     private string $code = '';
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Gedmo\Versioned()
+     */
+    private ?string $logoPath = null;
+
+    /**
+     * @ApiProperty(iri="https://schema.org/image")
+     * @Groups({"manufacturer:read"})
+     */
+    private ?string $logoUri = null;
+
+    /**
      * @ORM\Column(type="datetimetz_immutable")
      * @Gedmo\Timestampable(on="create")
      * @ApiProperty(iri="https://schema.org/DateTime")
@@ -149,6 +161,18 @@ class Manufacturer implements LockableEntityInterface
     public function setCode(string $code): self
     {
         $this->code = $code;
+
+        return $this;
+    }
+
+    public function getLogoPath(): ?string
+    {
+        return $this->logoPath;
+    }
+
+    public function setLogoPath(?string $logoPath): self
+    {
+        $this->logoPath = $logoPath;
 
         return $this;
     }

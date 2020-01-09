@@ -13,7 +13,7 @@
             <div class="card">
                 <div class="card-header">Edit of a Manufacturer</div>
                 <div class="card-body">
-                    <form action="{{ path('manufacturers_edit', {'slug': manufacturer.slug}) }}" method="post">
+                    <form action="{{ path('manufacturers_edit', {'slug': manufacturer.slug}) }}" method="post" enctype="multipart/form-data">
                         <p>
                             <a href="{{ path('manufacturers_list') }}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back to Manufacturers list</a>
                             <a href="{{ path('manufacturers_details', {'slug': manufacturer.slug}) }}" class="btn btn-primary"><i class="fa fa-eye"></i> Details</a>
@@ -32,6 +32,7 @@
 
                                 {{ form_row(form.name) }}
                                 {{ form_row(form.code, {'help': 'The uppercased short tag of the manufacturer. e.g., RSI for "Robert Space Industries".'}) }}
+                                {{ form_row(form.logo, {'attr': {'placeholder': 'Choose an image...'}, 'help': 'The logo image of the manufacturer in svg, jpeg, png or webp.'}) }}
                             </div>
                         </div>
 

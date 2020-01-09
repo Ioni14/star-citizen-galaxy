@@ -4,6 +4,7 @@ namespace App\Form\Type;
 
 use App\Form\Dto\ManufacturerDto;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -22,6 +23,11 @@ class ManufacturerForm extends AbstractType
             ])
             ->add('code', TextType::class, [
                 'required' => true,
+            ])
+            ->add('logo', FileType::class, [
+                'required' => false,
+                'image_path_property' => 'logoPath',
+                'image_assets_package' => 'manufacturer_logos',
             ]);
         if ($options['mode'] === self::MODE_EDIT) {
             $builder->add('version', HiddenType::class);
