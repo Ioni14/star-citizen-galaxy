@@ -16,7 +16,7 @@ class ShipDto
 {
     /**
      * @Assert\NotBlank()
-     * @Assert\Length(min="3", max="30")
+     * @Assert\Length(min="3", max="50")
      */
     public ?string $name;
 
