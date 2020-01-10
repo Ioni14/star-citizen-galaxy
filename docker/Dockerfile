@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     libjpeg62-turbo-dev \
     libpng-dev \
     libwebp-dev \
+    pngquant \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install -j$(nproc) gd intl zip pdo_mysql xml xsl \
     && pecl install redis \
@@ -19,6 +20,7 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-enable --ini-name 20-redis.ini redis \
     && docker-php-source delete \
     && rm -rf /tmp/*
+COPY --from=faithlife/mozjpeg /opt/mozjpeg /opt/mozjpeg
 
 RUN mkdir -p /app /.composer && chown -R www-data:www-data /app /.composer
 WORKDIR /app
@@ -68,9 +70,6 @@ ARG ENV=prod
 ARG DUMP_ENV=0
 
 USER root
-COPY --from=faithlife/mozjpeg /opt/mozjpeg /opt/mozjpeg
-RUN apt-get update && apt-get install -y pngquant && rm -rf /var/lib/apt/lists/*
-
 COPY docker/php/php.prod.ini /usr/local/etc/php/php.ini
 COPY docker/php/php-fpm.prod.conf /usr/local/etc/php-fpm.conf
 COPY docker/php/www.prod.conf /usr/local/etc/php-fpm.d/www.conf
