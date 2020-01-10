@@ -1,0 +1,44 @@
+{% extends 'ship_chassis/layout.html.twig' %}
+
+{% block content %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('homepage') }}">Home</a></li>
+        <li class="breadcrumb-item">
+            <a href="{{ path('ship_chassis_list') }}">Ship chassis</a>
+        </li>
+        <li class="breadcrumb-item active">Create</li>
+    </ol>
+    <div class="container-fluid">
+        <div class="animated fadeIn">
+            <div class="card">
+                <div class="card-header">Creation of a Ship chassis</div>
+                <div class="card-body">
+                    <form action="{{ path('ship_chassis_create') }}" method="post">
+                        <p>
+                            <a href="{{ path('ship_chassis_list') }}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back to Ship chassis list</a>
+                            <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Create</button>
+                        </p>
+
+                        <div class="row">
+                            <div class="col col-12 col-xl-6">
+                                {{ form_errors(form) }}
+
+                                {{ form_row(form.name) }}
+                                {{ form_row(form.manufacturer, {'attr': {'class': 'js-select2'}, 'help': 'The constructor of the chassis. e.g., Robert Space Industries is the manufacturer of Aurora chassis.'}) }}
+                            </div>
+                        </div>
+
+                        {% if form._token is defined %}
+                            {{ form_widget(form._token) }}
+                        {% endif %}
+
+                        <p class="mb-0">
+                            <a href="{{ path('ship_chassis_list') }}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back to Ship chassis list</a>
+                            <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Create</button>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

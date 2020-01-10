@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block body_attr 'class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show"' %}
+
+{% block body %}
+    <header class="app-header navbar">
+        {% include 'header.html.twig' %}
+    </header>
+    <div class="app-body">
+        <div class="sidebar">
+            {% include 'sidebar.html.twig' %}
+        </div>
+        <main class="main">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+    <footer class="app-footer">
+        {% include 'footer.html.twig' %}
+    </footer>
+{% endblock %}

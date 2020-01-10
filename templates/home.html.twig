@@ -1,0 +1,28 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('homepage') }}">Home</a></li>
+    </ol>
+    <div class="container-fluid">
+        <div class="animated fadeIn">
+            <div class="card">
+                <div class="card-body">
+                    <h4>Welcome to Star Citizen Galaxy</h4>
+                    <p>
+                        SC Galaxy is a community-driven <strong>Star Citizen Database</strong> and <strong>REST API</strong>.<br/>
+                        It is a tool to help developers and spreadsheets maintainers who are struggling to keep their data up to date.<br/>
+                        If you want to contribute, you find a bug or simply want to discuss, feel free to <a href="https://discord.gg/KY4Kpfn">join us on Discord <i class="fas fa-external-link-alt"></i></a>.
+                    </p>
+                    <p><a href="{{ path('api_doc') }}" class="btn btn-primary" target="_blank"><i class="fas fa-cogs"></i> API Docs</a></p>
+                    <h4>Data pages</h4>
+                    <ul>
+                        <li><a href="{{ path('ships_list') }}">List of the <i class="nav-icon fa fa-fighter-jet"></i> Ships</a></li>
+                        <li><a href="{{ path('ship_chassis_list') }}">List of the <i class="nav-icon fa fa-fighter-jet"></i> Ships chassis</a></li>
+                        <li><a href="{{ path('manufacturers_list') }}">List of the <i class="nav-icon fa fa-industry"></i> Manufacturers</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,3 +1,8 @@
+parameters:
+    env(REDIS_HOST): 'localhost'
+    env(REDIS_PORT): '6379'
+    env(REDIS_PASSWORD): ''
+
 framework:
     cache:
         app: cache.adapter.redis

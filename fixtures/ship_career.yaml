@@ -1,0 +1,7 @@
+App\Entity\ShipCareer:
+    career_combat:
+        __construct: ['<(\Ramsey\Uuid\Uuid::fromString("4deb2e25-5ac4-40b7-8bf1-34679bd2352d"))>']
+        label: 'Combat'
+    career_transport:
+        __construct: ['<(\Ramsey\Uuid\Uuid::fromString("7ff8a6f6-ba04-400a-91ba-0f7e5340fa65"))>']
+        label: 'Transport'

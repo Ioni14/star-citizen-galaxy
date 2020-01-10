@@ -1,0 +1,33 @@
+parameters:
+    liip_imagine.mozjpeg.binary: /opt/mozjpeg/bin/cjpeg
+    liip_imagine.pngquant.binary: /usr/bin/pngquant
+
+liip_imagine:
+    driver: "gd"
+    loaders:
+        ships_pictures_loader:
+            flysystem:
+                filesystem_service: oneup_flysystem.ships_pictures_filesystem_filesystem
+
+    filter_sets:
+        pictures:
+            filters:
+                downscale:
+                    max: [1920, 1080]
+            post_processors:
+                mozjpeg: { quality: 80 }
+                pngquant: { quality: "75-85" }
+        thumbnails:
+            filters:
+                downscale:
+                    max: [350, 210] # store_small size from RSI
+            post_processors:
+                mozjpeg: { quality: 80 }
+                pngquant: { quality: "75-85" }
+        logos:
+            filters:
+                downscale:
+                    max: [300, 150]
+            post_processors:
+                mozjpeg: { quality: 80 }
+                pngquant: { quality: "75-85" }

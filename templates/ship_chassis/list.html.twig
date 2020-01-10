@@ -1,0 +1,49 @@
+{% extends 'ship_chassis/layout.html.twig' %}
+
+{% block content %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('homepage') }}">Home</a></li>
+        <li class="breadcrumb-item">
+            <a href="{{ path('ship_chassis_list') }}">Ship Chassis</a>
+        </li>
+        <li class="breadcrumb-item active">List</li>
+    </ol>
+    <div class="container-fluid">
+        <div class="animated fadeIn">
+            <div class="card">
+                <div class="card-header">
+                    List of Ship Chassis
+                </div>
+                <div class="card-body">
+                    {% if is_granted('ROLE_MODERATOR') %}
+                        <p><a class="btn btn-primary" href="{{ path('ship_chassis_create') }}"><i class="fa fa-plus"></i> Create a new Ship Chassis</a></p>
+                    {% endif %}
+                    <table id="js-ship-chassis-datatable" class="table table-responsive-sm table-bordered table-striped table-sm" data-order='[[0, "asc"]]'>
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Manufacturer</th>
+                            {% if is_granted('ROLE_MODERATOR') %}
+                                <th class="nosort">Actions</th>
+                            {% endif %}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for chassis in shipChassis %}
+                            <tr>
+                                <td><a href="{{ path('ship_chassis_details', {'slug': chassis.slug}) }}">{{ chassis.name }}</a></td>
+                                <td>{{ chassis.manufacturer.name }}</td>
+                                {% if is_granted('ROLE_MODERATOR') %}
+                                    <td>
+                                        <a class="btn btn-primary btn-sm" href="{{ path('ship_chassis_edit', {'slug': chassis.slug}) }}"><i class="fa fa-edit"></i> Edit</a>
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends 'ships/layout.html.twig' %}
+
+{% block content %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('homepage') }}">Home</a></li>
+        <li class="breadcrumb-item">
+            <a href="{{ path('ships_list') }}">Ships</a>
+        </li>
+        <li class="breadcrumb-item active">Edit</li>
+    </ol>
+    <div class="container-fluid">
+        <div class="animated fadeIn">
+            <div class="card">
+                <div class="card-header">Edit of a Ship</div>
+                <div class="card-body">
+                    <form action="{{ path('ships_edit', {'slug': ship.slug}) }}" method="post" enctype="multipart/form-data">
+                        <p>
+                            <a href="{{ path('ships_list') }}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back to Ships list</a>
+                            <a href="{{ path('ships_details', {'slug': ship.slug}) }}" class="btn btn-primary"><i class="fa fa-eye"></i> Details</a>
+                            <button type="submit" class="btn btn-success" {{ not locked_by_me ? 'disabled' }}><i class="fa fa-check"></i> Save</button>
+                        </p>
+
+                        <div class="row">
+                            <div class="col col-12 col-xl-6">
+                                {% if not locked_by_me %}
+                                    <div class="alert alert-warning">
+                                        <i class="fas fa-exclamation-triangle"></i> <strong>{{ locked_by.nickname }}</strong> is currently editing this ship.
+                                    </div>
+                                {% endif %}
+
+                                {{ form_errors(form) }}
+
+                                {{ form_row(form.name) }}
+                                {{ form_row(form.chassis, {'attr': {'class': 'js-select2'}, 'help': 'The ship family. e.g., Aurora LN and ES are both an Aurora.'}) }}
+
+                                {{ form_label(form.holdedShips) }}
+                                {{ form_help(form.holdedShips, {'help': 'The ships that are contained in. e.g., a Carrack holds a Pisces.'}) }}
+                                <div id="js-holded-ships-collection" data-index="{{ form.holdedShips|length }}" data-prototype="{{ form_widget(form.holdedShips.vars.prototype)|e('html_attr') }}">
+                                    <div id="js-holded-ships-rows">
+                                        {% for holdedShip in form.holdedShips %}
+                                            {{ form_widget(holdedShip) }}
+                                        {% endfor %}
+                                    </div>
+                                    <p><button {{ form.holdedShips.vars.disabled ? 'disabled' }} type="button" class="btn btn-primary d-inline-block js-holded-ships-add-row" title="Add a row"><i class="fa fa-plus"></i> Add a row</button></p>
+                                </div>
+
+                                {{ form_row(form.height, {'help': 'The physical height of the ship. e.g., an Aurora LN is 4.0 meters tall.'}) }}
+                                {{ form_row(form.length, {'help': 'The physical length of the ship. e.g., an Aurora LN is 18.0 meters long.'}) }}
+                                {{ form_row(form.minCrew, {'help': 'How many citizens are needed to drive the ship?'}) }}
+                                {{ form_row(form.maxCrew, {'help': 'How many citizens are sufficient to drive the ship?'}) }}
+                                {{ form_row(form.size, {'attr': {'class': 'js-select2'}}) }}
+                                {{ form_row(form.cargoCapacity, {'help': 'How many cargo the ship can carry?'}) }}
+                                {{ form_row(form.standalonePrice) }}
+                                {{ form_row(form.warbondPrice) }}
+                                {{ form_row(form.readyStatus, {'attr': {'class': 'js-select2'}}) }}
+                                {{ form_row(form.career, {'attr': {'class': 'js-select2'}}) }}
+                                {{ form_row(form.roles, {'attr': {'class': 'js-select2'}}) }}
+                                {{ form_row(form.pledgeUrl, {'attr': {'placeholder': 'e.g., https://robertsspaceindustries.com/pledge/ships/rsi-aurora/Aurora-LN'}, 'help': 'The URL of the official page of the ship.'}) }}
+                                {{ form_row(form.picture, {'attr': {'placeholder': 'Choose an image...'}, 'help': 'The best quality picture of the ship in jpeg, png or webp.'}) }}
+                                {{ form_row(form.thumbnail, {'attr': {'placeholder': 'Choose an image...'}, 'help': 'The thumbnail of the ship in jpeg, png or webp.'}) }}
+                            </div>
+                        </div>
+
+                        {{ form_widget(form.version) }}
+                        {% if form._token is defined %}
+                            {{ form_widget(form._token) }}
+                        {% endif %}
+
+                        <p class="mb-0">
+                            <a href="{{ path('ships_list') }}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back to Ships list</a>
+                            <a href="{{ path('ships_details', {'slug': ship.slug}) }}" class="btn btn-primary"><i class="fa fa-eye"></i> Details</a>
+                            <button type="submit" class="btn btn-success" {{ not locked_by_me ? 'disabled' }}><i class="fa fa-check"></i> Save</button>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

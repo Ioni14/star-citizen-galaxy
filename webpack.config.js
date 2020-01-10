@@ -8,7 +8,10 @@ Encore
     .setOutputPath('public/build/')
     .setPublicPath('/build')
 
-    // .addEntry('app', './assets/js/app.js')
+    .addEntry('main', './assets/js/main.js')
+    .addEntry('manufacturers', './assets/js/manufacturers.js')
+    .addEntry('ships', './assets/js/ships.js')
+    .addEntry('ship_chassis', './assets/js/ships_chassis.js')
 
     .splitEntryChunks()
     .enableSingleRuntimeChunk()
@@ -23,8 +26,19 @@ Encore
         config.corejs = 3;
     })
 
+    .copyFiles({
+        from: './assets/js/vendors',
+        to: 'vendors/[path][name].[ext]',
+    })
+    .copyFiles({
+        from: './assets/static/images',
+        to: 'static/images/[path][name].[ext]',
+    })
+
     .enableSassLoader()
+    .enablePostCssLoader()
     .enableIntegrityHashes(Encore.isProduction())
+    .autoProvidejQuery()
 ;
 
 module.exports = Encore.getWebpackConfig();

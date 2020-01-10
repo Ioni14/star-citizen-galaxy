@@ -1,11 +1,48 @@
 security:
+    encoders:
+        App\Entity\User:
+            algorithm: auto
     providers:
-        in_memory: { memory: null }
+        oauth_user_provider:
+            id: App\Security\OAuthUserProvider
+        user_entity_username:
+            entity:
+                class: 'App\Entity\User'
+                property: 'username'
     firewalls:
         dev:
-            pattern: ^/(_(profiler|wdt)|build)/
+            pattern: ^/(_(profiler|wdt)|build|uploads|icons|favicon\.ico|robots\.txt)/
             security: false
         main:
             anonymous: lazy
+            provider: oauth_user_provider # default provider
+            switch_user:
+                provider: user_entity_username
+                role: ROLE_ADMIN
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800 # 1 week
+                path: /
+                user_providers: oauth_user_provider
+            oauth:
+                provider: oauth_user_provider
+                resource_owners:
+                    discord: /login/check-discord
+                login_path: /
+                use_referer: true
+                use_forward: false
+                failure_path: /
+                always_use_default_target_path: false
+                default_target_path: /
+                oauth_user_provider:
+                    service: App\Security\OAuthUserProvider
+                remember_me:  true
+            logout:
+                path: logout
+
+    role_hierarchy:
+        ROLE_MODERATOR: ROLE_USER
+        ROLE_ADMIN: ROLE_MODERATOR
+
     access_control:
          - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }

@@ -1,0 +1,7 @@
+App\Entity\ShipRole:
+    role_pathfinding:
+        __construct: ['<(\Ramsey\Uuid\Uuid::fromString("d70a9024-b835-4707-b6f0-5e7bf58d999d"))>']
+        label: 'Pathfinding'
+    role_medical:
+        __construct: ['<(\Ramsey\Uuid\Uuid::fromString("c3a73970-16d0-4809-a02f-a2ba58ae2beb"))>']
+        label: 'Medical'

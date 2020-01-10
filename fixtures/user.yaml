@@ -1,0 +1,28 @@
+App\Entity\User:
+    user_ioni:
+        __construct: ['<(\Ramsey\Uuid\Uuid::fromString("1fbc8bda-c6ac-409e-86a4-71e292e01c34"))>']
+        username: 'Ioni'
+        nickname: 'Ioni'
+        discordId: '123456789001'
+        discordTag: '0001'
+        createdAt: '<(new \DateTimeImmutable("2019-04-02 11:22:33"))>'
+        updatedAt: '<(new \DateTimeImmutable("2019-04-03 11:22:33"))>'
+        roles: ['ROLE_USER', 'ROLE_ADMIN']
+    user_ashuvidz:
+        __construct: ['<(\Ramsey\Uuid\Uuid::fromString("35b45ce3-1ff7-4b3f-bfd5-adfb933f1de9"))>']
+        username: 'Ashuvidz'
+        nickname: 'Ashuvidz'
+        discordId: '123456789002'
+        discordTag: '0002'
+        createdAt: '<(new \DateTimeImmutable("2019-04-03 11:22:33"))>'
+        updatedAt: '<(new \DateTimeImmutable("2019-04-04 11:22:33"))>'
+        roles: ['ROLE_USER', 'ROLE_ADMIN']
+    user_moderator1:
+        __construct: ['<(\Ramsey\Uuid\Uuid::fromString("18e3fc59-f9de-4853-9e44-26da3b1bafca"))>']
+        username: 'Moderator1'
+        nickname: 'Moderator1'
+        discordId: '123456789003'
+        discordTag: '0003'
+        createdAt: '<(new \DateTimeImmutable("2019-04-04 11:22:33"))>'
+        updatedAt: '<(new \DateTimeImmutable("2019-04-05 11:22:33"))>'
+        roles: ['ROLE_USER', 'ROLE_MODERATOR']
