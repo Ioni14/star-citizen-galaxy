@@ -46,7 +46,7 @@ class Manufacturer implements LockableEntityInterface
     private ?UuidInterface $id = null;
 
     /**
-     * @ORM\Column(type="string", length=30)
+     * @ORM\Column(type="string", length=50)
      * @Gedmo\Versioned()
      * @ApiProperty(iri="https://schema.org/name", required=true)
      * @Groups({"manufacturer:read", "chassis:read", "ship:read"})
