@@ -27,6 +27,10 @@ Encore
     })
 
     .copyFiles({
+        from: './assets/js/vendors',
+        to: 'vendors/[path][name].[ext]',
+    })
+    .copyFiles({
         from: './assets/static/images',
         to: 'static/images/[path][name].[ext]',
     })

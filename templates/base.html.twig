@@ -39,5 +39,16 @@
         {% block javascripts %}
             {{ encore_entry_script_tags('main') }}
         {% endblock %}
+        {% if app.environment == 'prod' %}
+            {% block gtag %}
+                <script async src="{{ asset('build/vendors/gtag.js') }}"></script>
+                <script>
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+                    gtag('config', 'UA-38751935-9', { 'anonymize_ip': true });
+                </script>
+            {% endblock %}
+        {% endif %}
     </body>
 </html>
