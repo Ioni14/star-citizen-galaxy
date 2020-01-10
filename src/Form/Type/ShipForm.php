@@ -75,7 +75,12 @@ class ShipForm extends AbstractType
             ->add('cargoCapacity', IntegerType::class, [
                 'required' => false,
             ])
-            ->add('price', MoneyType::class, [
+            ->add('standalonePrice', MoneyType::class, [
+                'required' => false,
+                'divisor' => 100,
+                'currency' => 'USD',
+            ])
+            ->add('warbondPrice', MoneyType::class, [
                 'required' => false,
                 'divisor' => 100,
                 'currency' => 'USD',

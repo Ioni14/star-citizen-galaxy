@@ -63,7 +63,8 @@ class CreateController extends AbstractController
                 ->setReadyStatus($shipDto->readyStatus)
                 ->setCareer($shipDto->career)
                 ->setPledgeUrl($shipDto->pledgeUrl)
-                ->setPrice($shipDto->price);
+                ->setStandalonePrice($shipDto->standalonePrice)
+                ->setWarbondPrice($shipDto->warbondPrice);
 
             foreach ($shipDto->roles as $role) {
                 $ship->addRole($role);

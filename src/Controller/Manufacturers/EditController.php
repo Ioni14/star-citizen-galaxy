@@ -7,8 +7,10 @@ use App\Form\Dto\ManufacturerDto;
 use App\Form\Type\ManufacturerForm;
 use App\Repository\ManufacturerRepository;
 use App\Service\LockHelper;
+use App\Service\Ship\FileHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Loggable\Entity\LogEntry;
+use League\Flysystem\FilesystemInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,15 +22,21 @@ class EditController extends AbstractController
 {
     private ManufacturerRepository $manufacturerRepository;
     private EntityManagerInterface $entityManager;
+    private FilesystemInterface $manufacturersLogosFilesystem;
+    private FileHelper $fileHelper;
     private LockHelper $lockHelper;
 
     public function __construct(
         ManufacturerRepository $manufacturerRepository,
         EntityManagerInterface $entityManager,
+        FilesystemInterface $manufacturersLogosFilesystem,
+        FileHelper $fileHelper,
         LockHelper $lockHelper
     ) {
         $this->manufacturerRepository = $manufacturerRepository;
         $this->entityManager = $entityManager;
+        $this->manufacturersLogosFilesystem = $manufacturersLogosFilesystem;
+        $this->fileHelper = $fileHelper;
         $this->lockHelper = $lockHelper;
     }
 
@@ -57,6 +65,7 @@ class EditController extends AbstractController
         $manufacturerDto = new ManufacturerDto(
             $manufacturer->getName(),
             $manufacturer->getCode(),
+            $manufacturer->getLogoPath(),
             $lastVersion,
             $lastVersion,
         );
@@ -69,6 +78,11 @@ class EditController extends AbstractController
             $manufacturer
                 ->setName($manufacturerDto->name)
                 ->setCode($manufacturerDto->code);
+
+            if ($manufacturerDto->logo !== null) {
+                $path = $this->fileHelper->handleFile($manufacturerDto->logo, $manufacturer->getSlug(), $manufacturer->getLogoPath(), 'logos', $this->manufacturersLogosFilesystem);
+                $manufacturer->setLogoPath($path);
+            }
 
             $this->entityManager->flush();
 

@@ -89,7 +89,8 @@ class EditController extends AbstractController
             $ship->getPledgeUrl(),
             $ship->getPicturePath(),
             $ship->getThumbnailPath(),
-            $ship->getPrice(),
+            $ship->getStandalonePrice(),
+            $ship->getWarbondPrice(),
             $lastVersion,
             $lastVersion,
         );
@@ -111,7 +112,8 @@ class EditController extends AbstractController
                 ->setReadyStatus($shipDto->readyStatus)
                 ->setCareer($shipDto->career)
                 ->setPledgeUrl($shipDto->pledgeUrl)
-                ->setPrice($shipDto->price);
+                ->setStandalonePrice($shipDto->standalonePrice)
+                ->setWarbondPrice($shipDto->warbondPrice);
 
             $ship->clearRoles();
             foreach ($shipDto->roles as $role) {

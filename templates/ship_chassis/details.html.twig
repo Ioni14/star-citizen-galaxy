@@ -30,11 +30,15 @@
                                 {% endfor %}
                             {% endfor %}
 
-                            <dl class="row">
+                            <dl class="row mb-2 border-bottom">
                                 <dt class="col-sm-3">Name</dt>
                                 <dd class="col-sm-9">{{ chassis.name }}</dd>
+                            </dl>
+                            <dl class="row mb-2 border-bottom">
                                 <dt class="col-sm-3">Manufacturer</dt>
                                 <dd class="col-sm-9">{{ chassis.manufacturer.name }}</dd>
+                            </dl>
+                            <dl class="row mb-2 border-bottom">
                                 <dt class="col-sm-3">Ships</dt>
                                 <dd class="col-sm-9">
                                     <ul>

@@ -2,6 +2,7 @@
 
 namespace App\Form\Dto;
 
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class ManufacturerDto
@@ -18,6 +19,13 @@ class ManufacturerDto
      */
     public ?string $code;
 
+    /**
+     * @Assert\File(maxSize="5M", mimeTypes={"image/jpeg", "image/png", "image/webp", "image/svg+xml"}, mimeTypesMessage="manufacturer.constraints.logo.bad_format")
+     */
+    public ?UploadedFile $logo = null;
+
+    public ?string $logoPath;
+
     public int $lastVersion;
 
     /**
@@ -25,10 +33,11 @@ class ManufacturerDto
      */
     public ?int $version = null;
 
-    public function __construct(?string $name = null, ?string $code = null, int $lastVersion = 0, int $version = 0)
+    public function __construct(?string $name = null, ?string $code = null, ?string $logoPath = null, int $lastVersion = 0, int $version = 0)
     {
         $this->name = $name;
         $this->code = $code;
+        $this->logoPath = $logoPath;
         $this->lastVersion = $lastVersion;
         $this->version = $version;
     }

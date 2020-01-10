@@ -23,12 +23,15 @@ class FileHelper implements LoggerAwareInterface
 
     public function handleFile(UploadedFile $file, string $slug, ?string $oldPath, string $filter, FilesystemInterface $filesystem): string
     {
-        // TODO : MOM!!
-        $filteredFile = $this->filterManager->applyFilter(new FileBinary(
+        $filteredFile = new FileBinary(
             $file->getRealPath(),
             $file->getMimeType(),
             $file->guessExtension(),
-        ), $filter);
+        );
+        if (in_array($file->getMimeType(), ['image/jpeg', 'image/png', 'image/webp'], true)) {
+            // TODO : MOM!!
+            $filteredFile = $this->filterManager->applyFilter($filteredFile, $filter);
+        }
 
         if ($oldPath !== null) {
             try {
@@ -47,7 +50,7 @@ class FileHelper implements LoggerAwareInterface
         }
         $result = $filesystem->write($path, $filteredFile->getContent());
         if (!$result) {
-            throw new \RuntimeException(sprintf('Unable to write file %s to Ships images filesystem.', $file->getRealPath()));
+            throw new \RuntimeException(sprintf('Unable to write file %s to images filesystem.', $file->getRealPath()));
         }
 
         return $path;

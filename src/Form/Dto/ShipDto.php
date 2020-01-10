@@ -33,22 +33,22 @@ class ShipDto
     public array $holdedShips;
 
     /**
-     * @Assert\Range(min="0", max="2147483647")
+     * @Assert\Range(min="1", max="2147483647")
      */
     public ?float $height;
 
     /**
-     * @Assert\Range(min="0", max="2147483647")
+     * @Assert\Range(min="1", max="2147483647")
      */
     public ?float $length;
 
     /**
-     * @Assert\Range(min="1", max="2147483647")
+     * @Assert\Range(min="0", max="2147483647")
      */
     public ?int $minCrew;
 
     /**
-     * @Assert\Range(min="1", max="2147483647")
+     * @Assert\Range(min="0", max="2147483647")
      * @Assert\Expression("value === null or this.minCrew === null or value >= this.minCrew", message="ship.constraints.max_crew.over_min_crew", groups={"second_pass"})
      */
     public ?int $maxCrew;
@@ -66,7 +66,12 @@ class ShipDto
     /**
      * @Assert\Range(min="0", max="2147483647")
      */
-    public ?int $price;
+    public ?int $standalonePrice;
+
+    /**
+     * @Assert\Range(min="0", max="2147483647")
+     */
+    public ?int $warbondPrice;
 
     /**
      * @Assert\Choice(choices=App\Entity\Ship::READY_STATUSES)
@@ -82,6 +87,7 @@ class ShipDto
 
     /**
      * @Assert\Url()
+     * @Assert\Regex("~^https://robertsspaceindustries\.com/pledge~", message="ship.constraints.pledge_url.start_with", groups={"second_pass"})
      */
     public ?string $pledgeUrl;
 
@@ -122,7 +128,8 @@ class ShipDto
         ?string $pledgeUrl = null,
         ?string $picturePath = null,
         ?string $thumbnailPath = null,
-        ?int $price = null,
+        ?int $standalonePrice = null,
+        ?int $warbondPrice = null,
         int $lastVersion = 0,
         int $version = 0
     ) {
@@ -141,7 +148,8 @@ class ShipDto
         $this->pledgeUrl = $pledgeUrl;
         $this->picturePath = $picturePath;
         $this->thumbnailPath = $thumbnailPath;
-        $this->price = $price;
+        $this->standalonePrice = $standalonePrice;
+        $this->warbondPrice = $warbondPrice;
         $this->lastVersion = $lastVersion;
         $this->version = $version;
     }

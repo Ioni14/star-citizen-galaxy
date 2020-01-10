@@ -41,6 +41,9 @@ class RateLimitSubscriber implements EventSubscriberInterface
         if (!$this->hasQuotas($route)) {
             return;
         }
+        if ($request->getMethod() === 'OPTIONS') {
+            return;
+        }
 
         $clientIp = $request->getClientIp();
 
@@ -65,6 +68,15 @@ class RateLimitSubscriber implements EventSubscriberInterface
         }
 
         $request = $event->getRequest();
+
+        $route = $request->attributes->get('_route');
+        if (!$this->hasQuotas($route)) {
+            return;
+        }
+        if ($request->getMethod() === 'OPTIONS') {
+            return;
+        }
+
         $response = $event->getResponse();
 
         $key = $request->attributes->get('api_key');

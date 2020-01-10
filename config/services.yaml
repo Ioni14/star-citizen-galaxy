@@ -26,11 +26,11 @@ services:
             - [auth, ['%env(REDIS_PASSWORD)%']]
 
     app.serializer.normalizer.ship_files:
-        class: App\Serializer\ShipFilesNormalizer
+        class: App\Serializer\FileFieldsNormalizer
         decorates: 'api_platform.serializer.normalizer.item'
         arguments: [ '@app.serializer.normalizer.ship_files.inner', '@assets.packages' ]
     app.jsonld.normalizer.ship_files:
-        class: App\Serializer\ShipFilesNormalizer
+        class: App\Serializer\FileFieldsNormalizer
         decorates: 'api_platform.jsonld.normalizer.item'
         arguments: [ '@app.jsonld.normalizer.ship_files.inner', '@assets.packages' ]
 

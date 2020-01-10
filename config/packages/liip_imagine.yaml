@@ -24,3 +24,10 @@ liip_imagine:
             post_processors:
                 mozjpeg: { quality: 80 }
                 pngquant: { quality: "75-85" }
+        logos:
+            filters:
+                downscale:
+                    max: [300, 150]
+            post_processors:
+                mozjpeg: { quality: 80 }
+                pngquant: { quality: "75-85" }
