@@ -16,7 +16,7 @@ class ShipDto
 {
     /**
      * @Assert\NotBlank()
-     * @Assert\Length(min="3", max="50")
+     * @Assert\Length(min="1", max="50")
      */
     public ?string $name;
 
@@ -41,6 +41,11 @@ class ShipDto
      * @Assert\Range(min="1", max="2147483647")
      */
     public ?float $length;
+
+    /**
+     * @Assert\Range(min="1", max="2147483647")
+     */
+    public ?float $beam;
 
     /**
      * @Assert\Range(min="0", max="2147483647")
@@ -118,6 +123,7 @@ class ShipDto
         array $holdedShips = [],
         ?float $height = null,
         ?float $length = null,
+        ?float $beam = null,
         ?int $minCrew = 1,
         ?int $maxCrew = 1,
         ?string $size = null,
@@ -138,6 +144,7 @@ class ShipDto
         $this->holdedShips = $holdedShips;
         $this->height = $height;
         $this->length = $length;
+        $this->beam = $beam;
         $this->minCrew = $minCrew;
         $this->maxCrew = $maxCrew;
         $this->size = $size;

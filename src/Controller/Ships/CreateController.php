@@ -56,6 +56,7 @@ class CreateController extends AbstractController
                 ->setChassis($shipDto->chassis)
                 ->setHeight($shipDto->height)
                 ->setLength($shipDto->length)
+                ->setBeam($shipDto->beam)
                 ->setMinCrew($shipDto->minCrew)
                 ->setMaxCrew($shipDto->maxCrew)
                 ->setSize($shipDto->size)

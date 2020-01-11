@@ -97,6 +97,14 @@
                                 </dd>
                             </dl>
                             <dl class="row mb-2 border-bottom">
+                                <dt class="col-sm-3">Beam</dt>
+                                <dd class="col-sm-9">
+                                    {% if ship.beam is not null %}
+                                        {{ ship.beam|number_format(2) }}
+                                    {% endif %}
+                                </dd>
+                            </dl>
+                            <dl class="row mb-2 border-bottom">
                                 <dt class="col-sm-3">Min crew</dt>
                                 <dd class="col-sm-9">{{ ship.minCrew }}</dd>
                             </dl>

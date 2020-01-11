@@ -9,7 +9,7 @@ class ShipChassisDto
 {
     /**
      * @Assert\NotBlank()
-     * @Assert\Length(min="3", max="50")
+     * @Assert\Length(min="1", max="50")
      */
     public ?string $name;
 

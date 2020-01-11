@@ -127,6 +127,14 @@ class Ship implements LockableEntityInterface
     private ?float $length = null;
 
     /**
+     * @ORM\Column(type="float", nullable=true)
+     * @Gedmo\Versioned()
+     * @ApiProperty()
+     * @Groups({"ship:read"})
+     */
+    private ?float $beam = null;
+
+    /**
      * @ORM\Column(type="integer", nullable=true)
      * @Gedmo\Versioned()
      * @ApiProperty()
@@ -388,6 +396,18 @@ class Ship implements LockableEntityInterface
     public function setLength(?float $length): self
     {
         $this->length = $length;
+
+        return $this;
+    }
+
+    public function getBeam(): ?float
+    {
+        return $this->beam;
+    }
+
+    public function setBeam(?float $beam): self
+    {
+        $this->beam = $beam;
 
         return $this;
     }
