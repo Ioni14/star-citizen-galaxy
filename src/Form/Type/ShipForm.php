@@ -54,6 +54,10 @@ class ShipForm extends AbstractType
                 'required' => false,
                 'scale' => 2,
             ])
+            ->add('beam', NumberType::class, [
+                'required' => false,
+                'scale' => 2,
+            ])
             ->add('minCrew', IntegerType::class, [
                 'required' => false,
             ])

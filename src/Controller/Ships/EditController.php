@@ -79,6 +79,7 @@ class EditController extends AbstractController
             }, $ship->getHoldedShips()->toArray()),
             $ship->getHeight(),
             $ship->getLength(),
+            $ship->getBeam(),
             $ship->getMinCrew(),
             $ship->getMaxCrew(),
             $ship->getSize(),
@@ -105,6 +106,7 @@ class EditController extends AbstractController
                 ->setChassis($shipDto->chassis)
                 ->setHeight($shipDto->height)
                 ->setLength($shipDto->length)
+                ->setBeam($shipDto->beam)
                 ->setMinCrew($shipDto->minCrew)
                 ->setMaxCrew($shipDto->maxCrew)
                 ->setSize($shipDto->size)

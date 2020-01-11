@@ -9,13 +9,13 @@ class ManufacturerDto
 {
     /**
      * @Assert\NotBlank()
-     * @Assert\Length(min="3", max="50")
+     * @Assert\Length(min="1", max="50")
      */
     public ?string $name;
 
     /**
      * @Assert\NotBlank()
-     * @Assert\Length(min="2", max="10")
+     * @Assert\Length(min="1", max="10")
      */
     public ?string $code;
 
