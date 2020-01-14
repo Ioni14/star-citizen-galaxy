@@ -13,10 +13,12 @@ RUN apt-get update && apt-get install -y \
     pngquant \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install -j$(nproc) gd intl zip pdo_mysql xml xsl \
-    && pecl install redis \
-    && apt-get remove -y libzip-dev libxml2-dev libxslt-dev libgcrypt-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev libwebp-dev \
+    && pecl channel-update pecl.php.net \
+    && pecl install redis apcu \
+    && apt-get remove -y icu-devtools libicu-dev libzip-dev libxml2-dev libxslt-dev libgcrypt-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev libwebp-dev \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-enable --ini-name 05-opcache.ini opcache \
+    && docker-php-ext-enable --ini-name 10-apcu.ini apcu \
     && docker-php-ext-enable --ini-name 20-redis.ini redis \
     && docker-php-source delete \
     && rm -rf /tmp/*
