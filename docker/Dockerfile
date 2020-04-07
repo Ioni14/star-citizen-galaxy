@@ -101,6 +101,11 @@ RUN mkdir -p public/bundles \
     && bin/console cache:warmup -v \
     && mkdir -p var/log public/uploads
 
+USER root
+# activate the opcache preloading
+RUN sed -i -r 's/;?opcache.preload=(.*)/opcache.preload=\1/' /usr/local/etc/php/php.ini
+USER www-data
+
 ENV BUILD_ENV prod
 ENTRYPOINT ["docker-app-entrypoint"]
 CMD ["php-fpm"]
