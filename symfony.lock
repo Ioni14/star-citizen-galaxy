@@ -247,9 +247,6 @@
     "php-http/client-common": {
         "version": "2.1.0"
     },
-    "php-http/curl-client": {
-        "version": "2.1.0"
-    },
     "php-http/discovery": {
         "version": "1.7.3"
     },
@@ -299,6 +296,9 @@
         "version": "1.0.1"
     },
     "psr/container": {
+        "version": "1.0.0"
+    },
+    "psr/http-client": {
         "version": "1.0.0"
     },
     "psr/http-factory": {
