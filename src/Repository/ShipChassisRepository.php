@@ -45,4 +45,22 @@ class ShipChassisRepository extends ServiceEntityRepository
 
         return $query->getSingleScalarResult();
     }
+
+    /**
+     * @return ShipChassis[]
+     */
+    public function searchByQuery(string $searchQuery): array
+    {
+        $like = '%'.$searchQuery.'%';
+
+        $dql = <<<DQL
+            SELECT chassis FROM App\Entity\ShipChassis chassis
+            WHERE chassis.name LIKE :searchQuery
+            ORDER BY chassis.name
+            DQL;
+        $query = $this->_em->createQuery($dql);
+        $query->setParameter('searchQuery', $like);
+
+        return $query->getResult();
+    }
 }

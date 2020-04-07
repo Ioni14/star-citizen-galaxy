@@ -14,6 +14,9 @@ class ShipRepository extends ServiceEntityRepository
         parent::__construct($registry, Ship::class);
     }
 
+    /**
+     * @return Ship[]
+     */
     public function findShipJoinedChassis(): array
     {
         $dql = <<<DQL
@@ -58,5 +61,23 @@ class ShipRepository extends ServiceEntityRepository
         $query->setParameter('chassis', $chassisId);
 
         return $query->getSingleScalarResult();
+    }
+
+    /**
+     * @return Ship[]
+     */
+    public function searchByQuery(string $searchQuery): array
+    {
+        $like = '%'.$searchQuery.'%';
+
+        $dql = <<<DQL
+            SELECT ship FROM App\Entity\Ship ship
+            WHERE ship.name LIKE :searchQuery
+            ORDER BY ship.name
+            DQL;
+        $query = $this->_em->createQuery($dql);
+        $query->setParameter('searchQuery', $like);
+
+        return $query->getResult();
     }
 }
