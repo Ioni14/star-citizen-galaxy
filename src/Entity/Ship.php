@@ -11,6 +11,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ShipRepository")
@@ -27,7 +28,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *       "groups"={"ship:read"},
  *       "enable_max_depth"=true
  *     },
- *     "force_eager"=false
+ *     "force_eager"=true
  *   },
  *   collectionOperations={
  *     "get"
@@ -97,16 +98,17 @@ class Ship implements LockableEntityInterface
     /**
      * @var HoldedShip[]|Collection
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\HoldedShip", mappedBy="holded", fetch="EAGER", cascade={"all"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\HoldedShip", mappedBy="holded", cascade={"all"}, orphanRemoval=true)
      */
     private $holders;
 
     /**
      * @var HoldedShip[]|Collection
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\HoldedShip", mappedBy="holder", fetch="EAGER", cascade={"all"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\HoldedShip", mappedBy="holder", cascade={"all"}, orphanRemoval=true)
      * @ApiProperty()
      * @Groups({"ship:read"})
+     * @MaxDepth(1)
      */
     private $holdedShips;
 
@@ -187,7 +189,7 @@ class Ship implements LockableEntityInterface
     /**
      * @var ShipCareer
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\ShipCareer", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="App\Entity\ShipCareer")
      * @Gedmo\Versioned()
      * @ApiProperty()
      * @Groups({"ship:read"})
@@ -197,7 +199,7 @@ class Ship implements LockableEntityInterface
     /**
      * @var ShipRole[]|Collection
      *
-     * @ORM\ManyToMany(targetEntity="App\Entity\ShipRole", fetch="EAGER")
+     * @ORM\ManyToMany(targetEntity="App\Entity\ShipRole")
      * @ApiProperty()
      * @Groups({"ship:read"})
      */

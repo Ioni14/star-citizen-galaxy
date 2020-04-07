@@ -42,6 +42,11 @@
                                 {% if is_granted('ROLE_MODERATOR') %}
                                     <td>
                                         <a class="btn btn-primary btn-sm" href="{{ path('ships_edit', {'slug': ship.slug}) }}"><i class="fa fa-edit"></i> Edit</a>
+                                        {% if is_granted('ROLE_ADMIN') %}
+                                            <form action="{{ path('ships_delete', {'shipId': ship.id}) }}" method="POST" class="d-inline-block">
+                                                <button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Delete</button>
+                                            </form>
+                                        {% endif %}
                                     </td>
                                 {% endif %}
                             </tr>
