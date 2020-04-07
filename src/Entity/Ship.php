@@ -113,6 +113,16 @@ class Ship implements LockableEntityInterface
     private $holdedShips;
 
     /**
+     * @var LoanerShip[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\LoanerShip", mappedBy="loaner", cascade={"all"}, orphanRemoval=true)
+     * @ApiProperty()
+     * @Groups({"ship:read"})
+     * @MaxDepth(1)
+     */
+    private $loanerShips;
+
+    /**
      * @ORM\Column(type="float", nullable=true)
      * @Gedmo\Versioned()
      * @ApiProperty()
@@ -280,6 +290,7 @@ class Ship implements LockableEntityInterface
         $this->id = $id;
         $this->holders = new ArrayCollection();
         $this->holdedShips = new ArrayCollection();
+        $this->loanerShips = new ArrayCollection();
         $this->roles = new ArrayCollection();
         $this->chassis = $chassis ?? new ShipChassis();
         $this->createdAt = new \DateTimeImmutable();
@@ -328,7 +339,7 @@ class Ship implements LockableEntityInterface
     }
 
     /**
-     * @return HoldedShip[]
+     * @return Collection|HoldedShip[]
      */
     public function getHoldedShips(): Collection
     {
@@ -349,6 +360,9 @@ class Ship implements LockableEntityInterface
         return $this;
     }
 
+    /**
+     * @return Collection|HoldedShip[]
+     */
     public function getHolders(): Collection
     {
         return $this->holders;
@@ -364,6 +378,28 @@ class Ship implements LockableEntityInterface
     public function removeHolder(HoldedShip $holdedShip): self
     {
         $this->holders->removeElement($holdedShip);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|LoanerShip[]
+     */
+    public function getLoanerShips(): Collection
+    {
+        return $this->loanerShips;
+    }
+
+    public function addLoaner(LoanerShip $loanedShip): self
+    {
+        $this->loanerShips->add($loanedShip);
+
+        return $this;
+    }
+
+    public function removeLoaner(LoanerShip $loanedShip): self
+    {
+        $this->loanerShips->removeElement($loanedShip);
 
         return $this;
     }

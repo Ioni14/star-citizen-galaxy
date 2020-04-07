@@ -7,6 +7,7 @@ use App\Entity\ShipCareer;
 use App\Entity\ShipChassis;
 use App\Entity\ShipRole;
 use App\Form\Dto\HoldedShipDto;
+use App\Form\Dto\LoanerShipDto;
 use App\Form\Dto\ShipDto;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -45,6 +46,13 @@ class ShipForm extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'prototype_data' => new HoldedShipDto(),
+            ])
+            ->add('loanerShips', CollectionType::class, [
+                'entry_type' => LoanerShipForm::class,
+                'by_reference' => false,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'prototype_data' => new LoanerShipDto(),
             ])
             ->add('height', NumberType::class, [
                 'required' => false,

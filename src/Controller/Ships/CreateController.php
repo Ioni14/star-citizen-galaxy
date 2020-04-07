@@ -7,6 +7,7 @@ use App\Form\Dto\ShipDto;
 use App\Form\Type\ShipForm;
 use App\Service\Ship\FileHelper;
 use App\Service\Ship\HoldedShipsHelper;
+use App\Service\Ship\LoanerShipsHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Loggable\LoggableListener;
 use League\Flysystem\FilesystemInterface;
@@ -23,6 +24,7 @@ class CreateController extends AbstractController
     private FilesystemInterface $picturesFilesystem;
     private FilesystemInterface $thumbnailsFilesystem;
     private HoldedShipsHelper $holdedShipsHelper;
+    private LoanerShipsHelper $loanerShipsHelper;
     private FileHelper $fileHelper;
 
     public function __construct(
@@ -30,12 +32,14 @@ class CreateController extends AbstractController
         FilesystemInterface $shipsPicturesFilesystem,
         FilesystemInterface $shipsThumbnailsFilesystem,
         HoldedShipsHelper $holdedShipsHelper,
+        LoanerShipsHelper $loanerShipsHelper,
         FileHelper $fileHelper
     ) {
         $this->entityManager = $entityManager;
         $this->picturesFilesystem = $shipsPicturesFilesystem;
         $this->thumbnailsFilesystem = $shipsThumbnailsFilesystem;
         $this->holdedShipsHelper = $holdedShipsHelper;
+        $this->loanerShipsHelper = $loanerShipsHelper;
         $this->fileHelper = $fileHelper;
     }
 
@@ -71,6 +75,7 @@ class CreateController extends AbstractController
             }
 
             $this->holdedShipsHelper->computeHoldedShips($ship, $shipDto);
+            $this->loanerShipsHelper->computeLoanerShips($ship, $shipDto);
 
             try {
                 $this->entityManager->beginTransaction();

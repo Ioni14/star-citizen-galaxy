@@ -33,6 +33,13 @@ class ShipDto
     public array $holdedShips;
 
     /**
+     * @var LoanerShipDto[]
+     *
+     * @Assert\Valid()
+     */
+    public array $loanerShips;
+
+    /**
      * @Assert\Range(min="1", max="2147483647")
      */
     public ?float $height;
@@ -116,6 +123,7 @@ class ShipDto
         ?string $name = null,
         ?ShipChassis $chassis = null,
         array $holdedShips = [],
+        array $loanerShips = [],
         ?float $height = null,
         ?float $length = null,
         ?float $beam = null,
@@ -136,6 +144,7 @@ class ShipDto
         $this->name = $name;
         $this->chassis = $chassis;
         $this->holdedShips = $holdedShips;
+        $this->loanerShips = $loanerShips;
         $this->height = $height;
         $this->length = $length;
         $this->beam = $beam;
@@ -157,6 +166,11 @@ class ShipDto
     public function addHoldedShip(HoldedShipDto $holdedShip): void
     {
         $this->holdedShips[] = $holdedShip;
+    }
+
+    public function addLoanerShip(LoanerShipDto $loanerShip): void
+    {
+        $this->loanerShips[] = $loanerShip;
     }
 
     public function addShipRole(ShipRole $role): void

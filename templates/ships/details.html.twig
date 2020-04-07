@@ -91,6 +91,16 @@
                                 </dd>
                             </dl>
                             <dl class="row mb-2 border-bottom">
+                                <dt class="col-sm-3">Loaner ships</dt>
+                                <dd class="col-sm-9">
+                                    <ul>
+                                        {% for loanerShip in ship.loanerShips %}
+                                            <li><a href="{{ path('ships_details', {'slug': loanerShip.loaned.slug}) }}">{{ loanerShip.loaned.name }}</a> <span class="badge badge-secondary">x{{ loanerShip.quantity }}</span></li>
+                                        {% endfor %}
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl class="row mb-2 border-bottom">
                                 <dt class="col-sm-3">Height</dt>
                                 <dd class="col-sm-9">
                                     {% if ship.height is not null %}

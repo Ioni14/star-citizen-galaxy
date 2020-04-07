@@ -20,11 +20,9 @@ class ShipRepository extends ServiceEntityRepository
     public function findShipJoinedChassis(): array
     {
         $dql = <<<DQL
-            SELECT s, c, m, holdedShips, holdedShip, roles, career, createdBy, updatedBy FROM App\Entity\Ship s
+            SELECT s, c, m, roles, career, createdBy, updatedBy FROM App\Entity\Ship s
             JOIN s.chassis c
             JOIN c.manufacturer m
-            LEFT JOIN s.holdedShips holdedShips
-            LEFT JOIN holdedShips.holded holdedShip
             LEFT JOIN s.career career
             LEFT JOIN s.roles roles
             LEFT JOIN s.createdBy createdBy
@@ -38,11 +36,13 @@ class ShipRepository extends ServiceEntityRepository
     public function findOneShipJoinedChassis(string $slug): ?Ship
     {
         $dql = <<<DQL
-            SELECT s, c, m, holdedShips, holdedShip, roles, career, createdBy, updatedBy FROM App\Entity\Ship s
+            SELECT s, c, m, holdedShips, holdedShip, loanerShips, loanedShip, roles, career, createdBy, updatedBy FROM App\Entity\Ship s
             JOIN s.chassis c
             JOIN c.manufacturer m
             LEFT JOIN s.holdedShips holdedShips
             LEFT JOIN holdedShips.holded holdedShip
+            LEFT JOIN s.loanerShips loanerShips
+            LEFT JOIN loanerShips.loaned loanedShip
             LEFT JOIN s.career career
             LEFT JOIN s.roles roles
             LEFT JOIN s.createdBy createdBy
