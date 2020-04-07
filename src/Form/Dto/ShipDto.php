@@ -71,12 +71,7 @@ class ShipDto
     /**
      * @Assert\Range(min="0", max="2147483647")
      */
-    public ?int $standalonePrice;
-
-    /**
-     * @Assert\Range(min="0", max="2147483647")
-     */
-    public ?int $warbondPrice;
+    public ?int $pledgeCost;
 
     /**
      * @Assert\Choice(choices=App\Entity\Ship::READY_STATUSES)
@@ -134,8 +129,7 @@ class ShipDto
         ?string $pledgeUrl = null,
         ?string $picturePath = null,
         ?string $thumbnailPath = null,
-        ?int $standalonePrice = null,
-        ?int $warbondPrice = null,
+        ?int $pledgeCost = null,
         int $lastVersion = 0,
         int $version = 0
     ) {
@@ -155,8 +149,7 @@ class ShipDto
         $this->pledgeUrl = $pledgeUrl;
         $this->picturePath = $picturePath;
         $this->thumbnailPath = $thumbnailPath;
-        $this->standalonePrice = $standalonePrice;
-        $this->warbondPrice = $warbondPrice;
+        $this->pledgeCost = $pledgeCost;
         $this->lastVersion = $lastVersion;
         $this->version = $version;
     }

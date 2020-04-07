@@ -121,18 +121,10 @@
                                 <dd class="col-sm-9">{{ ship.cargoCapacity }}</dd>
                             </dl>
                             <dl class="row mb-2 border-bottom">
-                                <dt class="col-sm-3">Standalone price</dt>
+                                <dt class="col-sm-3">Pledge cost</dt>
                                 <dd class="col-sm-9">
-                                    {% if ship.standalonePrice is not null %}
-                                        <i class="fas fa-dollar-sign" aria-hidden="true"></i> <span class="sr-only">$</span>{{ (ship.standalonePrice / 100)|number_format(2) }}
-                                    {% endif %}
-                                </dd>
-                            </dl>
-                            <dl class="row mb-2 border-bottom">
-                                <dt class="col-sm-3">Warbond price</dt>
-                                <dd class="col-sm-9">
-                                    {% if ship.warbondPrice is not null %}
-                                        <i class="fas fa-dollar-sign" aria-hidden="true"></i> <span class="sr-only">$</span>{{ (ship.warbondPrice / 100)|number_format(2) }}
+                                    {% if ship.pledgeCost is not null %}
+                                        <i class="fas fa-dollar-sign" aria-hidden="true"></i> <span class="sr-only">$</span>{{ (ship.pledgeCost / 100)|number_format(2) }}
                                     {% endif %}
                                 </dd>
                             </dl>

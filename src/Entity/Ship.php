@@ -243,17 +243,7 @@ class Ship implements LockableEntityInterface
      * @ApiProperty(iri="https://schema.org/price")
      * @Groups({"ship:read"})
      */
-    private ?int $standalonePrice = null;
-
-    /**
-     * In cents.
-     *
-     * @ORM\Column(type="integer", nullable=true)
-     * @Gedmo\Versioned()
-     * @ApiProperty(iri="https://schema.org/price")
-     * @Groups({"ship:read"})
-     */
-    private ?int $warbondPrice = null;
+    private ?int $pledgeCost = null;
 
     /**
      * @ORM\Column(type="datetimetz_immutable")
@@ -557,26 +547,14 @@ class Ship implements LockableEntityInterface
         return $this->thumbnailUri;
     }
 
-    public function getStandalonePrice(): ?int
+    public function getPledgeCost(): ?int
     {
-        return $this->standalonePrice;
+        return $this->pledgeCost;
     }
 
-    public function setStandalonePrice(?int $standalonePrice): self
+    public function setPledgeCost(?int $pledgeCost): self
     {
-        $this->standalonePrice = $standalonePrice;
-
-        return $this;
-    }
-
-    public function getWarbondPrice(): ?int
-    {
-        return $this->warbondPrice;
-    }
-
-    public function setWarbondPrice(?int $warbondPrice): self
-    {
-        $this->warbondPrice = $warbondPrice;
+        $this->pledgeCost = $pledgeCost;
 
         return $this;
     }
