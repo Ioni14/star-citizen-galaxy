@@ -18,6 +18,13 @@
                     {% if is_granted('ROLE_MODERATOR') %}
                         <p><a class="btn btn-primary" href="{{ path('ships_create') }}"><i class="fa fa-plus"></i> Create a new Ship</a></p>
                     {% endif %}
+                    {% for label, messages in app.flashes %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ label }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
                     <table id="js-ships-datatable" class="table table-responsive-sm table-bordered table-striped table-sm" data-order='[[0, "asc"]]'>
                         <thead>
                             <tr>

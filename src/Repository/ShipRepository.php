@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Ship;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Ramsey\Uuid\UuidInterface;
 
 class ShipRepository extends ServiceEntityRepository
 {
@@ -49,5 +50,13 @@ class ShipRepository extends ServiceEntityRepository
         $query->setParameter('slug', $slug);
 
         return $query->getOneOrNullResult();
+    }
+
+    public function countShipsByChassis(UuidInterface $chassisId): int
+    {
+        $query = $this->_em->createQuery('SELECT COUNT(ship) FROM App\Entity\Ship ship WHERE ship.chassis = :chassis');
+        $query->setParameter('chassis', $chassisId);
+
+        return $query->getSingleScalarResult();
     }
 }

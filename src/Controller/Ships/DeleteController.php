@@ -37,7 +37,7 @@ class DeleteController extends AbstractController
     }
 
     /**
-     * @Route("/ships/{shipId}", name="ships_delete", methods={"POST"})
+     * @Route("/ships/delete/{shipId}", name="ships_delete", methods={"POST"})
      * @Security("is_granted('ROLE_ADMIN')")
      */
     public function __invoke(Request $request, string $shipId): Response
@@ -45,7 +45,7 @@ class DeleteController extends AbstractController
         /** @var Ship|null $ship */
         $ship = $this->shipRepository->find($shipId);
         if ($ship === null) {
-            $this->addFlash('error', 'The ship does not exist.');
+            $this->addFlash('danger', 'The ship does not exist.');
 
             return $this->redirectToRoute('ships_list');
         }
@@ -70,7 +70,7 @@ class DeleteController extends AbstractController
             }
         }
 
-        $this->addFlash('success', 'The ship has been successfully deleted.');
+        $this->addFlash('success', "The ship {$ship->getName()} has been successfully deleted.");
 
         return $this->redirectToRoute('ships_list');
     }
