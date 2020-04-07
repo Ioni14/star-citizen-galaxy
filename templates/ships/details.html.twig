@@ -28,6 +28,16 @@
     {% endif %}
 {% endmacro %}
 
+{% block title 'Ship '~ship.name~' - Star Citizen Galaxy' %}
+{% block seo_metatags %}
+    <meta name="description" content="The details of the ship {{ ship.name }} by {{ ship.chassis.manufacturer.name }} of Star Citizen maintained by the community."/>
+    <meta property="og:type" content="website" />
+    <meta property="og:description" content="The details of the ship {{ ship.name }} by {{ ship.chassis.manufacturer.name }} of Star Citizen maintained by the community."/>
+    {% if ship.thumbnailPath is not null %}
+        <meta property="og:image" content="{{ asset(ship.thumbnailPath, 'ship_thumbnails') }}" />
+    {% endif %}
+{% endblock %}
+
 {% block content %}
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ path('homepage') }}">Home</a></li>

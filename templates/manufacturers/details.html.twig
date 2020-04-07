@@ -1,5 +1,15 @@
 {% extends 'manufacturers/layout.html.twig' %}
 
+{% block title 'Manufacturer '~manufacturer.name~' - Star Citizen Galaxy' %}
+{% block seo_metatags %}
+    <meta name="description" content="The details of the manufacturer {{ manufacturer.name }} of Star Citizen maintained by the community."/>
+    <meta property="og:type" content="website" />
+    <meta property="og:description" content="The details of the manufacturer {{ manufacturer.name }} of Star Citizen maintained by the community."/>
+    {% if manufacturer.logoPath is not null %}
+        <meta property="og:image" content="{{ asset(manufacturer.logoPath, 'manufacturer_logos') }}" />
+    {% endif %}
+{% endblock %}
+
 {% block content %}
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ path('homepage') }}">Home</a></li>
