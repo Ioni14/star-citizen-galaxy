@@ -20,6 +20,7 @@ Encore
     .enableBuildNotifications()
     .enableSourceMaps(!Encore.isProduction())
     .enableVersioning(Encore.isProduction())
+    .enableIntegrityHashes(Encore.isProduction())
 
     .configureBabelPresetEnv((config) => {
         config.useBuiltIns = 'usage';
@@ -37,7 +38,6 @@ Encore
 
     .enableSassLoader()
     .enablePostCssLoader()
-    .enableIntegrityHashes(Encore.isProduction())
     .autoProvidejQuery()
 ;
 
