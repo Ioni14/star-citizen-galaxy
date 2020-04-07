@@ -18,6 +18,13 @@
                     {% if is_granted('ROLE_MODERATOR') %}
                         <p><a class="btn btn-primary" href="{{ path('manufacturers_create') }}"><i class="fa fa-plus"></i> Create a new Manufacturer</a></p>
                     {% endif %}
+                    {% for label, messages in app.flashes %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ label }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
                     <table id="js-manufacturers-datatable" class="table table-responsive-sm table-bordered table-striped table-sm" data-order='[[0, "asc"]]'>
                         <thead>
                         <tr>
@@ -36,6 +43,11 @@
                                 {% if is_granted('ROLE_MODERATOR') %}
                                     <td>
                                         <a class="btn btn-primary btn-sm" href="{{ path('manufacturers_edit', {'slug': manufacturer.slug}) }}"><i class="fa fa-edit"></i> Edit</a>
+                                        {% if is_granted('ROLE_ADMIN') %}
+                                            <form action="{{ path('manufacturers_delete', {'manufacturerId': manufacturer.id}) }}" method="POST" class="d-inline-block">
+                                                <button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Delete</button>
+                                            </form>
+                                        {% endif %}
                                     </td>
                                 {% endif %}
                             </tr>
