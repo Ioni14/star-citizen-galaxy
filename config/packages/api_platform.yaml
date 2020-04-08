@@ -21,3 +21,7 @@ api_platform:
         html:
             mime_types:
                 - text/html
+    collection:
+        pagination:
+            client_enabled: true
+            enabled_parameter_name: pagination
