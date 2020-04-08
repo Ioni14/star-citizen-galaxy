@@ -55,6 +55,22 @@ class ShipRepository extends ServiceEntityRepository
         return $query->getOneOrNullResult();
     }
 
+    /**
+     * @return Ship[]
+     */
+    public function findLoanerShips(): array
+    {
+        $dql = <<<DQL
+            SELECT ship, loanerShips, loanedShip FROM App\Entity\Ship ship
+            JOIN ship.loanerShips loanerShips
+            JOIN loanerShips.loaned loanedShip
+            DQL;
+        $query = $this->_em->createQuery($dql);
+        $query->enableResultCache(300);
+
+        return $query->getResult();
+    }
+
     public function countShipsByChassis(UuidInterface $chassisId): int
     {
         $query = $this->_em->createQuery('SELECT COUNT(ship) FROM App\Entity\Ship ship WHERE ship.chassis = :chassis');

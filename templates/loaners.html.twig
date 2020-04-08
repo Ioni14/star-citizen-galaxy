@@ -1,0 +1,60 @@
+{% extends 'layout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('loaners') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('loaners') }}
+{% endblock %}
+
+{% block title 'Loaners - Star Citizen Galaxy' %}
+{% block seo_metatags %}
+    <meta name="description" content="The ship loaners of Star Citizen maintained by the community."/>
+    <meta property="og:type" content="website" />
+    <meta property="og:description" content="The ship loaners of Star Citizen maintained by the community."/>
+    <meta property="og:image" content="{{ asset('icons/favicon-64x64.png') }}" />
+{% endblock %}
+
+{% block content %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('homepage') }}">Home</a></li>
+        <li class="breadcrumb-item active">Loaners</li>
+    </ol>
+    <div class="container-fluid">
+        <div class="animated fadeIn">
+            <div class="card">
+                <div class="card-body">
+                    <h4>Loaners</h4>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <table id="js-loaners-datatable" class="table table-sm table-striped table-bordered" data-order='[[0, "asc"]]'>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Ship</th>
+                                        <th scope="col">Loaner(s)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for ship in loanerShips %}
+                                    <tr>
+                                        <td><a href="{{ path('ships_details', {'slug': ship.slug}) }}">{{ ship.name }}</a></td>
+                                        <td>
+                                            {% for loaner in ship.loanerShips %}
+                                                <a href="{{ path('ships_details', {'slug': loaner.loaned.slug}) }}">{{ loaner.loaned.name }}{{ loaner.quantity > 1 ? ' (x'~loaner.quantity~')' }}</a>
+                                                {%- if not loop.last %}, {% endif -%}
+                                            {% endfor %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
