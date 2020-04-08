@@ -4,7 +4,7 @@ namespace App\Serializer;
 
 use App\Entity\Manufacturer;
 use App\Entity\Ship;
-use Symfony\Component\Asset\Packages;
+use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerAwareInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -12,12 +12,12 @@ use Symfony\Component\Serializer\SerializerInterface;
 final class FileFieldsNormalizer implements NormalizerInterface, SerializerAwareInterface
 {
     private NormalizerInterface $decorated;
-    private Packages $assetPackages;
+    private CacheManager $cacheManager;
 
-    public function __construct(NormalizerInterface $decorated, Packages $assetPackages)
+    public function __construct(NormalizerInterface $decorated, CacheManager $cacheManager)
     {
         $this->decorated = $decorated;
-        $this->assetPackages = $assetPackages;
+        $this->cacheManager = $cacheManager;
     }
 
     /**
@@ -32,11 +32,11 @@ final class FileFieldsNormalizer implements NormalizerInterface, SerializerAware
         }
 
         if ($object instanceof Ship) {
-            $data['pictureUri'] = $object->getPicturePath() !== null ? $this->assetPackages->getUrl($object->getPicturePath(), 'ship_pictures') : null;
-            $data['thumbnailUri'] = $object->getThumbnailPath() !== null ? $this->assetPackages->getUrl($object->getThumbnailPath(), 'ship_thumbnails') : null;
+            $data['pictureUri'] = $object->getPicturePath() !== null ? $this->cacheManager->getBrowserPath($object->getPicturePath(), 'pictures') : null;
+            $data['thumbnailUri'] = $object->getThumbnailPath() !== null ? $this->cacheManager->getBrowserPath($object->getThumbnailPath(), 'thumbnails') : null;
         }
         if ($object instanceof Manufacturer) {
-            $data['logoUri'] = $object->getLogoPath() !== null ? $this->assetPackages->getUrl($object->getLogoPath(), 'manufacturer_logos') : null;
+            $data['logoUri'] = $object->getLogoPath() !== null ? $this->cacheManager->getBrowserPath($object->getLogoPath(), 'logos') : null;
         }
 
         return $data;

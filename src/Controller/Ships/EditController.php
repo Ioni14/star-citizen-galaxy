@@ -133,11 +133,11 @@ class EditController extends AbstractController
             $this->loanerShipsHelper->computeLoanerShips($ship, $shipDto);
 
             if ($shipDto->picture !== null) {
-                $path = $this->fileHelper->handleFile($shipDto->picture, $ship->getSlug(), $ship->getPicturePath(), 'pictures', $this->picturesFilesystem);
+                $path = $this->fileHelper->handleFile($shipDto->picture, $ship->getSlug(), $ship->getPicturePath(), $this->picturesFilesystem);
                 $ship->setPicturePath($path);
             }
             if ($shipDto->thumbnail !== null) {
-                $path = $this->fileHelper->handleFile($shipDto->thumbnail, $ship->getSlug(), $ship->getThumbnailPath(), 'thumbnails', $this->thumbnailsFilesystem);
+                $path = $this->fileHelper->handleFile($shipDto->thumbnail, $ship->getSlug(), $ship->getThumbnailPath(), $this->thumbnailsFilesystem);
                 $ship->setThumbnailPath($path);
             }
 

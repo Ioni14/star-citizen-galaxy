@@ -6,7 +6,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:description" content="The details of the manufacturer {{ manufacturer.name }} of Star Citizen maintained by the community."/>
     {% if manufacturer.logoPath is not null %}
-        <meta property="og:image" content="{{ asset(manufacturer.logoPath, 'manufacturer_logos') }}" />
+        <meta property="og:image" content="{{ manufacturer.logoPath|imagine_filter('logos') }}" />
     {% endif %}
 {% endblock %}
 
@@ -52,7 +52,7 @@
                                 <dt class="col-sm-3">Logo</dt>
                                 <dd class="col-sm-9">
                                     {% if manufacturer.logoPath is not null %}
-                                        <img src="{{ asset(manufacturer.logoPath, 'manufacturer_logos') }}" alt="logo preview" class="img-thumbnail" />
+                                        <img src="{{ manufacturer.logoPath|imagine_filter('logos') }}" alt="logo preview" class="img-thumbnail" />
                                     {% endif %}
                                 </dd>
                             </dl>

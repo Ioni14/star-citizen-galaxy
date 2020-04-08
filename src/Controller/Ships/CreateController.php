@@ -83,13 +83,14 @@ class CreateController extends AbstractController
                 $this->entityManager->flush(); // we need the generated Slug of the ship
 
                 if ($shipDto->picture !== null) {
-                    $path = $this->fileHelper->handleFile($shipDto->picture, $ship->getSlug(), $ship->getPicturePath(), 'pictures', $this->picturesFilesystem);
+                    $path = $this->fileHelper->handleFile($shipDto->picture, $ship->getSlug(), $ship->getPicturePath(), $this->picturesFilesystem);
                     $ship->setPicturePath($path);
                 }
                 if ($shipDto->thumbnail !== null) {
-                    $path = $this->fileHelper->handleFile($shipDto->thumbnail, $ship->getSlug(), $ship->getThumbnailPath(), 'thumbnails', $this->thumbnailsFilesystem);
+                    $path = $this->fileHelper->handleFile($shipDto->thumbnail, $ship->getSlug(), $ship->getThumbnailPath(), $this->thumbnailsFilesystem);
                     $ship->setThumbnailPath($path);
                 }
+
                 $this->entityManager->flush();
                 $dql = 'DELETE FROM Gedmo\Loggable\Entity\LogEntry e WHERE e.objectId = :oid AND e.action = :action';
                 $this->entityManager->createQuery($dql)->setParameters([

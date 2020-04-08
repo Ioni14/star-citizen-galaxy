@@ -120,12 +120,12 @@ class ShipForm extends AbstractType
             ->add('picture', FileType::class, [
                 'required' => false,
                 'image_path_property' => 'picturePath',
-                'image_assets_package' => 'ship_pictures',
+                'image_filter_set' => 'pictures',
             ])
             ->add('thumbnail', FileType::class, [
                 'required' => false,
                 'image_path_property' => 'thumbnailPath',
-                'image_assets_package' => 'ship_thumbnails',
+                'image_filter_set' => 'thumbnails',
             ]);
 
         if ($options['mode'] === self::MODE_EDIT) {

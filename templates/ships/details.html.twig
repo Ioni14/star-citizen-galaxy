@@ -34,7 +34,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:description" content="The details of the ship {{ ship.name }} by {{ ship.chassis.manufacturer.name }} of Star Citizen maintained by the community."/>
     {% if ship.thumbnailPath is not null %}
-        <meta property="og:image" content="{{ asset(ship.thumbnailPath, 'ship_thumbnails') }}" />
+        <meta property="og:image" content="{{ ship.thumbnailPath|imagine_filter('thumbnails') }}" />
     {% endif %}
 {% endblock %}
 
@@ -176,7 +176,7 @@
                                 <dt class="col-sm-3">Picture</dt>
                                 <dd class="col-sm-9">
                                     {% if ship.picturePath is not null %}
-                                        <img src="{{ asset(ship.picturePath, 'ship_pictures') }}" alt="picture preview" class="img-thumbnail" />
+                                        <img src="{{ ship.picturePath|imagine_filter('pictures') }}" alt="picture preview" class="img-thumbnail" />
                                     {% endif %}
                                 </dd>
                             </dl>
@@ -184,7 +184,7 @@
                                 <dt class="col-sm-3">Thumbnail</dt>
                                 <dd class="col-sm-9">
                                     {% if ship.thumbnailPath is not null %}
-                                        <img src="{{ asset(ship.thumbnailPath, 'ship_thumbnails') }}" alt="thumbnail preview" class="img-thumbnail" />
+                                        <img src="{{ ship.thumbnailPath|imagine_filter('thumbnails') }}" alt="thumbnail preview" class="img-thumbnail" />
                                     {% endif %}
                                 </dd>
                             </dl>
