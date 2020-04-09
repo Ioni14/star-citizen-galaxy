@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\Ships\BulkController;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -31,7 +32,43 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
  *     "force_eager"=true
  *   },
  *   collectionOperations={
- *     "get"
+ *     "get",
+ *     "bulk"={
+ *       "method"="POST",
+ *       "status"=200,
+ *       "path"="/ships/bulk",
+ *       "controller"=BulkController::class,
+ *       "defaults"={"_api_collection_operation_name"="bulk", "_api_receive"=false, "_api_persist"=false, "_api_respond"=true},
+ *       "openapi_context"={
+ *         "summary"="Retrieve the collection of Ship resources with many filters.",
+ *         "requestBody"={
+ *           "required"=true,
+ *           "content"={
+ *             "application/json"={
+ *               "schema"={
+ *                 "type"="object",
+ *                 "properties"={
+ *                   "ids"={
+ *                     "type"="array",
+ *                     "items"={"type"="string"},
+ *                     "uniqueItems"=true
+ *                   },
+ *                   "names"={
+ *                     "type"="array",
+ *                     "items"={"type"="string"},
+ *                     "uniqueItems"=true
+ *                   }
+ *                 },
+ *                 "example"={"ids": {"d286a6a8-dee2-4ccd-85df-4604aecdcb51", "f600412d-32e6-4480-bb54-d2aeb9b34c0c"}, "names": {"aurora es"}}
+ *               }
+ *             }
+ *           }
+ *         },
+ *         "responses"={
+ *           "200"={"description"="Filtered ship collection response."}
+ *         }
+ *       }
+ *     }
  *   },
  *   itemOperations={
  *     "get"

@@ -40,6 +40,12 @@
                                 {% endfor %}
                             {% endfor %}
 
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <dl class="row mb-2 border-bottom">
+                                    <dt class="col-sm-3">Id</dt>
+                                    <dd class="col-sm-9">{{ manufacturer.id }}</dd>
+                                </dl>
+                            {% endif %}
                             <dl class="row mb-2 border-bottom">
                                 <dt class="col-sm-3">Name</dt>
                                 <dd class="col-sm-9">{{ manufacturer.name }}</dd>
