@@ -236,12 +236,16 @@ class Ship implements LockableEntityInterface
     private ?string $picturePath = null;
 
     /**
+     * The URI of the ship picture. Dimensions: maximum 1920x1080.
+     *
      * @ApiProperty(iri="https://schema.org/image")
      * @Groups({"ship:read"})
      */
     private ?string $pictureUri = null;
 
     /**
+     * The URI of the ship thumbnail. Dimensions: 351x210.
+     *
      * @ApiProperty(iri="https://schema.org/image")
      * @Groups({"ship:read"})
      */
@@ -573,16 +577,6 @@ class Ship implements LockableEntityInterface
         $this->picturePath = $picturePath;
 
         return $this;
-    }
-
-    public function getPictureUri(): ?string
-    {
-        return $this->pictureUri;
-    }
-
-    public function getThumbnailUri(): ?string
-    {
-        return $this->thumbnailUri;
     }
 
     public function getPledgeCost(): ?int
