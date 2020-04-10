@@ -72,10 +72,11 @@ ARG ENV=prod
 ARG DUMP_ENV=0
 
 USER root
-COPY docker/php/php.prod.ini /usr/local/etc/php/php.ini
-COPY docker/php/php-fpm.prod.conf /usr/local/etc/php-fpm.conf
-COPY docker/php/www.prod.conf /usr/local/etc/php-fpm.d/www.conf
-COPY docker/php/entrypoint.sh /usr/local/bin/docker-app-entrypoint
+COPY --chown=root:root docker/php/php.prod.ini /usr/local/etc/php/php-fpm.ini
+COPY --chown=root:root docker/php/php-cli.prod.ini /usr/local/etc/php/php-cli.ini
+COPY --chown=root:root docker/php/php-fpm.prod.conf /usr/local/etc/php-fpm.conf
+COPY --chown=root:root docker/php/www.prod.conf /usr/local/etc/php-fpm.d/www.conf
+COPY --chown=root:root docker/php/entrypoint.sh /usr/local/bin/docker-app-entrypoint
 RUN chmod +x /usr/local/bin/docker-app-entrypoint
 
 USER www-data
@@ -100,11 +101,6 @@ RUN mkdir -p public/bundles \
     && rm -rf var/cache/* \
     && bin/console cache:warmup -v \
     && mkdir -p var/log public/uploads
-
-USER root
-# activate the opcache preloading
-RUN sed -i -r 's/;?opcache.preload=(.*)/opcache.preload=\1/' /usr/local/etc/php/php.ini
-USER www-data
 
 ENV BUILD_ENV prod
 ENTRYPOINT ["docker-app-entrypoint"]
@@ -159,9 +155,10 @@ RUN set -eux; \
 
 ENV PANTHER_NO_SANDBOX 1
 
-COPY docker/php/php.dev.ini /usr/local/etc/php/php.ini
-COPY docker/php/php-fpm.dev.conf /usr/local/etc/php-fpm.conf
-COPY docker/php/www.dev.conf /usr/local/etc/php-fpm.d/www.conf
+COPY --chown=root:root docker/php/php.dev.ini /usr/local/etc/php/php-fpm.ini
+COPY --chown=root:root docker/php/php-cli.dev.ini /usr/local/etc/php/php-cli.ini
+COPY --chown=root:root docker/php/php-fpm.dev.conf /usr/local/etc/php-fpm.conf
+COPY --chown=root:root docker/php/www.dev.conf /usr/local/etc/php-fpm.d/www.conf
 
 ENV BUILD_ENV dev
 
