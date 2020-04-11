@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\Ships\BulkController;
@@ -13,6 +14,7 @@ use Ramsey\Uuid\UuidInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ShipRepository")
@@ -74,6 +76,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
  *     "get"
  *   }
  * )
+ * @ApiFilter(SearchFilter::class, properties={"chassis": "exact", "name": "partial"})
  */
 class Ship implements LockableEntityInterface
 {
