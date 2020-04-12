@@ -1,14 +1,17 @@
 parameters:
     liip_imagine.mozjpeg.binary: /opt/mozjpeg/bin/cjpeg
     liip_imagine.pngquant.binary: /usr/bin/pngquant
+    env(LIIP_IMAGINE_RESOLVER_BASE_URL): 'http://localhost'
 
 liip_imagine:
     driver: "gd"
     resolvers:
         default:
-            web_path:
-                web_root: '%kernel.project_dir%/public'
-                cache_prefix: uploads/cache
+            flysystem:
+                filesystem_service: oneup_flysystem.public_filesystem_filesystem
+                root_url:           "%env(string:LIIP_IMAGINE_RESOLVER_BASE_URL)%"
+                cache_prefix:       uploads/cache
+                visibility:         public
     loaders:
         ships_pictures_loader:
             flysystem:

@@ -1,5 +1,8 @@
 oneup_flysystem:
     adapters:
+        public_adapter:
+            local:
+                directory: '%kernel.project_dir%/public'
         ships_pictures_adapter:
             local:
                 directory: '%kernel.project_dir%/public/uploads/ships/pictures'
@@ -10,6 +13,8 @@ oneup_flysystem:
             local:
                 directory: '%kernel.project_dir%/public/uploads/manufacturers/logos'
     filesystems:
+        public_filesystem:
+            adapter: public_adapter
         ships_pictures_filesystem:
             adapter: ships_pictures_adapter
         ships_thumbnails_filesystem:
