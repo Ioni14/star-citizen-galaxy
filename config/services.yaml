@@ -28,11 +28,13 @@ services:
     app.serializer.normalizer.ship_files:
         class: App\Serializer\FileFieldsNormalizer
         decorates: 'api_platform.serializer.normalizer.item'
-        arguments: [ '@app.serializer.normalizer.ship_files.inner', '@assets.packages' ]
+        arguments:
+            $decorated: '@app.serializer.normalizer.ship_files.inner'
     app.jsonld.normalizer.ship_files:
         class: App\Serializer\FileFieldsNormalizer
         decorates: 'api_platform.jsonld.normalizer.item'
-        arguments: [ '@app.jsonld.normalizer.ship_files.inner', '@assets.packages' ]
+        arguments:
+            $decorated: '@app.jsonld.normalizer.ship_files.inner'
 
     ApiPlatform\Core\Metadata\Property\Factory\AnnotationPropertyNameCollectionFactory:
         arguments: ['@annotation_reader', null]

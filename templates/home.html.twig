@@ -21,6 +21,18 @@
                         <li><a href="{{ path('ship_chassis_list') }}">List of the <i class="nav-icon fa fa-fighter-jet"></i> Ships chassis</a></li>
                         <li><a href="{{ path('manufacturers_list') }}">List of the <i class="nav-icon fa fa-industry"></i> Manufacturers</a></li>
                     </ul>
+                    <div class="row mb-3">
+                        <div class="col-md-6 col-lg-6 col-xl-3">
+                            <form action="{{ path('search') }}" method="GET">
+                                <div class="input-group">
+                                    <input type="search" placeholder="Search" class="form-control" name="q" value="{{ searchQuery is defined ? searchQuery : '' }}" />
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="submit" title="Search"><i class="fas fa-search"></i></button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

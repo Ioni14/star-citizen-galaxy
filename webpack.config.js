@@ -12,6 +12,7 @@ Encore
     .addEntry('manufacturers', './assets/js/manufacturers.js')
     .addEntry('ships', './assets/js/ships.js')
     .addEntry('ship_chassis', './assets/js/ships_chassis.js')
+    .addEntry('loaners', './assets/js/loaners.js')
 
     .splitEntryChunks()
     .enableSingleRuntimeChunk()
@@ -20,6 +21,7 @@ Encore
     .enableBuildNotifications()
     .enableSourceMaps(!Encore.isProduction())
     .enableVersioning(Encore.isProduction())
+    .enableIntegrityHashes(Encore.isProduction())
 
     .configureBabelPresetEnv((config) => {
         config.useBuiltIns = 'usage';
@@ -37,7 +39,6 @@ Encore
 
     .enableSassLoader()
     .enablePostCssLoader()
-    .enableIntegrityHashes(Encore.isProduction())
     .autoProvidejQuery()
 ;
 

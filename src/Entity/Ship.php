@@ -2,8 +2,11 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use App\Controller\Ships\BulkController;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,6 +14,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ShipRepository")
@@ -27,15 +31,52 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *       "groups"={"ship:read"},
  *       "enable_max_depth"=true
  *     },
- *     "force_eager"=false
+ *     "force_eager"=true
  *   },
  *   collectionOperations={
- *     "get"
+ *     "get",
+ *     "bulk"={
+ *       "method"="POST",
+ *       "status"=200,
+ *       "path"="/ships/bulk",
+ *       "controller"=BulkController::class,
+ *       "defaults"={"_api_collection_operation_name"="bulk", "_api_receive"=false, "_api_persist"=false, "_api_respond"=true},
+ *       "openapi_context"={
+ *         "summary"="Retrieve the collection of Ship resources with many filters.",
+ *         "requestBody"={
+ *           "required"=true,
+ *           "content"={
+ *             "application/json"={
+ *               "schema"={
+ *                 "type"="object",
+ *                 "properties"={
+ *                   "ids"={
+ *                     "type"="array",
+ *                     "items"={"type"="string"},
+ *                     "uniqueItems"=true
+ *                   },
+ *                   "names"={
+ *                     "type"="array",
+ *                     "items"={"type"="string"},
+ *                     "uniqueItems"=true
+ *                   }
+ *                 },
+ *                 "example"={"ids": {"d286a6a8-dee2-4ccd-85df-4604aecdcb51", "f600412d-32e6-4480-bb54-d2aeb9b34c0c"}, "names": {"aurora es"}}
+ *               }
+ *             }
+ *           }
+ *         },
+ *         "responses"={
+ *           "200"={"description"="Filtered ship collection response."}
+ *         }
+ *       }
+ *     }
  *   },
  *   itemOperations={
  *     "get"
  *   }
  * )
+ * @ApiFilter(SearchFilter::class, properties={"chassis": "exact", "name": "partial"})
  */
 class Ship implements LockableEntityInterface
 {
@@ -97,18 +138,29 @@ class Ship implements LockableEntityInterface
     /**
      * @var HoldedShip[]|Collection
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\HoldedShip", mappedBy="holded", fetch="EAGER", cascade={"all"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\HoldedShip", mappedBy="holded", cascade={"all"}, orphanRemoval=true)
      */
     private $holders;
 
     /**
      * @var HoldedShip[]|Collection
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\HoldedShip", mappedBy="holder", fetch="EAGER", cascade={"all"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\HoldedShip", mappedBy="holder", cascade={"all"}, orphanRemoval=true)
      * @ApiProperty()
      * @Groups({"ship:read"})
+     * @MaxDepth(1)
      */
     private $holdedShips;
+
+    /**
+     * @var LoanerShip[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\LoanerShip", mappedBy="loaner", cascade={"all"}, orphanRemoval=true)
+     * @ApiProperty()
+     * @Groups({"ship:read"})
+     * @MaxDepth(1)
+     */
+    private $loanerShips;
 
     /**
      * @ORM\Column(type="float", nullable=true)
@@ -177,17 +229,17 @@ class Ship implements LockableEntityInterface
     private ?string $size = null;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      * @Gedmo\Versioned()
      * @ApiProperty()
      * @Groups({"ship:read"})
      */
-    private ?int $cargoCapacity = null;
+    private ?float $cargoCapacity = null;
 
     /**
      * @var ShipCareer
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\ShipCareer", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="App\Entity\ShipCareer")
      * @Gedmo\Versioned()
      * @ApiProperty()
      * @Groups({"ship:read"})
@@ -197,7 +249,7 @@ class Ship implements LockableEntityInterface
     /**
      * @var ShipRole[]|Collection
      *
-     * @ORM\ManyToMany(targetEntity="App\Entity\ShipRole", fetch="EAGER")
+     * @ORM\ManyToMany(targetEntity="App\Entity\ShipRole")
      * @ApiProperty()
      * @Groups({"ship:read"})
      */
@@ -224,12 +276,16 @@ class Ship implements LockableEntityInterface
     private ?string $picturePath = null;
 
     /**
+     * The URI of the ship picture. Dimensions: maximum 1920x1080.
+     *
      * @ApiProperty(iri="https://schema.org/image")
      * @Groups({"ship:read"})
      */
     private ?string $pictureUri = null;
 
     /**
+     * The URI of the ship thumbnail. Dimensions: 351x210.
+     *
      * @ApiProperty(iri="https://schema.org/image")
      * @Groups({"ship:read"})
      */
@@ -243,17 +299,7 @@ class Ship implements LockableEntityInterface
      * @ApiProperty(iri="https://schema.org/price")
      * @Groups({"ship:read"})
      */
-    private ?int $standalonePrice = null;
-
-    /**
-     * In cents.
-     *
-     * @ORM\Column(type="integer", nullable=true)
-     * @Gedmo\Versioned()
-     * @ApiProperty(iri="https://schema.org/price")
-     * @Groups({"ship:read"})
-     */
-    private ?int $warbondPrice = null;
+    private ?int $pledgeCost = null;
 
     /**
      * @ORM\Column(type="datetimetz_immutable")
@@ -288,6 +334,7 @@ class Ship implements LockableEntityInterface
         $this->id = $id;
         $this->holders = new ArrayCollection();
         $this->holdedShips = new ArrayCollection();
+        $this->loanerShips = new ArrayCollection();
         $this->roles = new ArrayCollection();
         $this->chassis = $chassis ?? new ShipChassis();
         $this->createdAt = new \DateTimeImmutable();
@@ -336,7 +383,7 @@ class Ship implements LockableEntityInterface
     }
 
     /**
-     * @return HoldedShip[]
+     * @return Collection|HoldedShip[]
      */
     public function getHoldedShips(): Collection
     {
@@ -357,6 +404,9 @@ class Ship implements LockableEntityInterface
         return $this;
     }
 
+    /**
+     * @return Collection|HoldedShip[]
+     */
     public function getHolders(): Collection
     {
         return $this->holders;
@@ -372,6 +422,28 @@ class Ship implements LockableEntityInterface
     public function removeHolder(HoldedShip $holdedShip): self
     {
         $this->holders->removeElement($holdedShip);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|LoanerShip[]
+     */
+    public function getLoanerShips(): Collection
+    {
+        return $this->loanerShips;
+    }
+
+    public function addLoaner(LoanerShip $loanedShip): self
+    {
+        $this->loanerShips->add($loanedShip);
+
+        return $this;
+    }
+
+    public function removeLoaner(LoanerShip $loanedShip): self
+    {
+        $this->loanerShips->removeElement($loanedShip);
 
         return $this;
     }
@@ -460,12 +532,12 @@ class Ship implements LockableEntityInterface
         return $this;
     }
 
-    public function getCargoCapacity(): ?int
+    public function getCargoCapacity(): ?float
     {
         return $this->cargoCapacity;
     }
 
-    public function setCargoCapacity(?int $cargoCapacity): self
+    public function setCargoCapacity(?float $cargoCapacity): self
     {
         $this->cargoCapacity = $cargoCapacity;
 
@@ -547,36 +619,14 @@ class Ship implements LockableEntityInterface
         return $this;
     }
 
-    public function getPictureUri(): ?string
+    public function getPledgeCost(): ?int
     {
-        return $this->pictureUri;
+        return $this->pledgeCost;
     }
 
-    public function getThumbnailUri(): ?string
+    public function setPledgeCost(?int $pledgeCost): self
     {
-        return $this->thumbnailUri;
-    }
-
-    public function getStandalonePrice(): ?int
-    {
-        return $this->standalonePrice;
-    }
-
-    public function setStandalonePrice(?int $standalonePrice): self
-    {
-        $this->standalonePrice = $standalonePrice;
-
-        return $this;
-    }
-
-    public function getWarbondPrice(): ?int
-    {
-        return $this->warbondPrice;
-    }
-
-    public function setWarbondPrice(?int $warbondPrice): self
-    {
-        $this->warbondPrice = $warbondPrice;
+        $this->pledgeCost = $pledgeCost;
 
         return $this;
     }

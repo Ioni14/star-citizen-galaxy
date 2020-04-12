@@ -7,6 +7,7 @@ use App\Form\Dto\ShipDto;
 use App\Form\Type\ShipForm;
 use App\Service\Ship\FileHelper;
 use App\Service\Ship\HoldedShipsHelper;
+use App\Service\Ship\LoanerShipsHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Loggable\LoggableListener;
 use League\Flysystem\FilesystemInterface;
@@ -23,6 +24,7 @@ class CreateController extends AbstractController
     private FilesystemInterface $picturesFilesystem;
     private FilesystemInterface $thumbnailsFilesystem;
     private HoldedShipsHelper $holdedShipsHelper;
+    private LoanerShipsHelper $loanerShipsHelper;
     private FileHelper $fileHelper;
 
     public function __construct(
@@ -30,12 +32,14 @@ class CreateController extends AbstractController
         FilesystemInterface $shipsPicturesFilesystem,
         FilesystemInterface $shipsThumbnailsFilesystem,
         HoldedShipsHelper $holdedShipsHelper,
+        LoanerShipsHelper $loanerShipsHelper,
         FileHelper $fileHelper
     ) {
         $this->entityManager = $entityManager;
         $this->picturesFilesystem = $shipsPicturesFilesystem;
         $this->thumbnailsFilesystem = $shipsThumbnailsFilesystem;
         $this->holdedShipsHelper = $holdedShipsHelper;
+        $this->loanerShipsHelper = $loanerShipsHelper;
         $this->fileHelper = $fileHelper;
     }
 
@@ -64,14 +68,14 @@ class CreateController extends AbstractController
                 ->setReadyStatus($shipDto->readyStatus)
                 ->setCareer($shipDto->career)
                 ->setPledgeUrl($shipDto->pledgeUrl)
-                ->setStandalonePrice($shipDto->standalonePrice)
-                ->setWarbondPrice($shipDto->warbondPrice);
+                ->setPledgeCost($shipDto->pledgeCost);
 
             foreach ($shipDto->roles as $role) {
                 $ship->addRole($role);
             }
 
             $this->holdedShipsHelper->computeHoldedShips($ship, $shipDto);
+            $this->loanerShipsHelper->computeLoanerShips($ship, $shipDto);
 
             try {
                 $this->entityManager->beginTransaction();
@@ -79,13 +83,14 @@ class CreateController extends AbstractController
                 $this->entityManager->flush(); // we need the generated Slug of the ship
 
                 if ($shipDto->picture !== null) {
-                    $path = $this->fileHelper->handleFile($shipDto->picture, $ship->getSlug(), $ship->getPicturePath(), 'pictures', $this->picturesFilesystem);
+                    $path = $this->fileHelper->handleFile($shipDto->picture, $ship->getSlug(), $ship->getPicturePath(), $this->picturesFilesystem);
                     $ship->setPicturePath($path);
                 }
                 if ($shipDto->thumbnail !== null) {
-                    $path = $this->fileHelper->handleFile($shipDto->thumbnail, $ship->getSlug(), $ship->getThumbnailPath(), 'thumbnails', $this->thumbnailsFilesystem);
+                    $path = $this->fileHelper->handleFile($shipDto->thumbnail, $ship->getSlug(), $ship->getThumbnailPath(), $this->thumbnailsFilesystem);
                     $ship->setThumbnailPath($path);
                 }
+
                 $this->entityManager->flush();
                 $dql = 'DELETE FROM Gedmo\Loggable\Entity\LogEntry e WHERE e.objectId = :oid AND e.action = :action';
                 $this->entityManager->createQuery($dql)->setParameters([

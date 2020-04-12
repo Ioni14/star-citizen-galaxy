@@ -14,7 +14,7 @@
     {{- form_help(form) -}}
 
     {%- if image_uri is not null -%}
-        <img src="{{ asset(image_uri, image_assets_package) }}" alt="preview" class="img-thumbnail mt-2" />
+        <img src="{{ image_uri|imagine_filter(image_filter_set) }}" alt="preview" class="img-thumbnail mt-2" />
     {%- endif -%}
 
     </{{ element|default('div') }}>
@@ -25,6 +25,21 @@
         <div class="col col-1">
             <label class="d-block">&nbsp;</label>
             <button type="button" class="btn btn-danger d-inline-block js-holded-ships-delete-row" title="Delete a row" {{ form.vars.disabled ? 'disabled' }}><i class="fa fa-minus"></i></button>
+        </div>
+        <div class="col col-7">
+            {{ form_row(form.ship, {'attr': {'class': 'js-select2'}}) }}
+        </div>
+        <div class="col col-4">
+            {{ form_row(form.quantity) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block loaner_ship_widget %}
+    <div class="row">
+        <div class="col col-1">
+            <label class="d-block">&nbsp;</label>
+            <button type="button" class="btn btn-danger d-inline-block js-loaner-ships-delete-row" title="Delete a row" {{ form.vars.disabled ? 'disabled' }}><i class="fa fa-minus"></i></button>
         </div>
         <div class="col col-7">
             {{ form_row(form.ship, {'attr': {'class': 'js-select2'}}) }}

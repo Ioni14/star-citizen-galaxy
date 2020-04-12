@@ -37,6 +37,17 @@
                                     <p><button type="button" class="btn btn-primary d-inline-block js-holded-ships-add-row" title="Add a row"><i class="fa fa-plus"></i> Add a row</button></p>
                                 </div>
 
+                                {{ form_label(form.loanerShips) }}
+                                {{ form_help(form.loanerShips, {'help': 'Playable ships given in-game when the original one can\'t be used alone. e.g., a Cyclone loans an Aurora MR.'}) }}
+                                <div id="js-loaner-ships-collection" data-index="{{ form.loanerShips|length }}" data-prototype="{{ form_widget(form.loanerShips.vars.prototype)|e('html_attr') }}">
+                                    <div id="js-loaner-ships-rows">
+                                        {% for loanerShip in form.loanerShips %}
+                                            {{ form_widget(loanerShip) }}
+                                        {% endfor %}
+                                    </div>
+                                    <p><button type="button" class="btn btn-primary d-inline-block js-loaner-ships-add-row" title="Add a row"><i class="fa fa-plus"></i> Add a row</button></p>
+                                </div>
+
                                 {{ form_row(form.height, {'help': 'The physical height of the ship. e.g., an Aurora LN is 4.0 meters tall.'}) }}
                                 {{ form_row(form.length, {'help': 'The physical length of the ship. e.g., an Aurora LN is 18.0 meters long.'}) }}
                                 {{ form_row(form.beam, {'help': 'The physical beam of the ship. e.g., an Aurora LN is 8.0 meters large.'}) }}
@@ -44,8 +55,7 @@
                                 {{ form_row(form.maxCrew, {'help': 'How many citizens are sufficient to drive the ship?'}) }}
                                 {{ form_row(form.size, {'attr': {'class': 'js-select2'}}) }}
                                 {{ form_row(form.cargoCapacity, {'help': 'How many cargo the ship can carry?'}) }}
-                                {{ form_row(form.standalonePrice) }}
-                                {{ form_row(form.warbondPrice) }}
+                                {{ form_row(form.pledgeCost) }}
                                 {{ form_row(form.readyStatus, {'attr': {'class': 'js-select2'}}) }}
                                 {{ form_row(form.career, {'attr': {'class': 'js-select2'}}) }}
                                 {{ form_row(form.roles, {'attr': {'class': 'js-select2'}}) }}

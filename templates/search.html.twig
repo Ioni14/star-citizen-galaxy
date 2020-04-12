@@ -1,0 +1,57 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('homepage') }}">Home</a></li>
+        <li class="breadcrumb-item active">Search</li>
+    </ol>
+    <div class="container-fluid">
+        <div class="animated fadeIn">
+            <div class="card">
+                <div class="card-body">
+                    <h4>Search for &laquo; {{ searchQuery }} &raquo;</h4>
+                    <div class="row mb-3">
+                        <div class="col-md-6 col-lg-6 col-xl-3">
+                            <form action="{{ path('search') }}" method="GET">
+                                <div class="input-group">
+                                    <input type="search" placeholder="Search" class="form-control" name="q" value="{{ searchQuery is defined ? searchQuery : '' }}" />
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="submit" title="Search"><i class="fas fa-search"></i></button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    {% if error is defined and error == 'too_short_query' %}
+                        <div class="alert alert-danger">The search query must be {{ constant('App\\Controller\\SearchController::MINIMUM_SEARCH_QUERY_LENGTH') }} characters minimum.</div>
+                    {% else %}
+                        {% if manufacturers|length > 0 %}
+                            <h4>{{ manufacturers|length }} Manufacturers found</h4>
+                            <ul>
+                                {% for manufacturer in manufacturers %}
+                                    <li><a href="{{ path('manufacturers_details', {'slug': manufacturer.slug}) }}">{{ manufacturer.name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {% if chassis|length > 0 %}
+                            <h4>{{ chassis|length }} Ship Chassis found</h4>
+                            <ul>
+                                {% for chassi in chassis %}
+                                    <li><a href="{{ path('ship_chassis_details', {'slug': chassi.slug}) }}">{{ chassi.name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {% if ships|length > 0 %}
+                            <h4>{{ ships|length }} Ships found</h4>
+                            <ul>
+                                {% for ship in ships %}
+                                    <li><a href="{{ path('ships_details', {'slug': ship.slug}) }}">{{ ship.name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -27,7 +27,7 @@ class ManufacturerForm extends AbstractType
             ->add('logo', FileType::class, [
                 'required' => false,
                 'image_path_property' => 'logoPath',
-                'image_assets_package' => 'manufacturer_logos',
+                'image_filter_set' => 'logos',
             ]);
         if ($options['mode'] === self::MODE_EDIT) {
             $builder->add('version', HiddenType::class);

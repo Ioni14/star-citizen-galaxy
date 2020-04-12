@@ -1,16 +1,30 @@
 parameters:
     liip_imagine.mozjpeg.binary: /opt/mozjpeg/bin/cjpeg
     liip_imagine.pngquant.binary: /usr/bin/pngquant
+    env(LIIP_IMAGINE_RESOLVER_BASE_URL): 'http://localhost'
 
 liip_imagine:
     driver: "gd"
+    resolvers:
+        default:
+            flysystem:
+                filesystem_service: oneup_flysystem.public_filesystem_filesystem
+                root_url:           "%env(string:LIIP_IMAGINE_RESOLVER_BASE_URL)%"
+                cache_prefix:       uploads/cache
+                visibility:         public
     loaders:
         ships_pictures_loader:
             flysystem:
                 filesystem_service: oneup_flysystem.ships_pictures_filesystem_filesystem
-
+        ships_thumbnails_loader:
+            flysystem:
+                filesystem_service: oneup_flysystem.ships_thumbnails_filesystem_filesystem
+        manufacturers_logos_loader:
+            flysystem:
+                filesystem_service: oneup_flysystem.manufacturers_logos_filesystem_filesystem
     filter_sets:
         pictures:
+            data_loader: ships_pictures_loader
             filters:
                 downscale:
                     max: [1920, 1080]
@@ -18,13 +32,19 @@ liip_imagine:
                 mozjpeg: { quality: 80 }
                 pngquant: { quality: "75-85" }
         thumbnails:
+            data_loader: ships_thumbnails_loader
             filters:
-                downscale:
-                    max: [350, 210] # store_small size from RSI
+                upscale:
+                    min: [351, 210]
+                thumbnail:
+                    size: [351, 210]
+                    mode: outbound
+                    allow_upscale: true
             post_processors:
                 mozjpeg: { quality: 80 }
                 pngquant: { quality: "75-85" }
         logos:
+            data_loader: manufacturers_logos_loader
             filters:
                 downscale:
                     max: [300, 150]

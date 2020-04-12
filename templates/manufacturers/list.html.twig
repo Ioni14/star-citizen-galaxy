@@ -1,5 +1,13 @@
 {% extends 'manufacturers/layout.html.twig' %}
 
+{% block title 'All manufacturers - Star Citizen Galaxy' %}
+{% block seo_metatags %}
+    <meta name="description" content="All the ship manufacturers of Star Citizen maintained by the community."/>
+    <meta property="og:type" content="website" />
+    <meta property="og:description" content="All the ship manufacturers of Star Citizen maintained by the community."/>
+    <meta property="og:image" content="{{ asset('icons/favicon-64x64.png') }}" />
+{% endblock %}
+
 {% block content %}
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ path('homepage') }}">Home</a></li>
@@ -18,6 +26,13 @@
                     {% if is_granted('ROLE_MODERATOR') %}
                         <p><a class="btn btn-primary" href="{{ path('manufacturers_create') }}"><i class="fa fa-plus"></i> Create a new Manufacturer</a></p>
                     {% endif %}
+                    {% for label, messages in app.flashes %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ label }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
                     <table id="js-manufacturers-datatable" class="table table-responsive-sm table-bordered table-striped table-sm" data-order='[[0, "asc"]]'>
                         <thead>
                         <tr>
@@ -36,6 +51,11 @@
                                 {% if is_granted('ROLE_MODERATOR') %}
                                     <td>
                                         <a class="btn btn-primary btn-sm" href="{{ path('manufacturers_edit', {'slug': manufacturer.slug}) }}"><i class="fa fa-edit"></i> Edit</a>
+                                        {% if is_granted('ROLE_ADMIN') %}
+                                            <form action="{{ path('manufacturers_delete', {'manufacturerId': manufacturer.id}) }}" method="POST" class="d-inline-block">
+                                                <button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Delete</button>
+                                            </form>
+                                        {% endif %}
                                     </td>
                                 {% endif %}
                             </tr>

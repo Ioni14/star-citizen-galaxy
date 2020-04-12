@@ -54,7 +54,7 @@ class CreateController extends AbstractController
                 $this->entityManager->flush(); // we need the generated Slug of the ship
 
                 if ($manufacturerDto->logo !== null) {
-                    $path = $this->fileHelper->handleFile($manufacturerDto->logo, $manufacturer->getSlug(), $manufacturer->getLogoPath(), 'logos', $this->manufacturersLogosFilesystem);
+                    $path = $this->fileHelper->handleFile($manufacturerDto->logo, $manufacturer->getSlug(), $manufacturer->getLogoPath(), $this->manufacturersLogosFilesystem);
                     $manufacturer->setLogoPath($path);
                 }
                 $this->entityManager->flush();
