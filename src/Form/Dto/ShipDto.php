@@ -73,7 +73,7 @@ class ShipDto
     /**
      * @Assert\Range(min="0", max="2147483647")
      */
-    public ?int $cargoCapacity;
+    public ?float $cargoCapacity;
 
     /**
      * @Assert\Range(min="0", max="2147483647")
@@ -130,7 +130,7 @@ class ShipDto
         ?int $minCrew = 1,
         ?int $maxCrew = 1,
         ?string $size = null,
-        ?int $cargoCapacity = null,
+        ?float $cargoCapacity = null,
         ?ShipCareer $career = null,
         array $roles = [],
         ?string $readyStatus = null,

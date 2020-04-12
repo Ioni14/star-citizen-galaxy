@@ -84,8 +84,9 @@ class ShipForm extends AbstractType
                     'ship.sizes.capital' => Ship::SIZE_CAPITAL,
                 ],
             ])
-            ->add('cargoCapacity', IntegerType::class, [
+            ->add('cargoCapacity', NumberType::class, [
                 'required' => false,
+                'scale' => 2,
             ])
             ->add('pledgeCost', MoneyType::class, [
                 'required' => false,

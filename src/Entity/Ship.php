@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Controller\Ships\BulkController;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -14,7 +15,6 @@ use Ramsey\Uuid\UuidInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ShipRepository")
@@ -229,12 +229,12 @@ class Ship implements LockableEntityInterface
     private ?string $size = null;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      * @Gedmo\Versioned()
      * @ApiProperty()
      * @Groups({"ship:read"})
      */
-    private ?int $cargoCapacity = null;
+    private ?float $cargoCapacity = null;
 
     /**
      * @var ShipCareer
@@ -532,12 +532,12 @@ class Ship implements LockableEntityInterface
         return $this;
     }
 
-    public function getCargoCapacity(): ?int
+    public function getCargoCapacity(): ?float
     {
         return $this->cargoCapacity;
     }
 
-    public function setCargoCapacity(?int $cargoCapacity): self
+    public function setCargoCapacity(?float $cargoCapacity): self
     {
         $this->cargoCapacity = $cargoCapacity;
 
