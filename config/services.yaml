@@ -9,6 +9,8 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+        bind:
+            $publicBaseUrl: '%env(string:LIIP_IMAGINE_RESOLVER_BASE_URL)%'
 
     App\:
         resource: '../src/*'

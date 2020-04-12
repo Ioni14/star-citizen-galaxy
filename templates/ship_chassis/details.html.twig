@@ -50,7 +50,7 @@
                             </dl>
                             <dl class="row mb-2 border-bottom">
                                 <dt class="col-sm-3">Manufacturer</dt>
-                                <dd class="col-sm-9">{{ chassis.manufacturer.name }}</dd>
+                                <dd class="col-sm-9"><a href="{{ path('manufacturers_details', {'slug': chassis.manufacturer.slug}) }}">{{ chassis.manufacturer.name }}</a></dd>
                             </dl>
                             <dl class="row mb-2 border-bottom">
                                 <dt class="col-sm-3">Ships</dt>

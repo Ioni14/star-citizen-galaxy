@@ -9,7 +9,7 @@ liip_imagine:
         default:
             flysystem:
                 filesystem_service: oneup_flysystem.public_filesystem_filesystem
-                root_url:           "%env(string:LIIP_IMAGINE_RESOLVER_BASE_URL)%"
+                root_url:           '%env(string:LIIP_IMAGINE_RESOLVER_BASE_URL)%'
                 cache_prefix:       uploads/cache
                 visibility:         public
     loaders:
