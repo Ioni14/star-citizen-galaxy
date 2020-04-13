@@ -1,8 +1,8 @@
 App\Entity\Manufacturer:
     manufacturer_rsi:
         __construct: ['<(\Ramsey\Uuid\Uuid::fromString("dbf9cab3-c65a-4475-8594-183a587e2953"))>']
-        name: 'Robert Space Industries'
-        slug: 'robert-space-industries'
+        name: 'Roberts Space Industries'
+        slug: 'roberts-space-industries'
         code: 'RSI'
         createdAt: '<(new \DateTimeImmutable("2019-05-01 21:22:33"))>'
         updatedAt: '<(new \DateTimeImmutable("2019-05-02 21:22:33"))>'

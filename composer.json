@@ -60,10 +60,17 @@
     },
     "require-dev": {
         "doctrine/data-fixtures": "^1.4",
+        "friendsofphp/php-cs-fixer": "^2.16",
         "hautelook/alice-bundle": "^2.5",
-        "symfony/debug-pack": "*",
-        "symfony/profiler-pack": "*",
-        "symfony/test-pack": "*"
+        "symfony/browser-kit": "*",
+        "symfony/css-selector": "*",
+        "symfony/debug-bundle": "*",
+        "symfony/monolog-bundle": "^3.0",
+        "symfony/phpunit-bridge": "*",
+        "symfony/stopwatch": "*",
+        "symfony/twig-bundle": "*",
+        "symfony/var-dumper": "*",
+        "symfony/web-profiler-bundle": "*"
     },
     "config": {
         "preferred-install": {

@@ -26,3 +26,21 @@ App\Entity\User:
         createdAt: '<(new \DateTimeImmutable("2019-04-04 11:22:33"))>'
         updatedAt: '<(new \DateTimeImmutable("2019-04-05 11:22:33"))>'
         roles: ['ROLE_USER', 'ROLE_MODERATOR']
+    user_admin1:
+        __construct: ['<(\Ramsey\Uuid\Uuid::fromString("b87d9a59-f62b-4b8d-a339-411e2eb88ba9"))>']
+        username: 'Admin1'
+        nickname: 'Admin1'
+        discordId: '123456789004'
+        discordTag: '0004'
+        createdAt: '<(new \DateTimeImmutable("2019-04-05 11:22:33"))>'
+        updatedAt: '<(new \DateTimeImmutable("2019-04-06 11:22:33"))>'
+        roles: ['ROLE_USER', 'ROLE_ADMIN']
+    user_user1:
+        __construct: ['<(\Ramsey\Uuid\Uuid::fromString("209cd405-2643-4e1c-94e5-3b805e7d6a44"))>']
+        username: 'User1'
+        nickname: 'User1'
+        discordId: '123456789005'
+        discordTag: '0005'
+        createdAt: '<(new \DateTimeImmutable("2019-04-06 11:22:33"))>'
+        updatedAt: '<(new \DateTimeImmutable("2019-04-07 11:22:33"))>'
+        roles: ['ROLE_USER']
