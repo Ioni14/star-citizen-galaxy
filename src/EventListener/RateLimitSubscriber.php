@@ -44,6 +44,7 @@ class RateLimitSubscriber implements EventSubscriberInterface, LoggerAwareInterf
         $route = $request->attributes->get('_route');
         if ($route === null) {
             $this->logger->error('[RateLimitSubscriber] no _route attribute found on request event.', ['attributes' => $request->attributes->all()]);
+
             return;
         }
         if (!$this->hasQuotas($route)) {
@@ -80,6 +81,7 @@ class RateLimitSubscriber implements EventSubscriberInterface, LoggerAwareInterf
         $route = $request->attributes->get('_route');
         if ($route === null) {
             $this->logger->error('[RateLimitSubscriber] no _route attribute found on response event.', ['attributes' => $request->attributes->all()]);
+
             return;
         }
         if (!$this->hasQuotas($route)) {

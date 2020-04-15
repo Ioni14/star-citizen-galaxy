@@ -6,9 +6,10 @@ App\Entity\Ship:
         slug: 'aurora-es'
         height: 4.0
         length: 18.0
+        beam: 8.0
         minCrew: 1
         maxCrew: 1
-        standalonePrice: 5000
+        pledgeCost: 5000
         readyStatus: 'flight-ready'
         size: 'small'
         cargoCapacity: 2
@@ -24,9 +25,10 @@ App\Entity\Ship:
         slug: 'aurora-ln'
         height: 4.0
         length: 18.0
+        beam: 8.0
         minCrew: 1
         maxCrew: 1
-        standalonePrice: 7500
+        pledgeCost: 7500
         readyStatus: 'flight-ready'
         size: 'small'
         career: '@career_transport'
