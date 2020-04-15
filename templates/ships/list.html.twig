@@ -50,8 +50,8 @@
                         {% for ship in ships %}
                             <tr>
                                 <td><a href="{{ path('ships_details', {'slug': ship.slug}) }}">{{ ship.name }}</a></td>
-                                <td>{{ ship.chassis.name ?? '-' }}</td>
-                                <td>{{ ship.chassis.manufacturer.name ?? '-' }}</td>
+                                <td><a href="{{ path('ship_chassis_details', {'slug': ship.chassis.slug}) }}">{{ ship.chassis.name ?? '-' }}</a></td>
+                                <td><a href="{{ path('manufacturers_details', {'slug': ship.chassis.manufacturer.slug}) }}">{{ ship.chassis.manufacturer.name ?? '-' }}</a></td>
                                 <td>{{ ship.size }}</td>
                                 <td>{{ ship.career ? ship.career.label : '' }}</td>
                                 {% if is_granted('ROLE_MODERATOR') %}
