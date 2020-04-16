@@ -16,7 +16,7 @@
             </trans-unit>
             <trans-unit id="manufacturer.constraints.logo.bad_format">
                 <source>manufacturer.constraints.logo.bad_format</source>
-                <target>The logo must be in svg, jpeg, png or webp.</target>
+                <target>The logo must be in jpeg, png or webp.</target>
             </trans-unit>
         </body>
     </file>

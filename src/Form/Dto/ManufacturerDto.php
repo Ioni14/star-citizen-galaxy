@@ -20,7 +20,7 @@ class ManufacturerDto
     public ?string $code;
 
     /**
-     * @Assert\File(maxSize="5M", mimeTypes={"image/jpeg", "image/png", "image/webp", "image/svg+xml"}, mimeTypesMessage="manufacturer.constraints.logo.bad_format")
+     * @Assert\File(maxSize="5M", mimeTypes={"image/jpeg", "image/png", "image/webp"}, mimeTypesMessage="manufacturer.constraints.logo.bad_format")
      */
     public ?UploadedFile $logo = null;
 
