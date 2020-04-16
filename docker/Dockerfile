@@ -1,4 +1,4 @@
-FROM php:7.4.1-fpm-buster as req_php
+FROM php:7.4.4-fpm-buster as req_php
 
 RUN apt-get update && apt-get install -y \
     unzip \
@@ -13,10 +13,12 @@ RUN apt-get update && apt-get install -y \
     pngquant \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install -j$(nproc) gd intl zip pdo_mysql xml xsl \
-    && pecl install redis \
-    && apt-get remove -y libzip-dev libxml2-dev libxslt-dev libgcrypt-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev libwebp-dev \
+    && pecl channel-update pecl.php.net \
+    && pecl install redis apcu \
+    && apt-get remove -y icu-devtools libicu-dev libzip-dev libxml2-dev libxslt-dev libgcrypt-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev libwebp-dev \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-enable --ini-name 05-opcache.ini opcache \
+    && docker-php-ext-enable --ini-name 10-apcu.ini apcu \
     && docker-php-ext-enable --ini-name 20-redis.ini redis \
     && docker-php-source delete \
     && rm -rf /tmp/*
@@ -29,7 +31,7 @@ USER www-data
 ########################################
 FROM req_php as composer_deps
 
-COPY --from=composer:1.9.1 /usr/bin/composer /usr/local/bin/composer
+COPY --from=composer:1.9.3 /usr/bin/composer /usr/local/bin/composer
 
 # prod|dev
 ARG ENV=prod
@@ -70,10 +72,11 @@ ARG ENV=prod
 ARG DUMP_ENV=0
 
 USER root
-COPY docker/php/php.prod.ini /usr/local/etc/php/php.ini
-COPY docker/php/php-fpm.prod.conf /usr/local/etc/php-fpm.conf
-COPY docker/php/www.prod.conf /usr/local/etc/php-fpm.d/www.conf
-COPY docker/php/entrypoint.sh /usr/local/bin/docker-app-entrypoint
+COPY --chown=root:root docker/php/php.prod.ini /usr/local/etc/php/php-fpm.ini
+COPY --chown=root:root docker/php/php-cli.prod.ini /usr/local/etc/php/php-cli.ini
+COPY --chown=root:root docker/php/php-fpm.prod.conf /usr/local/etc/php-fpm.conf
+COPY --chown=root:root docker/php/www.prod.conf /usr/local/etc/php-fpm.d/www.conf
+COPY --chown=root:root docker/php/entrypoint.sh /usr/local/bin/docker-app-entrypoint
 RUN chmod +x /usr/local/bin/docker-app-entrypoint
 
 USER www-data
@@ -137,7 +140,7 @@ FROM build_php as build_php_dev
 #COPY public/index_test.php public/
 
 USER root
-COPY --from=composer:1.9.1 /usr/bin/composer /usr/local/bin/composer
+COPY --from=composer:1.9.3 /usr/bin/composer /usr/local/bin/composer
 ENV COMPOSER_MEMORY_LIMIT -1
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_HOME /.composer
@@ -152,9 +155,10 @@ RUN set -eux; \
 
 ENV PANTHER_NO_SANDBOX 1
 
-COPY docker/php/php.dev.ini /usr/local/etc/php/php.ini
-COPY docker/php/php-fpm.dev.conf /usr/local/etc/php-fpm.conf
-COPY docker/php/www.dev.conf /usr/local/etc/php-fpm.d/www.conf
+COPY --chown=root:root docker/php/php.dev.ini /usr/local/etc/php/php-fpm.ini
+COPY --chown=root:root docker/php/php-cli.dev.ini /usr/local/etc/php/php-cli.ini
+COPY --chown=root:root docker/php/php-fpm.dev.conf /usr/local/etc/php-fpm.conf
+COPY --chown=root:root docker/php/www.dev.conf /usr/local/etc/php-fpm.d/www.conf
 
 ENV BUILD_ENV dev
 

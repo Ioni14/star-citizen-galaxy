@@ -33,6 +33,13 @@ class ShipDto
     public array $holdedShips;
 
     /**
+     * @var LoanerShipDto[]
+     *
+     * @Assert\Valid()
+     */
+    public array $loanerShips;
+
+    /**
      * @Assert\Range(min="1", max="2147483647")
      */
     public ?float $height;
@@ -66,17 +73,12 @@ class ShipDto
     /**
      * @Assert\Range(min="0", max="2147483647")
      */
-    public ?int $cargoCapacity;
+    public ?float $cargoCapacity;
 
     /**
      * @Assert\Range(min="0", max="2147483647")
      */
-    public ?int $standalonePrice;
-
-    /**
-     * @Assert\Range(min="0", max="2147483647")
-     */
-    public ?int $warbondPrice;
+    public ?int $pledgeCost;
 
     /**
      * @Assert\Choice(choices=App\Entity\Ship::READY_STATUSES)
@@ -121,27 +123,28 @@ class ShipDto
         ?string $name = null,
         ?ShipChassis $chassis = null,
         array $holdedShips = [],
+        array $loanerShips = [],
         ?float $height = null,
         ?float $length = null,
         ?float $beam = null,
         ?int $minCrew = 1,
         ?int $maxCrew = 1,
         ?string $size = null,
-        ?int $cargoCapacity = null,
+        ?float $cargoCapacity = null,
         ?ShipCareer $career = null,
         array $roles = [],
         ?string $readyStatus = null,
         ?string $pledgeUrl = null,
         ?string $picturePath = null,
         ?string $thumbnailPath = null,
-        ?int $standalonePrice = null,
-        ?int $warbondPrice = null,
+        ?int $pledgeCost = null,
         int $lastVersion = 0,
         int $version = 0
     ) {
         $this->name = $name;
         $this->chassis = $chassis;
         $this->holdedShips = $holdedShips;
+        $this->loanerShips = $loanerShips;
         $this->height = $height;
         $this->length = $length;
         $this->beam = $beam;
@@ -155,8 +158,7 @@ class ShipDto
         $this->pledgeUrl = $pledgeUrl;
         $this->picturePath = $picturePath;
         $this->thumbnailPath = $thumbnailPath;
-        $this->standalonePrice = $standalonePrice;
-        $this->warbondPrice = $warbondPrice;
+        $this->pledgeCost = $pledgeCost;
         $this->lastVersion = $lastVersion;
         $this->version = $version;
     }
@@ -164,6 +166,11 @@ class ShipDto
     public function addHoldedShip(HoldedShipDto $holdedShip): void
     {
         $this->holdedShips[] = $holdedShip;
+    }
+
+    public function addLoanerShip(LoanerShipDto $loanerShip): void
+    {
+        $this->loanerShips[] = $loanerShip;
     }
 
     public function addShipRole(ShipRole $role): void

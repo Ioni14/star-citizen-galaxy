@@ -4,7 +4,8 @@ namespace App\Serializer;
 
 use App\Entity\Manufacturer;
 use App\Entity\Ship;
-use Symfony\Component\Asset\Packages;
+use Liip\ImagineBundle\Imagine\Cache\CacheManager;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerAwareInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -12,12 +13,14 @@ use Symfony\Component\Serializer\SerializerInterface;
 final class FileFieldsNormalizer implements NormalizerInterface, SerializerAwareInterface
 {
     private NormalizerInterface $decorated;
-    private Packages $assetPackages;
+    private CacheManager $cacheManager;
+    private string $publicBaseUrl;
 
-    public function __construct(NormalizerInterface $decorated, Packages $assetPackages)
+    public function __construct(NormalizerInterface $decorated, CacheManager $cacheManager, string $publicBaseUrl)
     {
         $this->decorated = $decorated;
-        $this->assetPackages = $assetPackages;
+        $this->cacheManager = $cacheManager;
+        $this->publicBaseUrl = $publicBaseUrl;
     }
 
     /**
@@ -32,14 +35,21 @@ final class FileFieldsNormalizer implements NormalizerInterface, SerializerAware
         }
 
         if ($object instanceof Ship) {
-            $data['pictureUri'] = $object->getPicturePath() !== null ? $this->assetPackages->getUrl($object->getPicturePath(), 'ship_pictures') : null;
-            $data['thumbnailUri'] = $object->getThumbnailPath() !== null ? $this->assetPackages->getUrl($object->getThumbnailPath(), 'ship_thumbnails') : null;
+            $data['pictureUri'] = $object->getPicturePath() !== null ? $this->generateImageAbsoluteUrl($object->getPicturePath(), 'pictures') : null;
+            $data['thumbnailUri'] = $object->getThumbnailPath() !== null ? $this->generateImageAbsoluteUrl($object->getThumbnailPath(), 'thumbnails') : null;
         }
         if ($object instanceof Manufacturer) {
-            $data['logoUri'] = $object->getLogoPath() !== null ? $this->assetPackages->getUrl($object->getLogoPath(), 'manufacturer_logos') : null;
+            $data['logoUri'] = $object->getLogoPath() !== null ? $this->generateImageAbsoluteUrl($object->getLogoPath(), 'logos') : null;
         }
 
         return $data;
+    }
+
+    private function generateImageAbsoluteUrl($path, $filter): ?string
+    {
+        return $this->cacheManager->isStored($path, $filter, null) ?
+            $this->cacheManager->resolve($path, $filter, null) :
+            $this->publicBaseUrl.$this->cacheManager->generateUrl($path, $filter, [], null, UrlGeneratorInterface::ABSOLUTE_PATH);
     }
 
     public function supportsNormalization($data, $format = null): bool

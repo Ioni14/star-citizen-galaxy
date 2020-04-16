@@ -4,8 +4,7 @@ namespace App\Service\Ship;
 
 use League\Flysystem\FileNotFoundException;
 use League\Flysystem\FilesystemInterface;
-use Liip\ImagineBundle\Imagine\Filter\FilterManager;
-use Liip\ImagineBundle\Model\FileBinary;
+use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -14,25 +13,15 @@ class FileHelper implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
-    private FilterManager $filterManager;
+    private CacheManager $cacheManager;
 
-    public function __construct(FilterManager $filterManager)
+    public function __construct(CacheManager $cacheManager)
     {
-        $this->filterManager = $filterManager;
+        $this->cacheManager = $cacheManager;
     }
 
-    public function handleFile(UploadedFile $file, string $slug, ?string $oldPath, string $filter, FilesystemInterface $filesystem): string
+    public function handleFile(UploadedFile $file, string $slug, ?string $oldPath, FilesystemInterface $filesystem): string
     {
-        $filteredFile = new FileBinary(
-            $file->getRealPath(),
-            $file->getMimeType(),
-            $file->guessExtension(),
-        );
-        if (in_array($file->getMimeType(), ['image/jpeg', 'image/png', 'image/webp'], true)) {
-            // TODO : MOM!!
-            $filteredFile = $this->filterManager->applyFilter($filteredFile, $filter);
-        }
-
         if ($oldPath !== null) {
             try {
                 // TODO : MOM!!
@@ -40,18 +29,27 @@ class FileHelper implements LoggerAwareInterface
             } catch (FileNotFoundException $e) {
                 $this->logger->error('[Filesystem] Unable to delete {path}.', ['exception' => $e, 'path' => $oldPath]);
             }
+            $this->cacheManager->remove($oldPath);
         }
-        $path = $slug.'.'.$file->guessExtension();
+
+        $contents = file_get_contents($file->getPathname());
+        $path = $slug.'.'.substr(sha1($contents), 0, 8).'.'.$file->guessExtension();
         try {
             // TODO : MOM!!
-            $filesystem->delete($path);
+            $result = $filesystem->delete($path);
         } catch (FileNotFoundException $e) {
-            $this->logger->error('[Filesystem] Unable to delete {path}.', ['exception' => $e, 'path' => $path]);
+            $result = false;
         }
-        $result = $filesystem->write($path, $filteredFile->getContent());
         if (!$result) {
-            throw new \RuntimeException(sprintf('Unable to write file %s to images filesystem.', $file->getRealPath()));
+            $this->logger->error('[Filesystem] Unable to delete {path}.', ['path' => $path]);
         }
+
+        $result = $filesystem->write($path, $contents);
+        if (!$result) {
+            throw new \RuntimeException(sprintf('Unable to write file %s to images filesystem.', $file->getPathname()));
+        }
+
+        $this->cacheManager->remove($path);
 
         return $path;
     }

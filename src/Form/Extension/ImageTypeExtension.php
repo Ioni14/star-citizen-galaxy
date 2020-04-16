@@ -22,14 +22,14 @@ class ImageTypeExtension extends AbstractTypeExtension
                 $imageUri = $accessor->getValue($parentData, $options['image_path_property']);
             }
 
-            $view->vars['image_assets_package'] = $options['image_assets_package'] ?? null;
+            $view->vars['image_filter_set'] = $options['image_filter_set'] ?? null;
             $view->vars['image_uri'] = $imageUri;
         }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefined(['image_assets_package', 'image_path_property']);
+        $resolver->setDefined(['image_filter_set', 'image_path_property']);
     }
 
     public static function getExtendedTypes(): iterable

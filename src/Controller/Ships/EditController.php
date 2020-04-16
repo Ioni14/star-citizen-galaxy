@@ -3,14 +3,17 @@
 namespace App\Controller\Ships;
 
 use App\Entity\HoldedShip;
+use App\Entity\LoanerShip;
 use App\Entity\Ship;
 use App\Form\Dto\HoldedShipDto;
+use App\Form\Dto\LoanerShipDto;
 use App\Form\Dto\ShipDto;
 use App\Form\Type\ShipForm;
 use App\Repository\ShipRepository;
 use App\Service\LockHelper;
 use App\Service\Ship\FileHelper;
 use App\Service\Ship\HoldedShipsHelper;
+use App\Service\Ship\LoanerShipsHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Loggable\Entity\LogEntry;
 use League\Flysystem\FilesystemInterface;
@@ -28,6 +31,7 @@ class EditController extends AbstractController
     private FilesystemInterface $picturesFilesystem;
     private FilesystemInterface $thumbnailsFilesystem;
     private HoldedShipsHelper $holdedShipsHelper;
+    private LoanerShipsHelper $loanerShipsHelper;
     private FileHelper $fileHelper;
     private LockHelper $lockHelper;
 
@@ -37,6 +41,7 @@ class EditController extends AbstractController
         FilesystemInterface $shipsPicturesFilesystem,
         FilesystemInterface $shipsThumbnailsFilesystem,
         HoldedShipsHelper $holdedShipsHelper,
+        LoanerShipsHelper $loanerShipsHelper,
         FileHelper $fileHelper,
         LockHelper $lockHelper
     ) {
@@ -45,6 +50,7 @@ class EditController extends AbstractController
         $this->picturesFilesystem = $shipsPicturesFilesystem;
         $this->thumbnailsFilesystem = $shipsThumbnailsFilesystem;
         $this->holdedShipsHelper = $holdedShipsHelper;
+        $this->loanerShipsHelper = $loanerShipsHelper;
         $this->fileHelper = $fileHelper;
         $this->lockHelper = $lockHelper;
     }
@@ -77,6 +83,9 @@ class EditController extends AbstractController
             array_map(static function (HoldedShip $holdedShip): HoldedShipDto {
                 return new HoldedShipDto($holdedShip->getHolded(), $holdedShip->getQuantity());
             }, $ship->getHoldedShips()->toArray()),
+            array_map(static function (LoanerShip $loanerShip): LoanerShipDto {
+                return new LoanerShipDto($loanerShip->getLoaned(), $loanerShip->getQuantity());
+            }, $ship->getLoanerShips()->toArray()),
             $ship->getHeight(),
             $ship->getLength(),
             $ship->getBeam(),
@@ -90,8 +99,7 @@ class EditController extends AbstractController
             $ship->getPledgeUrl(),
             $ship->getPicturePath(),
             $ship->getThumbnailPath(),
-            $ship->getStandalonePrice(),
-            $ship->getWarbondPrice(),
+            $ship->getPledgeCost(),
             $lastVersion,
             $lastVersion,
         );
@@ -114,8 +122,7 @@ class EditController extends AbstractController
                 ->setReadyStatus($shipDto->readyStatus)
                 ->setCareer($shipDto->career)
                 ->setPledgeUrl($shipDto->pledgeUrl)
-                ->setStandalonePrice($shipDto->standalonePrice)
-                ->setWarbondPrice($shipDto->warbondPrice);
+                ->setPledgeCost($shipDto->pledgeCost);
 
             $ship->clearRoles();
             foreach ($shipDto->roles as $role) {
@@ -123,13 +130,14 @@ class EditController extends AbstractController
             }
 
             $this->holdedShipsHelper->computeHoldedShips($ship, $shipDto);
+            $this->loanerShipsHelper->computeLoanerShips($ship, $shipDto);
 
             if ($shipDto->picture !== null) {
-                $path = $this->fileHelper->handleFile($shipDto->picture, $ship->getSlug(), $ship->getPicturePath(), 'pictures', $this->picturesFilesystem);
+                $path = $this->fileHelper->handleFile($shipDto->picture, $ship->getSlug(), $ship->getPicturePath(), $this->picturesFilesystem);
                 $ship->setPicturePath($path);
             }
             if ($shipDto->thumbnail !== null) {
-                $path = $this->fileHelper->handleFile($shipDto->thumbnail, $ship->getSlug(), $ship->getThumbnailPath(), 'thumbnails', $this->thumbnailsFilesystem);
+                $path = $this->fileHelper->handleFile($shipDto->thumbnail, $ship->getSlug(), $ship->getThumbnailPath(), $this->thumbnailsFilesystem);
                 $ship->setThumbnailPath($path);
             }
 

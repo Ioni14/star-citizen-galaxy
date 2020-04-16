@@ -1,12 +1,9 @@
 api_platform:
     title: 'Star Citizen Galaxy'
     description: 'An unofficial open API for Star Citizen in-game concepts. By the creators of Fleet Manager.'
-    version: '0.0.1'
+    version: '0.1.0'
     show_webby: true
     path_segment_name_generator: 'api_platform.path_segment_name_generator.dash'
-#    mapping:
-#        paths: ['%kernel.project_dir%/config/api_platform/mapping']
-#    resource_class_directories: ['%kernel.project_dir%/config/api_platform/mapping']
     resource_class_directories:
         - '%kernel.project_dir%/src/Entity'
     swagger:
@@ -24,3 +21,7 @@ api_platform:
         html:
             mime_types:
                 - text/html
+    collection:
+        pagination:
+            client_enabled: true
+            enabled_parameter_name: pagination

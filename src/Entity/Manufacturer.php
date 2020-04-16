@@ -74,6 +74,8 @@ class Manufacturer implements LockableEntityInterface
     private ?string $logoPath = null;
 
     /**
+     * The URI of the manufacturer logo. Dimensions: maximum 300x150.
+     *
      * @ApiProperty(iri="https://schema.org/image")
      * @Groups({"manufacturer:read"})
      */

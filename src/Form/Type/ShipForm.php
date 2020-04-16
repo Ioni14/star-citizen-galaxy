@@ -7,6 +7,7 @@ use App\Entity\ShipCareer;
 use App\Entity\ShipChassis;
 use App\Entity\ShipRole;
 use App\Form\Dto\HoldedShipDto;
+use App\Form\Dto\LoanerShipDto;
 use App\Form\Dto\ShipDto;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -46,6 +47,13 @@ class ShipForm extends AbstractType
                 'allow_delete' => true,
                 'prototype_data' => new HoldedShipDto(),
             ])
+            ->add('loanerShips', CollectionType::class, [
+                'entry_type' => LoanerShipForm::class,
+                'by_reference' => false,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'prototype_data' => new LoanerShipDto(),
+            ])
             ->add('height', NumberType::class, [
                 'required' => false,
                 'scale' => 2,
@@ -76,15 +84,11 @@ class ShipForm extends AbstractType
                     'ship.sizes.capital' => Ship::SIZE_CAPITAL,
                 ],
             ])
-            ->add('cargoCapacity', IntegerType::class, [
+            ->add('cargoCapacity', NumberType::class, [
                 'required' => false,
+                'scale' => 2,
             ])
-            ->add('standalonePrice', MoneyType::class, [
-                'required' => false,
-                'divisor' => 100,
-                'currency' => 'USD',
-            ])
-            ->add('warbondPrice', MoneyType::class, [
+            ->add('pledgeCost', MoneyType::class, [
                 'required' => false,
                 'divisor' => 100,
                 'currency' => 'USD',
@@ -117,12 +121,12 @@ class ShipForm extends AbstractType
             ->add('picture', FileType::class, [
                 'required' => false,
                 'image_path_property' => 'picturePath',
-                'image_assets_package' => 'ship_pictures',
+                'image_filter_set' => 'pictures',
             ])
             ->add('thumbnail', FileType::class, [
                 'required' => false,
                 'image_path_property' => 'thumbnailPath',
-                'image_assets_package' => 'ship_thumbnails',
+                'image_filter_set' => 'thumbnails',
             ]);
 
         if ($options['mode'] === self::MODE_EDIT) {

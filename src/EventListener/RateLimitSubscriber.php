@@ -2,14 +2,18 @@
 
 namespace App\EventListener;
 
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class RateLimitSubscriber implements EventSubscriberInterface
+class RateLimitSubscriber implements EventSubscriberInterface, LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     // REQUEST_LIMIT_PER_ROUTE over EXPIRATION seconds
     private const EXPIRATION = 60;
     private const REQUEST_LIMIT_PER_ROUTE = 300;
@@ -38,6 +42,11 @@ class RateLimitSubscriber implements EventSubscriberInterface
         $request = $event->getRequest();
 
         $route = $request->attributes->get('_route');
+        if ($route === null) {
+            $this->logger->error('[RateLimitSubscriber] no _route attribute found on request event.', ['attributes' => $request->attributes->all()]);
+
+            return;
+        }
         if (!$this->hasQuotas($route)) {
             return;
         }
@@ -70,6 +79,11 @@ class RateLimitSubscriber implements EventSubscriberInterface
         $request = $event->getRequest();
 
         $route = $request->attributes->get('_route');
+        if ($route === null) {
+            $this->logger->error('[RateLimitSubscriber] no _route attribute found on response event.', ['attributes' => $request->attributes->all()]);
+
+            return;
+        }
         if (!$this->hasQuotas($route)) {
             return;
         }

@@ -80,7 +80,7 @@ class EditController extends AbstractController
                 ->setCode($manufacturerDto->code);
 
             if ($manufacturerDto->logo !== null) {
-                $path = $this->fileHelper->handleFile($manufacturerDto->logo, $manufacturer->getSlug(), $manufacturer->getLogoPath(), 'logos', $this->manufacturersLogosFilesystem);
+                $path = $this->fileHelper->handleFile($manufacturerDto->logo, $manufacturer->getSlug(), $manufacturer->getLogoPath(), $this->manufacturersLogosFilesystem);
                 $manufacturer->setLogoPath($path);
             }
 

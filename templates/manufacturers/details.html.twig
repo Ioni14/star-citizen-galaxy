@@ -1,5 +1,15 @@
 {% extends 'manufacturers/layout.html.twig' %}
 
+{% block title 'Manufacturer '~manufacturer.name~' - Star Citizen Galaxy' %}
+{% block seo_metatags %}
+    <meta name="description" content="The details of the manufacturer {{ manufacturer.name }} of Star Citizen maintained by the community."/>
+    <meta property="og:type" content="website" />
+    <meta property="og:description" content="The details of the manufacturer {{ manufacturer.name }} of Star Citizen maintained by the community."/>
+    {% if manufacturer.logoPath is not null %}
+        <meta property="og:image" content="{{ manufacturer.logoPath|imagine_filter('logos') }}" />
+    {% endif %}
+{% endblock %}
+
 {% block content %}
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ path('homepage') }}">Home</a></li>
@@ -30,6 +40,12 @@
                                 {% endfor %}
                             {% endfor %}
 
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <dl class="row mb-2 border-bottom">
+                                    <dt class="col-sm-3">Id</dt>
+                                    <dd class="col-sm-9">{{ manufacturer.id }}</dd>
+                                </dl>
+                            {% endif %}
                             <dl class="row mb-2 border-bottom">
                                 <dt class="col-sm-3">Name</dt>
                                 <dd class="col-sm-9">{{ manufacturer.name }}</dd>
@@ -42,7 +58,7 @@
                                 <dt class="col-sm-3">Logo</dt>
                                 <dd class="col-sm-9">
                                     {% if manufacturer.logoPath is not null %}
-                                        <img src="{{ asset(manufacturer.logoPath, 'manufacturer_logos') }}" alt="logo preview" class="img-thumbnail" />
+                                        <img src="{{ manufacturer.logoPath|imagine_filter('logos') }}" alt="logo preview" class="img-thumbnail" />
                                     {% endif %}
                                 </dd>
                             </dl>

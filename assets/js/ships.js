@@ -47,4 +47,16 @@ $(document).ready(function () {
     $('#js-holded-ships-collection').on('click', '.js-holded-ships-delete-row', (ev) => {
         $(ev.currentTarget).closest('.row').remove();
     });
+
+    $('#js-loaner-ships-collection').on('click', '.js-loaner-ships-add-row', (ev) => {
+        addNewRowCollection($('#js-loaner-ships-collection'), $('#js-loaner-ships-rows'), ($newRow) => {
+            $newRow.find('.js-select2').select2(select2Options);
+            $newRow.on('click', '.js-loaner-ships-delete-row', (ev) => {
+                $(ev.currentTarget).closest('.row').remove();
+            });
+        });
+    });
+    $('#js-loaner-ships-collection').on('click', '.js-loaner-ships-delete-row', (ev) => {
+        $(ev.currentTarget).closest('.row').remove();
+    });
 });

@@ -1,5 +1,13 @@
 {% extends 'ship_chassis/layout.html.twig' %}
 
+{% block title 'Ship chassis '~chassis.name~' - Star Citizen Galaxy' %}
+{% block seo_metatags %}
+    <meta name="description" content="The details of the ship chassis {{ chassis.name }} by {{ chassis.manufacturer.name }} of Star Citizen maintained by the community."/>
+    <meta property="og:type" content="website" />
+    <meta property="og:description" content="The details of the ship chassis {{ chassis.name }} by {{ chassis.manufacturer.name }} of Star Citizen maintained by the community."/>
+    <meta property="og:image" content="{{ asset('icons/favicon-64x64.png') }}" />
+{% endblock %}
+
 {% block content %}
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ path('homepage') }}">Home</a></li>
@@ -30,13 +38,19 @@
                                 {% endfor %}
                             {% endfor %}
 
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <dl class="row mb-2 border-bottom">
+                                    <dt class="col-sm-3">Id</dt>
+                                    <dd class="col-sm-9">{{ chassis.id }}</dd>
+                                </dl>
+                            {% endif %}
                             <dl class="row mb-2 border-bottom">
                                 <dt class="col-sm-3">Name</dt>
                                 <dd class="col-sm-9">{{ chassis.name }}</dd>
                             </dl>
                             <dl class="row mb-2 border-bottom">
                                 <dt class="col-sm-3">Manufacturer</dt>
-                                <dd class="col-sm-9">{{ chassis.manufacturer.name }}</dd>
+                                <dd class="col-sm-9"><a href="{{ path('manufacturers_details', {'slug': chassis.manufacturer.slug}) }}">{{ chassis.manufacturer.name }}</a></dd>
                             </dl>
                             <dl class="row mb-2 border-bottom">
                                 <dt class="col-sm-3">Ships</dt>

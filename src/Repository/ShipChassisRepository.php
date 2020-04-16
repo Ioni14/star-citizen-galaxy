@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\ShipChassis;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Ramsey\Uuid\UuidInterface;
 
 class ShipChassisRepository extends ServiceEntityRepository
 {
@@ -35,5 +36,31 @@ class ShipChassisRepository extends ServiceEntityRepository
         $query->setParameter('slug', $slug);
 
         return $query->getOneOrNullResult();
+    }
+
+    public function countChassisByManufacturer(UuidInterface $manufacturerId): int
+    {
+        $query = $this->_em->createQuery('SELECT COUNT(chassis) FROM App\Entity\ShipChassis chassis WHERE chassis.manufacturer = :manufacturer');
+        $query->setParameter('manufacturer', $manufacturerId);
+
+        return $query->getSingleScalarResult();
+    }
+
+    /**
+     * @return ShipChassis[]
+     */
+    public function searchByQuery(string $searchQuery): array
+    {
+        $like = '%'.$searchQuery.'%';
+
+        $dql = <<<DQL
+            SELECT chassis FROM App\Entity\ShipChassis chassis
+            WHERE chassis.name LIKE :searchQuery
+            ORDER BY chassis.name
+            DQL;
+        $query = $this->_em->createQuery($dql);
+        $query->setParameter('searchQuery', $like);
+
+        return $query->getResult();
     }
 }
