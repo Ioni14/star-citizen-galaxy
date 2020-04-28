@@ -625,6 +625,16 @@ class Ship implements LockableEntityInterface
         return $this;
     }
 
+    public function getPictureUri(): ?string
+    {
+        return $this->pictureUri;
+    }
+
+    public function getThumbnailUri(): ?string
+    {
+        return $this->thumbnailUri;
+    }
+
     public function getPledgeCost(): ?int
     {
         return $this->pledgeCost;
