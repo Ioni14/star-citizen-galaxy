@@ -6,7 +6,8 @@ if (!Encore.isRuntimeEnvironmentConfigured()) {
 
 Encore
     .setOutputPath('public/build/')
-    .setPublicPath('/build')
+    .setPublicPath(process.env.PUBLIC_URL ? process.env.PUBLIC_URL : '/build')
+    .setManifestKeyPrefix('build/')
 
     .addEntry('main', './assets/js/main.js')
     .addEntry('manufacturers', './assets/js/manufacturers.js')
