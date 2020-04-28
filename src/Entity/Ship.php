@@ -278,7 +278,10 @@ class Ship implements LockableEntityInterface
     /**
      * The URI of the ship picture. Dimensions: maximum 1920x1080.
      *
-     * @ApiProperty(iri="https://schema.org/image")
+     * @ApiProperty(
+     *     readable=true,
+     *     iri="https://schema.org/image"
+     * )
      * @Groups({"ship:read"})
      */
     private ?string $pictureUri = null;
@@ -286,7 +289,10 @@ class Ship implements LockableEntityInterface
     /**
      * The URI of the ship thumbnail. Dimensions: 351x210.
      *
-     * @ApiProperty(iri="https://schema.org/image")
+     * @ApiProperty(
+     *     readable=true,
+     *     iri="https://schema.org/image"
+     * )
      * @Groups({"ship:read"})
      */
     private ?string $thumbnailUri = null;
