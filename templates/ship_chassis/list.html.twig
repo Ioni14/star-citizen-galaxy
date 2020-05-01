@@ -47,7 +47,7 @@
                         {% for chassis in shipChassis %}
                             <tr>
                                 <td><a href="{{ path('ship_chassis_details', {'slug': chassis.slug}) }}">{{ chassis.name }}</a></td>
-                                <td>{{ chassis.manufacturer.name }}</td>
+                                <td><a href="{{ path('manufacturers_details', {'slug': chassis.manufacturer.slug}) }}">{{ chassis.manufacturer.name }}</a></td>
                                 {% if is_granted('ROLE_MODERATOR') %}
                                     <td>
                                         <a class="btn btn-primary btn-sm" href="{{ path('ship_chassis_edit', {'slug': chassis.slug}) }}"><i class="fa fa-edit"></i> Edit</a>

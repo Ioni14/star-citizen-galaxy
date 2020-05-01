@@ -115,5 +115,7 @@ class CreateControllerTest extends WebTestCase
         $this->assertSame('c3a73970-16d0-4809-a02f-a2ba58ae2beb', $ship->getRoles()[0]->getId()->toString());
         $this->assertSame('d70a9024-b835-4707-b6f0-5e7bf58d999d', $ship->getRoles()[1]->getId()->toString());
         $this->assertSame('https://robertsspaceindustries.com/pledges/ships/rsi-aurora/Aurora-MR', $ship->getPledgeUrl());
+        $this->assertSame('myship.e05fa786.jpeg', $ship->getPicturePath());
+        $this->assertSame('myship.d934ae6f.jpeg', $ship->getThumbnailPath());
     }
 }

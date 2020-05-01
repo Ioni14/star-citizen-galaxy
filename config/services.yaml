@@ -2,15 +2,11 @@ parameters:
     env(REDIS_HOST): 'localhost'
     env(REDIS_PORT): '6379'
     env(REDIS_PASSWORD): ''
-    env(SHIP_PICTURES_PATH_PREFIX): ''
-    env(SHIP_THUMBNAILS_PATH_PREFIX): ''
 
 services:
     _defaults:
         autowire: true
         autoconfigure: true
-        bind:
-            $publicBaseUrl: '%env(string:LIIP_IMAGINE_RESOLVER_BASE_URL)%'
 
     App\:
         resource: '../src/*'
@@ -41,3 +37,13 @@ services:
     ApiPlatform\Core\Metadata\Property\Factory\AnnotationPropertyNameCollectionFactory:
         arguments: ['@annotation_reader', null]
     api_platform.metadata.property.name_collection_factory: '@ApiPlatform\Core\Metadata\Property\Factory\AnnotationPropertyNameCollectionFactory'
+
+    Aws\S3\S3Client:
+        arguments:
+            -
+                version: 'latest'
+                region: '%env(AWS_S3_REGION)%'
+                # TODO : remove credentials when on EC2 (instance profile used https://docs.aws.amazon.com/aws-sdk-php/v2/guide/credentials.html#using-iam-roles-for-amazon-ec2-instances)
+                credentials:
+                    key: '%env(AWS_ACCESS_ID)%'
+                    secret: '%env(AWS_ACCESS_KEY)%'

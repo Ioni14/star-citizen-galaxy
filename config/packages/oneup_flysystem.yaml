@@ -1,20 +1,27 @@
 oneup_flysystem:
     adapters:
-        public_adapter:
-            local:
-                directory: '%kernel.project_dir%/public'
+        cache_adapter:
+            awss3v3:
+                client: Aws\S3\S3Client
+                bucket: '%env(AWS_S3_UPLOADS_BUCKET)%'
         ships_pictures_adapter:
-            local:
-                directory: '%kernel.project_dir%/public/uploads/ships/pictures'
+            awss3v3:
+                client: Aws\S3\S3Client
+                bucket: '%env(AWS_S3_UPLOADS_BUCKET)%'
+                prefix: ships/pictures
         ships_thumbnails_adapter:
-            local:
-                directory: '%kernel.project_dir%/public/uploads/ships/thumbnails'
+            awss3v3:
+                client: Aws\S3\S3Client
+                bucket: '%env(AWS_S3_UPLOADS_BUCKET)%'
+                prefix: ships/thumbnails
         manufacturers_logos_adapter:
-            local:
-                directory: '%kernel.project_dir%/public/uploads/manufacturers/logos'
+            awss3v3:
+                client: Aws\S3\S3Client
+                bucket: '%env(AWS_S3_UPLOADS_BUCKET)%'
+                prefix: manufacturers/logos
     filesystems:
-        public_filesystem:
-            adapter: public_adapter
+        cache_filesystem:
+            adapter: cache_adapter
         ships_pictures_filesystem:
             adapter: ships_pictures_adapter
         ships_thumbnails_filesystem:

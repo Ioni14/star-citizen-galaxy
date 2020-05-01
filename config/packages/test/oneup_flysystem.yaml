@@ -1,0 +1,14 @@
+oneup_flysystem:
+    adapters:
+        cache_adapter:
+            local:
+                directory: '%kernel.project_dir%/public'
+        ships_pictures_adapter:
+            local:
+                directory: '%kernel.project_dir%/public/uploads/ships/pictures'
+        ships_thumbnails_adapter:
+            local:
+                directory: '%kernel.project_dir%/public/uploads/ships/thumbnails'
+        manufacturers_logos_adapter:
+            local:
+                directory: '%kernel.project_dir%/public/uploads/manufacturers/logos'

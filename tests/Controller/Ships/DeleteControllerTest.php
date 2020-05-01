@@ -4,11 +4,7 @@ namespace App\Tests\Controller\Ships;
 
 use App\Entity\Ship;
 use App\Entity\User;
-use App\Service\LockHelper;
 use App\Tests\WebTestCase;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Finder\SplFileInfo;
 
 class DeleteControllerTest extends WebTestCase
 {

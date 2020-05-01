@@ -8,10 +8,10 @@ liip_imagine:
     resolvers:
         default:
             flysystem:
-                filesystem_service: oneup_flysystem.public_filesystem_filesystem
-                root_url:           '%env(string:LIIP_IMAGINE_RESOLVER_BASE_URL)%'
-                cache_prefix:       uploads/cache
-                visibility:         public
+                filesystem_service: oneup_flysystem.cache_filesystem_filesystem
+                root_url: 'https://%env(AWS_S3_UPLOADS_BUCKET)%.s3-%env(AWS_S3_REGION)%.amazonaws.com'
+                cache_prefix: cache
+    cache: default
     loaders:
         ships_pictures_loader:
             flysystem:

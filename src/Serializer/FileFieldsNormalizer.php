@@ -5,7 +5,6 @@ namespace App\Serializer;
 use App\Entity\Manufacturer;
 use App\Entity\Ship;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerAwareInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -14,13 +13,11 @@ final class FileFieldsNormalizer implements NormalizerInterface, SerializerAware
 {
     private NormalizerInterface $decorated;
     private CacheManager $cacheManager;
-    private string $publicBaseUrl;
 
-    public function __construct(NormalizerInterface $decorated, CacheManager $cacheManager, string $publicBaseUrl)
+    public function __construct(NormalizerInterface $decorated, CacheManager $cacheManager)
     {
         $this->decorated = $decorated;
         $this->cacheManager = $cacheManager;
-        $this->publicBaseUrl = $publicBaseUrl;
     }
 
     /**
@@ -35,21 +32,14 @@ final class FileFieldsNormalizer implements NormalizerInterface, SerializerAware
         }
 
         if ($object instanceof Ship) {
-            $data['pictureUri'] = $object->getPicturePath() !== null ? $this->generateImageAbsoluteUrl($object->getPicturePath(), 'pictures') : null;
-            $data['thumbnailUri'] = $object->getThumbnailPath() !== null ? $this->generateImageAbsoluteUrl($object->getThumbnailPath(), 'thumbnails') : null;
+            $data['pictureUri'] = $object->getPicturePath() !== null ? $this->cacheManager->getBrowserPath($object->getPicturePath(), 'pictures') : null;
+            $data['thumbnailUri'] = $object->getThumbnailPath() !== null ? $this->cacheManager->getBrowserPath($object->getThumbnailPath(), 'thumbnails') : null;
         }
         if ($object instanceof Manufacturer) {
-            $data['logoUri'] = $object->getLogoPath() !== null ? $this->generateImageAbsoluteUrl($object->getLogoPath(), 'logos') : null;
+            $data['logoUri'] = $object->getLogoPath() !== null ? $this->cacheManager->getBrowserPath($object->getLogoPath(), 'logos') : null;
         }
 
         return $data;
-    }
-
-    private function generateImageAbsoluteUrl($path, $filter): ?string
-    {
-        return $this->cacheManager->isStored($path, $filter, null) ?
-            $this->cacheManager->resolve($path, $filter, null) :
-            $this->publicBaseUrl.$this->cacheManager->generateUrl($path, $filter, [], null, UrlGeneratorInterface::ABSOLUTE_PATH);
     }
 
     public function supportsNormalization($data, $format = null): bool
