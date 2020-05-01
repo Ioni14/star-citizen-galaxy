@@ -23,6 +23,10 @@ services:
             - [connect, ['%env(REDIS_HOST)%', '%env(REDIS_PORT)%']]
             - [auth, ['%env(REDIS_PASSWORD)%']]
 
+    Doctrine\Common\Cache\RedisCache:
+        calls:
+            - [setRedis, ['@Redis']]
+
     app.serializer.normalizer.ship_files:
         class: App\Serializer\FileFieldsNormalizer
         decorates: 'api_platform.serializer.normalizer.item'
@@ -47,3 +51,10 @@ services:
                 credentials:
                     key: '%env(AWS_ACCESS_ID)%'
                     secret: '%env(AWS_ACCESS_KEY)%'
+
+    app.liip_imagine.cache.resolver.default.cache:
+        class: Liip\ImagineBundle\Imagine\Cache\Resolver\CacheResolver
+        decorates: 'liip_imagine.cache.resolver.default'
+        arguments:
+            $cache: '@Doctrine\Common\Cache\RedisCache'
+            $cacheResolver: '@app.liip_imagine.cache.resolver.default.cache.inner'

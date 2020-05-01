@@ -3,6 +3,8 @@ services:
     php:
         image: sc-galaxy-php:latest
         hostname: php
+        depends_on:
+            - redis
     apache:
         image: sc-galaxy-apache:latest
         hostname: apache

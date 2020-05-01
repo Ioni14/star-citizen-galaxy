@@ -53,17 +53,6 @@ RUN composer global require "hirak/prestissimo:^0.3" --prefer-dist --no-progress
     fi; \
     composer dump-env $ENV
 
-################################
-#FROM node:12-alpine as node_deps
-#
-#WORKDIR /app
-#COPY package.json yarn.lock ./
-#RUN yarn install
-#
-#COPY assets assets
-#COPY webpack.config.js postcss.config.js ./
-#RUN mkdir public && yarn encore production
-
 ####################################
 FROM req_php as build_php
 
@@ -88,8 +77,6 @@ COPY --chown=www-data:www-data src src
 COPY --chown=www-data:www-data templates templates
 COPY --chown=www-data:www-data translations translations
 COPY --chown=www-data:www-data .env* Makefile composer.json composer.lock ./
-#COPY --chown=www-data:www-data --from=node_deps /app/public/build/entrypoints.json public/build/entrypoints.json
-#COPY --chown=www-data:www-data --from=node_deps /app/public/build/manifest.json public/build/manifest.json
 COPY --chown=www-data:www-data public/build/entrypoints.json public/build/manifest.json public/build/
 COPY --chown=www-data:www-data --from=composer_deps /app/vendor vendor
 COPY --chown=www-data:www-data --from=composer_deps /app/.env.local.php .env.local.php
@@ -101,7 +88,7 @@ RUN mkdir -p public/bundles \
     && bin/console assets:install -v \
     && rm -rf var/cache/* \
     && bin/console cache:warmup -v \
-    && mkdir -p var/log public/uploads
+    && mkdir -p var/log
 
 ENV BUILD_ENV prod
 ENTRYPOINT ["docker-app-entrypoint"]
@@ -119,9 +106,8 @@ USER www-data
 WORKDIR /app
 COPY --chown=www-data:www-data public/favicon.ico public/robots.txt public/
 COPY --chown=www-data:www-data public/icons public/icons
-#COPY --chown=www-data:www-data --from=node_deps /app/public/build public/build
 COPY --chown=www-data:www-data --from=build_php /app/public/bundles public/bundles
-RUN touch public/index.php && mkdir -p public/uploads
+RUN touch public/index.php
 
 USER root
 
