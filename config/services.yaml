@@ -58,3 +58,4 @@ services:
         arguments:
             $cache: '@Doctrine\Common\Cache\RedisCache'
             $cacheResolver: '@app.liip_imagine.cache.resolver.default.cache.inner'
+    Liip\ImagineBundle\Service\FilterService: '@liip_imagine.service.filter'
