@@ -11,7 +11,7 @@ monolog:
             buffer_size:  50 # How many messages should be saved? Prevent memory leaks
         grouped:
             type:    group
-            members: [streamed_error, deduplicated]
+            members: [streamed_error] #, deduplicated]
         streamed_error:
             type: stream
             path: "%kernel.logs_dir%/%kernel.environment%-error.log"
