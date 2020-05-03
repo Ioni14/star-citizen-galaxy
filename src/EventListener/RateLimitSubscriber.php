@@ -5,6 +5,7 @@ namespace App\EventListener;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\IpUtils;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -55,6 +56,10 @@ class RateLimitSubscriber implements EventSubscriberInterface, LoggerAwareInterf
         }
 
         $clientIp = $request->getClientIp();
+        if (IpUtils::checkIp($clientIp, ['127.0.0.0/8', '192.168.0.0/16', '172.16.0.0/12', '10.0.0.0/8'])) {
+            // bypass if in private network
+            return;
+        }
 
         $key = sprintf('route:%s;ip:%s', $route, $clientIp);
         $this->redis->incr($key);
@@ -92,14 +97,18 @@ class RateLimitSubscriber implements EventSubscriberInterface, LoggerAwareInterf
         }
 
         $response = $event->getResponse();
-
-        $key = $request->attributes->get('api_key');
-
         if ($response->getStatusCode() === 429) {
             return;
         }
-        $response->headers->set('X-RateLimit-Limit', $limit = $request->attributes->get('api_limit'));
-        $response->headers->set('X-RateLimit-Remaining', $limit - $this->redis->get($key));
+
+        if (!$request->attributes->has('api_key')) {
+            // no limit asked
+            return;
+        }
+
+        $key = $request->attributes->get('api_key');
+        $response->headers->set('X-RateLimit-Limit', $limit = $request->attributes->getInt('api_limit'));
+        $response->headers->set('X-RateLimit-Remaining', $limit - (int) $this->redis->get($key));
         $response->headers->set('X-RateLimit-Reset', time() + $this->redis->ttl($key));
     }
 

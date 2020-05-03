@@ -25,3 +25,6 @@ api_platform:
         pagination:
             client_enabled: true
             enabled_parameter_name: pagination
+    http_cache:
+        etag: false
+        public: false
