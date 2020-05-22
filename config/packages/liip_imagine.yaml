@@ -11,6 +11,7 @@ liip_imagine:
                 filesystem_service: oneup_flysystem.cache_filesystem_filesystem
                 root_url: '%env(UPLOADS_CDN_BASE_URL)%'
                 cache_prefix: cache
+                visibility: private # CDN used
     cache: default
     loaders:
         ships_pictures_loader:
