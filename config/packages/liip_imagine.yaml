@@ -1,7 +1,6 @@
 parameters:
     liip_imagine.mozjpeg.binary: /opt/mozjpeg/bin/cjpeg
     liip_imagine.pngquant.binary: /usr/bin/pngquant
-    env(LIIP_IMAGINE_RESOLVER_BASE_URL): 'http://localhost'
 
 liip_imagine:
     driver: "gd"
