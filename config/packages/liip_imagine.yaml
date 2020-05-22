@@ -1,6 +1,7 @@
 parameters:
     liip_imagine.mozjpeg.binary: /opt/mozjpeg/bin/cjpeg
     liip_imagine.pngquant.binary: /usr/bin/pngquant
+    env(UPLOADS_CDN_BASE_URL): 'https://%env(AWS_S3_UPLOADS_BUCKET)%.s3-%env(AWS_S3_REGION)%.amazonaws.com'
 
 liip_imagine:
     driver: "gd"
@@ -8,7 +9,7 @@ liip_imagine:
         default:
             flysystem:
                 filesystem_service: oneup_flysystem.cache_filesystem_filesystem
-                root_url: 'https://%env(AWS_S3_UPLOADS_BUCKET)%.s3-%env(AWS_S3_REGION)%.amazonaws.com'
+                root_url: '%env(UPLOADS_CDN_BASE_URL)%'
                 cache_prefix: cache
     cache: default
     loaders:
