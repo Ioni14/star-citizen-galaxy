@@ -99,14 +99,14 @@ class ShipDto
     public ?string $pledgeUrl;
 
     /**
-     * @Assert\File(maxSize="5M", mimeTypes={"image/jpeg", "image/png", "image/webp"}, mimeTypesMessage="ship.constraints.picture.bad_format")
+     * @Assert\File(maxSize="5M", mimeTypes={"image/jpeg", "image/png"}, mimeTypesMessage="ship.constraints.picture.bad_format")
      */
     public ?UploadedFile $picture = null;
 
     public ?string $picturePath;
 
     /**
-     * @Assert\File(maxSize="1M", mimeTypes={"image/jpeg", "image/png", "image/webp"}, mimeTypesMessage="ship.constraints.picture.bad_format")
+     * @Assert\File(maxSize="1M", mimeTypes={"image/jpeg", "image/png"}, mimeTypesMessage="ship.constraints.picture.bad_format")
      */
     public ?UploadedFile $thumbnail = null;
 

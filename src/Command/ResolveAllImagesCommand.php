@@ -31,7 +31,7 @@ class ResolveAllImagesCommand extends Command
         $this->manufacturerRepository = $manufacturerRepository;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         /** @var Ship[] $ships */
         $ships = $this->shipRepository->findAll();
@@ -55,6 +55,8 @@ class ResolveAllImagesCommand extends Command
             }
         }
         $output->writeln('<info>Done.</info>');
+
+        return 0;
     }
 
     private function resolveImage(string $path, string $filter): string

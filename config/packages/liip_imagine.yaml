@@ -11,7 +11,7 @@ liip_imagine:
                 filesystem_service: oneup_flysystem.cache_filesystem_filesystem
                 root_url: '%env(UPLOADS_CDN_BASE_URL)%'
                 cache_prefix: cache
-                visibility: private # CDN used
+                visibility: private # managed by bucket policies
     cache: default
     loaders:
         ships_pictures_loader:
@@ -31,7 +31,7 @@ liip_imagine:
                     max: [1920, 1080]
             post_processors:
                 mozjpeg: { quality: 80 }
-                pngquant: { quality: "75-85" }
+                pngquant: { quality: [75,85] }
         thumbnails:
             data_loader: ships_thumbnails_loader
             filters:
@@ -43,7 +43,7 @@ liip_imagine:
                     allow_upscale: true
             post_processors:
                 mozjpeg: { quality: 80 }
-                pngquant: { quality: "75-85" }
+                pngquant: { quality: [75,85] }
         logos:
             data_loader: manufacturers_logos_loader
             filters:
@@ -51,4 +51,4 @@ liip_imagine:
                     max: [300, 150]
             post_processors:
                 mozjpeg: { quality: 80 }
-                pngquant: { quality: "75-85" }
+                pngquant: { quality: [75,85] }
