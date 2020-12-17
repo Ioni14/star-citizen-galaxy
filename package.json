@@ -10,7 +10,7 @@
         "babel-plugin-syntax-dynamic-import": "^6.18",
         "bootstrap": "^4.4",
         "core-js": "^3.6",
-        "datatables.net": "^1.10.20",
+        "datatables.net": "^1.10.22",
         "datatables.net-bs4": "^1.10.20",
         "jquery": "^3.4.1",
         "node-sass": "^4.13",
