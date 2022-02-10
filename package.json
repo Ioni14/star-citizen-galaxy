@@ -13,7 +13,7 @@
         "datatables.net": "^1.10.20",
         "datatables.net-bs4": "^1.10.20",
         "jquery": "^3.4.1",
-        "node-sass": "^4.13",
+        "node-sass": "^7.0",
         "perfect-scrollbar": "^1.4.0",
         "postcss-loader": "^3.0.0",
         "regenerator-runtime": "^0.13",
